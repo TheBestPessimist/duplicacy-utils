@@ -2,8 +2,10 @@
 # This script assumes that it is run form the same folder as the duplicacy
 # executable (eg. from __the repository__).
 #
-# It should also be run as an Administrator, since the backup command uses
-# the flag -vss (Shadow Copy), which can only be used as an administrator.
+# If it is run as an Administrator, the backup command will use
+# the -vss flag (Shadow Copy), which can only be used as an Administrator.
+# This is not a hard requirement though. The flag is NOT added if a
+# non-admin user starts the script.
 #
 # Thanks to <bassebaba/DuplicacyPowershell> for the initial script which
 # inspired this one and from which i borrowed some parts.
@@ -28,7 +30,8 @@ $duplicacy = @{             # this creates a hash table in powershell
     backup = " backup -stats -threads 18 "
     list = " list "
     check = " check "
-    vssOption = $false
+    # vssOption = $false
+    vssOption = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 }
 $duplicacy.command = $duplicacy.exe + $duplicacy.options
 if($duplicacy.vssOption) {
@@ -85,7 +88,9 @@ function log($str) {
 }
 
 function elevateAsAdmin() {
-    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
+    }
 }
 
 # elevateAsAdmin
