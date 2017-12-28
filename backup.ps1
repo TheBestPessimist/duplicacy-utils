@@ -15,12 +15,14 @@ if(!(Test-Path -Path $logFolder )){
 ##############################
 
 ##############################
-$duplicacyExe = " .\z.exe "
-$duplicacyOptions = " -d -log "
-$duplicacyCommand = " $duplicacyExe $duplicacyOptions "
-# $duplicacyBackup = " backup -vss -stats -threads 18 "
-$duplicacyList = " list "
-$duplicacyCheck = " check "
+$duplicacy = @{        # this creates a hash table in powershell
+    exe = " .\z.exe "
+    options = " -d -log "
+    backup = " backup -vss -stats -threads 18 "
+    list = " list "
+    check = " check "
+}
+$duplicacy.command = $duplicacy.exe + $duplicacy.options
 ##############################
 
 ##############################
@@ -29,26 +31,33 @@ $teeCommand = " | Tee-Object -FilePath $logFile -Append "
 
 
 function main {
-    log "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    log "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    log "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    log "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    log "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    log "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    logStartBackupProcess
 
-    doDuplicacyCommand $duplicacyList
-    # $command = $duplicacyExe + $duplicacyOptions + $duplicacyCheck
-    # Invoke-Expression $command
+    doDuplicacyCommand $duplicacy.list
 
-    # | Out-File ("a" + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss"))
+    logFinishBackupProcess
+}
 
+function logStartBackupProcess {
+    $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    log "================================================================="
+    log "==== Starting duplicacy backup Process @ $date ===="
+    log "================================================================="
+}
 
-
-
+function logFinishBackupProcess {
+    $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    log "================================================================="
+    log "==== Finished duplicacy backup Process @ $date ===="
+    log "================================================================="
 }
 
 function doDuplicacyCommand($arg){
-   invoke " $duplicacyCommand $arg "
+    $command = $duplicacy.command + $arg
+    log "==="
+    log "=== Now executting $command"
+    log "==="
+    invoke $command
 }
 
 function invoke($command) {
@@ -57,24 +66,8 @@ function invoke($command) {
 
 
 function log($str) {
-    $date = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss:fff")
+    $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss.fff")
     invoke " Write-Output '${date} $str' "
 }
 
-Enum Fruit {
-   Apple = 29
-   Pear = 30
-   Kiwi = 31
-}
-
 main
-
-
-
-# $duplicacy = @{}        # this creates a hash table in powershell
-# $duplicacy.exe = " .\z.exe "
-# $duplicacy.options = " -d -log "
-# $duplicacy.command = " $duplicacyExe $duplicacyOptions "
-# $duplicacy.backup = " backup -vss -stats -threads 18 "
-# $duplicacy.list = " list "
-# $duplicacy.check = " check "
