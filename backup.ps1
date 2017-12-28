@@ -4,13 +4,15 @@
 #
 # The log folder is created in the folder .duplicacy/tbp-logs/
 #
-# If it is run as an Administrator, the backup command will use
-# the -vss flag (Shadow Copy), which can only be used as an Administrator.
-# This is not a hard requirement though. The flag is NOT added if a
-# non-admin user starts the script.
+# If the user wishes (sets the flag to true) and the script it is run as an Administrator,
+# the backup command will use the -vss flag (Shadow Copy),
+# which can only be used as an Administrator.
 #
 # Thanks to <bassebaba/DuplicacyPowershell> for the initial script which
 # inspired this one and from which i borrowed some parts.
+#
+# The script can be run (after setting the correct paths and variable names) like this:
+#       powershell -NoProfile -ExecutionPolicy Bypass -File "C:\duplicacy repo\backup.ps1" -Verb RunAs;
 #
 ##############################
 
@@ -27,16 +29,15 @@ $logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") +
 ##############################
 $duplicacy = @{             # this creates a hash table in powershell
     exe = " .\z.exe "
-    # options = " -d -log "
-    options = "  "
+    options = " -d -log "
+    # options = "  "
     backup = " backup -stats -threads 18 "
     list = " list "
     check = " check "
-    # vssOption = $false
-    vssOption = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+    vssOption = $false
 }
 $duplicacy.command = $duplicacy.exe + $duplicacy.options
-if($duplicacy.vssOption) {
+if($duplicacy.vssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     $duplicacy.backup += " -vss "
 }
 ##############################
@@ -46,8 +47,8 @@ function main {
     ##############################
     ##############################
 
-    doDuplicacyCommand $duplicacy.list
-    # doDuplicacyCommand $duplicacy.backup
+    # doDuplicacyCommand $duplicacy.list
+    doDuplicacyCommand $duplicacy.backup
 
     ##############################
     ##############################
