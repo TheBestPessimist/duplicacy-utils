@@ -15,8 +15,8 @@
 
 ##############################
 $logFolder = ".duplicacy/tbp-logs/"
-# $logFile = $logFolder + "log " + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss")
-$logFile = $logFolder + "log " + $(Get-Date).toString("yyyy-MM-dd")
+# $logFile = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss") + ".log"
+$logFile = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd") + ".log"
 $logFile = $logFile -replace ' ', '` '
 if(!(Test-Path -Path $logFolder )){
     New-Item -ItemType directory -Path $logFolder
@@ -95,4 +95,4 @@ function elevateAsAdmin() {
 
 # elevateAsAdmin
 main
-# Read-Host "Press ENTER"
+# Read-Host "Press ENTER to exit: "
