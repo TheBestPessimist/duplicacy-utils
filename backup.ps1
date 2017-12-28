@@ -2,6 +2,8 @@
 # This script assumes that it is run form the same folder as the duplicacy
 # executable (eg. from __the repository__).
 #
+# The log folder is created in the folder .duplicacy/tbp-logs/
+#
 # If it is run as an Administrator, the backup command will use
 # the -vss flag (Shadow Copy), which can only be used as an Administrator.
 # This is not a hard requirement though. The flag is NOT added if a
@@ -12,21 +14,21 @@
 #
 ##############################
 
+##############################
+$repositoryFolder = "C:/duplicacy repo/"
+##############################
 
 ##############################
 $logFolder = ".duplicacy/tbp-logs/"
-# $logFile = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss") + ".log"
-$logFile = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd") + ".log"
-$logFile = $logFile -replace ' ', '` '
-if(!(Test-Path -Path $logFolder )){
-    New-Item -ItemType directory -Path $logFolder
-}
+# $logFilePath = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss") + ".log"
+$logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") + ".log"
 ##############################
 
 ##############################
 $duplicacy = @{             # this creates a hash table in powershell
     exe = " .\z.exe "
-    options = " -d -log "
+    # options = " -d -log "
+    options = "  "
     backup = " backup -stats -threads 18 "
     list = " list "
     check = " check "
@@ -39,33 +41,60 @@ if($duplicacy.vssOption) {
 }
 ##############################
 
-##############################
-$teeCommand = " | Tee-Object -FilePath $logFile -Append "
-##############################
-
-
 function main {
-    logStartBackupProcess
+    doPreBackupTasks
+    ##############################
+    ##############################
 
     doDuplicacyCommand $duplicacy.list
-    doDuplicacyCommand $duplicacy.backup
+    # doDuplicacyCommand $duplicacy.backup
 
-    logFinishBackupProcess
+    ##############################
+    ##############################
+    doPostBackupTasks
 }
 
-function logStartBackupProcess {
+
+function doPreBackupTasks() {
+    Push-Location $repositoryFolder
+
+    if( !(Test-Path -Path $logFolder ) ) {
+        New-Item -ItemType directory -Path $logFolder
+        log "Folder $logFolder does not exist. It has just been created"
+    }
+
+    logStartBackupProcess
+    zipOlderLogFiles
+}
+
+function doPostBackupTasks() {
+    logFinishBackupProcess
+    Pop-Location
+}
+
+function zipOlderLogFiles() {
+    log "Zipping older log files..."
+
+}
+
+function logStartBackupProcess() {
     $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
     log
     log
     log "================================================================="
     log "==== Starting duplicacy backup Process @ $date ===="
+    log "===="
+    log ("==== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
+
 }
 
-function logFinishBackupProcess {
+function logFinishBackupProcess() {
     $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
     log "================================================================="
     log "==== Finished duplicacy backup Process @ $date ===="
+    log "===="
+    log ("==== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
 }
 
@@ -78,7 +107,7 @@ function doDuplicacyCommand($arg){
 }
 
 function invoke($command) {
-    Invoke-Expression " $command $teeCommand "
+    Invoke-Expression " $command | Tee-Object -FilePath '$logFilePath' -Append "
 }
 
 
