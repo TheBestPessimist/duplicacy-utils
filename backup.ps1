@@ -4,6 +4,10 @@
 #
 # It should also be run as an Administrator, since the backup command uses
 # the flag -vss (Shadow Copy), which can only be used as an administrator.
+#
+# Thanks to <bassebaba/DuplicacyPowershell> for the initial script which
+# inspired this one and from which i borrowed some parts.
+#
 ##############################
 
 
@@ -48,6 +52,8 @@ function main {
 
 function logStartBackupProcess {
     $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    log
+    log
     log "================================================================="
     log "==== Starting duplicacy backup Process @ $date ===="
     log "================================================================="
