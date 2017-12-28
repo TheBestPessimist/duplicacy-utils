@@ -1,7 +1,10 @@
 ##############################
-# This script assumes that it is run form the same folder as the duplicacy executable (eg. from __the repository__)
+# This script assumes that it is run form the same folder as the duplicacy
+# executable (eg. from __the repository__).
+#
+# It should also be run as an Administrator, since the backup command uses
+# the flag -vss (Shadow Copy), which can only be used as an administrator.
 ##############################
-
 
 
 ##############################
@@ -15,14 +18,18 @@ if(!(Test-Path -Path $logFolder )){
 ##############################
 
 ##############################
-$duplicacy = @{        # this creates a hash table in powershell
+$duplicacy = @{             # this creates a hash table in powershell
     exe = " .\z.exe "
     options = " -d -log "
-    backup = " backup -vss -stats -threads 18 "
+    backup = " backup -stats -threads 18 "
     list = " list "
     check = " check "
+    vssOption = $false
 }
 $duplicacy.command = $duplicacy.exe + $duplicacy.options
+if($duplicacy.vssOption) {
+    $duplicacy.backup += " -vss "
+}
 ##############################
 
 ##############################
@@ -34,6 +41,7 @@ function main {
     logStartBackupProcess
 
     doDuplicacyCommand $duplicacy.list
+    doDuplicacyCommand $duplicacy.backup
 
     logFinishBackupProcess
 }
@@ -70,4 +78,10 @@ function log($str) {
     invoke " Write-Output '${date} $str' "
 }
 
+function elevateAsAdmin() {
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
+}
+
+# elevateAsAdmin
 main
+# Read-Host "Press ENTER"
