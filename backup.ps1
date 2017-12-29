@@ -29,11 +29,11 @@ $logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") +
 ##############################
 $duplicacy = @{             # this creates a hash table in powershell
     exe = " .\z.exe "
-    options = " -d -log "
-    # options = "  "
+    # options = " -d -log "
+    options = " -log "
     backup = " backup -stats -threads 18 "
     list = " list "
-    check = " check "
+    check = " check -tabular "
     vssOption = $false
 }
 $duplicacy.command = $duplicacy.exe + $duplicacy.options
@@ -47,8 +47,9 @@ function main {
     ##############################
     ##############################
 
-    # doDuplicacyCommand $duplicacy.list
-    doDuplicacyCommand $duplicacy.backup
+    doDuplicacyCommand $duplicacy.list
+    # doDuplicacyCommand $duplicacy.backup
+    # doDuplicacyCommand $duplicacy.check
 
     ##############################
     ##############################
