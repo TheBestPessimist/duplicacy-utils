@@ -1,0 +1,112 @@
+##################################################
+################################################## notes about this file
+##################################################
+#
+# This file is a generic file which adds some folders and files to the duplicacy backup ignore list
+# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/
+#
+##################################################
+#
+# note: "^[^/]*"" has the purpose of assuring that there is only 1 "/" before the folder.
+# This means that it should match "c:/Recovery/" or "some_sym_link/Recovery/",
+#       but not "c:/a/Recovery/" nor "some_sym_link/a/Recovery/"
+# In other words, the purpose of that regex is to handle excluding, at least in windows,
+#       folders and files which are in root, or in a symlink to root
+#
+
+##################################################
+################################################## generic excludes
+##################################################
+
+############################## exclude the ".git" subfolder
+e:\.git/.*$
+
+
+############################## exclude temp files everywhere (case insensitive)
+e:(?i)\.(tmp|temp)$
+
+
+##############################
+############################## online storage solutions
+##############################
+
+############################## exclude Google Drive cache folder (which is in the google drive folder actually)
+e:\.tmp\.drivedownload/
+
+############################## exclude Onedrive cache folder
+e:OneDriveTemp/
+
+############################## exclude dropbox cache folder
+e:\.dropbox\.cache/
+
+
+
+##################################################
+################################################## excludes for windows machines
+##################################################
+
+############################## exclude recycle bin
+e:(?i)\$RECYCLE\.BIN/
+e:(?i)\$RECYCLED/
+
+
+############################## exclude system volume information
+e:^[^/]*/System Volume Information/
+
+
+############################## exclude some hidden windows 10 update folder
+e:(?i)\$Windows\.\~BT/
+
+
+############################## THE windows folder itself should be excluded
+e:^[^/]*/Windows/
+
+
+############################## exclude some other inaccesible hidden folders
+e:(?i)^[^/]*config.msi/
+e:(?i)^[^/]*MSOCache/
+e:^[^/]*/Recovery/
+
+
+############################## !!!! not sure if this one should actually be ignored or not. opinions needed. help me!! (it is a link in C:/)
+# e:/Documents and Settings
+
+
+############################## exclude some hidden windows files in C:/
+e:^[^/]*/bootmgr
+e:^[^/]*/BOOTNXT
+e:^[^/]*/BOOTSECT.BAK
+e:^[^/]*/pagefile.sys
+e:^[^/]*/hiberfil.sys
+e:^[^/]*/swapfile.sys
+
+
+############################## exclude some temp folders
+e:/AppData/Local/Temp/
+e:/Local Settings/Temp/
+e:/Local Settings/Temporary Internet Files/
+
+
+##############################
+############################## excludes for OSX
+##############################
+
+############################## exclude ".DS_Store" and "._.DS_Store"
+e:\.*DS_Store
+
+
+############################## exclude trash bin stuff
+e:\.Trash/
+
+
+##############################
+############################## local excludes
+##############################
+e:/AppData/Local/JetBrains/
+e:/AppData/Local/Google/
+e:/AppData/Local/Dropbox/
+e:/AppData/Local/Steam/
+e:/AppData/Local/Downloaded Installations/
+# the following is because of skype modern app which throws an error even with -vss flag. It's so anoying. I have opened a bug.
+e:/AppData/Local/Packages/
+e:/AppData/Local/Microsoft/Windows/INetCache/
