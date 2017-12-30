@@ -45,8 +45,8 @@ $logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") +
 ##############################
 $duplicacy = @{             # this creates a hash table in powershell
     exe = " .\z.exe "
-    options = " -d -log "
-    # options = " -log "
+    # options = " -d -log "
+    options = " -log "
     vssOption = $false
 
     backup = " backup -stats -threads 18 "
@@ -68,8 +68,8 @@ function main {
 
     # doDuplicacyCommand $duplicacy.list
     # doDuplicacyCommand $duplicacy.backup
-    # doDuplicacyCommand $duplicacy.check
     # doDuplicacyCommand $duplicacy.prune
+    # doDuplicacyCommand $duplicacy.check
 
     ##############################
     ##############################
@@ -78,6 +78,7 @@ function main {
 
 
 function doPreBackupTasks() {
+    [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.VisualBasic")   # needed to delete logFile
     Push-Location $repositoryFolder
 
     if( !(Test-Path -Path $logFolder ) ) {
@@ -95,7 +96,19 @@ function doPostBackupTasks() {
 }
 
 function zipOlderLogFiles() {
-    log "Zipping older log files... NOT IMPLEMENTED"
+    log "Zipping older log files..."
+
+    $logFiles = Get-ChildItem $logFolder -File -Filter *.log
+    foreach( $file in $logFiles ) {
+        $fullName = $file.FullName
+        $zipFileName = Join-Path -Path $file.DirectoryName -ChildPath $file.Basename
+        log "Zipping (and then deleting) the logFile: $fullName to the zipFile: $zipFileName"
+        Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal
+        # Remove-Item -Path $fullName # not good since it deletes the file.
+        [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
+    }
+
+
 
 }
 
