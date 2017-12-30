@@ -96,20 +96,15 @@ function doPostBackupTasks() {
 }
 
 function zipOlderLogFiles() {
-    log "Zipping older log files..."
-
-    $logFiles = Get-ChildItem $logFolder -File -Filter *.log
+    $logFiles = Get-ChildItem $logFolder -File -Filter *.log |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
     foreach( $file in $logFiles ) {
         $fullName = $file.FullName
         $zipFileName = Join-Path -Path $file.DirectoryName -ChildPath $file.Basename
         log "Zipping (and then deleting) the logFile: $fullName to the zipFile: $zipFileName"
         Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal
-        # Remove-Item -Path $fullName # not good since it deletes the file.
+        # Remove-Item -Path $fullName # not good since it deletes the file. I want to send it to recycle bin.
         [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
     }
-
-
-
 }
 
 function logStartBackupProcess() {
