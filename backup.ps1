@@ -27,6 +27,7 @@
 $timings = @{
     scriptStartTime = 0
     scriptEndTime = 0
+    scriptTotalRuntime = 0
 }
 ##############################
 
@@ -37,8 +38,8 @@ $repositoryFolder = "C:/duplicacy repo/"
 
 ##############################
 $logFolder = ".duplicacy/tbp-logs/"
-$logFilePath = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss") + ".log"
-# $logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") + ".log"
+# $logFilePath = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH") + ".log"
+$logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") + ".log"
 ##############################
 
 ##############################
@@ -100,12 +101,13 @@ function zipOlderLogFiles() {
 
 function logStartBackupProcess() {
     $timings.scriptStartTime = Get-Date
-    $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    $startTime = $timings.scriptStartTime.ToString("yyyy-MM-dd HH:mm:ss")
     log
     log
     log "================================================================="
-    log "==== Starting duplicacy backup Process @ $date ===="
+    log "==== Starting Duplicacy backup process =========================="
     log "======"
+    log "====== Start time is: $startTime"
     log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
 
@@ -113,12 +115,13 @@ function logStartBackupProcess() {
 
 function logFinishBackupProcess() {
     $timings.scriptEndTime = Get-Date
-    $scriptTotalRuntime = New-Timespan -Start $timings.scriptStartTime -End $timings.scriptEndTime
-    $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    $timings.scriptTotalRuntime = New-Timespan -Start $timings.scriptStartTime -End $timings.scriptEndTime
+    $startTime = $timings.scriptStartTime.ToString("yyyy-MM-dd HH:mm:ss")
+    $endTime = $timings.scriptEndTime.ToString("yyyy-MM-dd HH:mm:ss")
     log "================================================================="
-    log "==== Finished duplicacy backup Process @ $date ===="
+    log "==== Finished Duplicacy backup process =========================="
     log "======"
-    log ("====== Total runtime: {0} Days, {1} Minutes, {2} Seconds" -f $scriptTotalRuntime.Hours,$scriptTotalRuntime.Minutes,$scriptTotalRuntime.Seconds)
+    log ("====== Total runtime: {0} Days {1} Minutes {2} Seconds, start time: {3}, finish time: {4}" -f $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
     log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
 }
