@@ -52,7 +52,7 @@ $duplicacy = @{             # this creates a hash table in powershell
     backup = " backup -stats -threads 18 "
     list   = " list "
     check  = " check -tabular "
-    prune  = " prune -exhaustive -keep 7:30 -keep 1:7 "
+    prune  = " prune -exhaustive -keep 7:30 -keep 1:7 -keep 1:1 "
 }
 $duplicacy.command = $duplicacy.exe + $duplicacy.options
 if($duplicacy.vssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {

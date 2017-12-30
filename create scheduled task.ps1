@@ -23,7 +23,7 @@
 ##############################
 # Change these three variables to whatever you want
 $taskName = "zzzzzzzzzzzzzzzzzzzzzzzzz"
-$script =  '-NoProfile -ExecutionPolicy Bypass -File "C:\duplicacy repo\backup.ps1" -Verb RunAs'
+$script =  '-NoProfile -ExecutionPolicy Bypass -File "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1" -Verb RunAs'
 # $repetitionInterval = (New-TimeSpan -Minutes 1)
 $repetitionInterval = (New-TimeSpan -Hours 1)
 ##############################
