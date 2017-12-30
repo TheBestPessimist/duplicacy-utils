@@ -121,7 +121,7 @@ function logFinishBackupProcess() {
     log "================================================================="
     log "==== Finished Duplicacy backup process =========================="
     log "======"
-    log ("====== Total runtime: {0} Days {1} Minutes {2} Seconds, start time: {3}, finish time: {4}" -f $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
+    log ("====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}" -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
     log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
 }
