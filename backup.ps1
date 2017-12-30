@@ -14,7 +14,22 @@
 # The script can be run (after setting the correct paths and variable names) like this:
 #       powershell -NoProfile -ExecutionPolicy Bypass -File "C:\duplicacy repo\backup.ps1" -Verb RunAs;
 #
+# prune explanation (from here: https://github.com/gilbertchen/duplicacy/wiki/prune) :
+# $ duplicacy prune -keep 1:7       # Keep 1 snapshot per day for snapshots older than 7 days
+# $ duplicacy prune -keep 7:30      # Keep 1 snapshot every 7 days for snapshots older than 30 days
+# $ duplicacy prune -keep 30:180    # Keep 1 snapshot every 30 days for snapshots older than 180 days
+# $ duplicacy prune -keep 0:360     # Keep no snapshots older than 360 days
+# the order has to be from the eldest to the youngest!
 ##############################
+
+##############################
+# various timings that could prove useful for the user
+$timings = @{
+    scriptStartTime = 0
+    scriptEndTime = 0
+}
+##############################
+
 
 ##############################
 $repositoryFolder = "C:/duplicacy repo/"
@@ -22,19 +37,21 @@ $repositoryFolder = "C:/duplicacy repo/"
 
 ##############################
 $logFolder = ".duplicacy/tbp-logs/"
-# $logFilePath = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss") + ".log"
-$logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") + ".log"
+$logFilePath = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH-mm-ss") + ".log"
+# $logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") + ".log"
 ##############################
 
 ##############################
 $duplicacy = @{             # this creates a hash table in powershell
     exe = " .\z.exe "
-    # options = " -d -log "
-    options = " -log "
-    backup = " backup -stats -threads 18 "
-    list = " list "
-    check = " check -tabular "
+    options = " -d -log "
+    # options = " -log "
     vssOption = $false
+
+    backup = " backup -stats -threads 18 "
+    list   = " list "
+    check  = " check -tabular "
+    prune  = " prune -exhaustive -keep 7:30 -keep 1:7 "
 }
 $duplicacy.command = $duplicacy.exe + $duplicacy.options
 if($duplicacy.vssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
@@ -43,13 +60,15 @@ if($duplicacy.vssOption -And ([Security.Principal.WindowsPrincipal][Security.Pri
 ##############################
 
 function main {
+# http://www.wallacetech.co.uk/?p=693
     doPreBackupTasks
     ##############################
     ##############################
 
-    doDuplicacyCommand $duplicacy.list
+    # doDuplicacyCommand $duplicacy.list
     # doDuplicacyCommand $duplicacy.backup
     # doDuplicacyCommand $duplicacy.check
+    # doDuplicacyCommand $duplicacy.prune
 
     ##############################
     ##############################
@@ -75,28 +94,32 @@ function doPostBackupTasks() {
 }
 
 function zipOlderLogFiles() {
-    log "Zipping older log files..."
+    log "Zipping older log files... NOT IMPLEMENTED"
 
 }
 
 function logStartBackupProcess() {
+    $timings.scriptStartTime = Get-Date
     $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
     log
     log
     log "================================================================="
     log "==== Starting duplicacy backup Process @ $date ===="
-    log "===="
-    log ("==== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
+    log "======"
+    log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
 
 }
 
 function logFinishBackupProcess() {
+    $timings.scriptEndTime = Get-Date
+    $scriptTotalRuntime = New-Timespan -Start $timings.scriptStartTime -End $timings.scriptEndTime
     $date = $(Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
     log "================================================================="
     log "==== Finished duplicacy backup Process @ $date ===="
-    log "===="
-    log ("==== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
+    log "======"
+    log ("====== Total runtime: {0} Days, {1} Minutes, {2} Seconds" -f $scriptTotalRuntime.Hours,$scriptTotalRuntime.Minutes,$scriptTotalRuntime.Seconds)
+    log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
 }
 
