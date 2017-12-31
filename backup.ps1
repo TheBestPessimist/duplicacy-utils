@@ -1,6 +1,4 @@
-##############################
-# This script assumes that it is run form the same folder as the duplicacy
-# executable (eg. from __the repository__).
+#=================================================
 #
 # The log folder is created in the folder .duplicacy/tbp-logs/
 #
@@ -14,71 +12,84 @@
 # The script can be run (after setting the correct paths and variable names) like this:
 #       powershell -NoProfile -ExecutionPolicy Bypass -File "C:\duplicacy repo\backup.ps1" -Verb RunAs;
 #
-# prune explanation (from here: https://github.com/gilbertchen/duplicacy/wiki/prune) :
+# prune explanation (from here: https://github.com/gilbertchen/duplicacy/wiki/prune ):
 # $ duplicacy prune -keep 1:7       # Keep 1 snapshot per day for snapshots older than 7 days
 # $ duplicacy prune -keep 7:30      # Keep 1 snapshot every 7 days for snapshots older than 30 days
-# $ duplicacy prune -keep 30:180    # Keep 1 snapshot every 30 days for snapshots older than 180 days
-# $ duplicacy prune -keep 0:360     # Keep no snapshots older than 360 days
 # the order has to be from the eldest to the youngest!
-##############################
+#
+#=================================================
 
-##############################
-# various timings that could prove useful for the user
+
+#=================================================
+# Import the backup config file
+#
+. ".\backup config.ps1"
+#=================================================
+
+#=================================================
+# Various timers keeping time
+#
 $timings = @{
     scriptStartTime = 0
     scriptEndTime = 0
     scriptTotalRuntime = 0
 }
-##############################
+#=================================================
 
-
-##############################
-$repositoryFolder = "C:/duplicacy repo/"
-##############################
-
-##############################
-$logFolder = ".duplicacy/tbp-logs/"
+#=================================================
+# Info about the logging
+#
+$logFolder = ".duplicacy/tbp-logs/" # relative to repositoryFolder
 # $logFilePath = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH") + ".log"
 $logFilePath = $logFolder + "backup-log " + $(Get-Date).toString("yyyy-MM-dd") + ".log"
-##############################
+#=================================================
 
-##############################
-$duplicacy = @{             # this creates a hash table in powershell
-    exe = " .\z.exe "
-    # options = " -d -log "
-    options = " -log "
-    vssOption = $false
+#=================================================
+# The duplicacy commands
+#
+$duplicacyBackupVss_temp = ""
+if( $duplicacyVssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator") ) {
+    $duplicacyBackupVss_temp = " -vss "
+}
 
-    backup = " backup -stats -threads 18 "
+$duplicacyOptions_temp = " -log "
+if( $duplicacyDebug ) {
+    $duplicacyOptions_temp += " -d "
+}
+
+$duplicacy = @{             # this is a hash table
+    exe = " $duplicacyExePath "
+    options = " $duplicacyOptions_temp "
+    command = " $duplicacyExePath $duplicacyOptions_temp "
+
+    backup = " backup -stats -threads 18 $duplicacyBackupVss_temp "
     list   = " list "
     check  = " check -tabular "
-    prune  = " prune -exhaustive -keep 7:30 -keep 1:7 -keep 1:1 "
+    prune  = " prune $duplicacyPruneRetentionPolicy "
 }
-$duplicacy.command = $duplicacy.exe + $duplicacy.options
-if($duplicacy.vssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    $duplicacy.backup += " -vss "
-}
-##############################
+#=================================================
+
 
 function main {
-# http://www.wallacetech.co.uk/?p=693
+    # http://www.wallacetech.co.uk/?p=693
     doPreBackupTasks
-    ##############################
-    ##############################
+    #=================================================
+    #=================================================
 
     # doDuplicacyCommand $duplicacy.list
     # doDuplicacyCommand $duplicacy.backup
-    # doDuplicacyCommand $duplicacy.prune
-    # doDuplicacyCommand $duplicacy.check
+    doDuplicacyCommand $duplicacy.prune
+    doDuplicacyCommand $duplicacy.check
 
-    ##############################
-    ##############################
+    #=================================================
+    #=================================================
     doPostBackupTasks
 }
 
-
+#=================================================
+# Helper functions
+#
 function doPreBackupTasks() {
-    [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.VisualBasic")   # needed to delete logFile
     Push-Location $repositoryFolder
 
     if( !(Test-Path -Path $logFolder ) ) {
@@ -88,23 +99,6 @@ function doPreBackupTasks() {
 
     logStartBackupProcess
     zipOlderLogFiles
-}
-
-function doPostBackupTasks() {
-    logFinishBackupProcess
-    Pop-Location
-}
-
-function zipOlderLogFiles() {
-    $logFiles = Get-ChildItem $logFolder -File -Filter *.log |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
-    foreach( $file in $logFiles ) {
-        $fullName = $file.FullName
-        $zipFileName = Join-Path -Path $file.DirectoryName -ChildPath $file.Basename
-        log "Zipping (and then deleting) the logFile: $fullName to the zipFile: $zipFileName"
-        Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal
-        # Remove-Item -Path $fullName # not good since it deletes the file. I want to send it to recycle bin.
-        [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
-    }
 }
 
 function logStartBackupProcess() {
@@ -118,7 +112,24 @@ function logStartBackupProcess() {
     log "====== Start time is: $startTime"
     log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
     log "================================================================="
+}
 
+function zipOlderLogFiles() {
+    [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.VisualBasic")   # needed to delete logFile
+    $logFiles = Get-ChildItem $logFolder -File -Filter *.log |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
+    foreach( $file in $logFiles ) {
+        $fullName = $file.FullName
+        $zipFileName = Join-Path -Path $file.DirectoryName -ChildPath $file.Basename
+        log "Zipping (and then deleting) the logFile: $fullName to the zipFile: $zipFileName"
+        Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal
+        # Remove-Item -Path $fullName # not good since it deletes the file. I want to send it to recycle bin.
+        [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
+    }
+}
+
+function doPostBackupTasks() {
+    logFinishBackupProcess
+    Pop-Location
 }
 
 function logFinishBackupProcess() {
