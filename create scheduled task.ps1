@@ -3,6 +3,7 @@
 # - https://blog.netnerds.net/2015/01/create-scheduled-task-or-scheduled-job-to-indefinitely-run-a-powershell-script-every-5-minutes/ (mostly copied)
 # - http://britv8.com/powershell-create-a-scheduled-task/
 #
+# talk about executionpolicy! (shoudl set it before, and unset it after)
 ##############################
 
 
@@ -22,8 +23,9 @@
 
 ##############################
 # Change these three variables to whatever you want
+$scriptName = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
 $taskName = "zzzzzzzzzzzzzzzzzzzzzzzzz"
-$script =  '-NoProfile -ExecutionPolicy Bypass -File "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1" -Verb RunAs'
+$script =  '-NoProfile -ExecutionPolicy Bypass -File "' + $scriptName + '" -Verb RunAs'
 # $repetitionInterval = (New-TimeSpan -Minutes 1)
 $repetitionInterval = (New-TimeSpan -Hours 1)
 ##############################
