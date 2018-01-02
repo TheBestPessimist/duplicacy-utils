@@ -23,7 +23,7 @@
 #=================================================
 # Import the backup config file
 #
-. ".\backup config.ps1"
+. "$PSScriptRoot\backup config.ps1"
 #=================================================
 
 #=================================================
@@ -77,9 +77,9 @@ function main {
     #=================================================
 
     # doDuplicacyCommand $duplicacy.list
-    # doDuplicacyCommand $duplicacy.backup
-    doDuplicacyCommand $duplicacy.prune
-    doDuplicacyCommand $duplicacy.check
+    doDuplicacyCommand $duplicacy.backup
+    # doDuplicacyCommand $duplicacy.prune
+    # doDuplicacyCommand $duplicacy.check
 
     #=================================================
     #=================================================
