@@ -48,4 +48,4 @@ ___
 
 - explanation of how to run the scripts, and that they need to be in the same folder
 - send mail with the stats of the backup command
-- save mail password to windows credentials manager
+- save mail password to windows credentials manager, not in plaintext or some temp file which is just dumb
