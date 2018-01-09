@@ -210,9 +210,6 @@ e:/AppData/Local/Microsoft/Windows/INetCache/
 .*/Library/Saved Application State/.*
 .*/Library/Mail/.*/Info.plist
 .*/Library/Calendars/.*/Info.plist
-.*/Code42/Code 42 Service.app/*
-.*/Code42/SharePlan Helper.app/*
-.*/Code42/SharePlanMenuItem.app/*
 (?i).*/backups.backupdb/.*
 .*MobileBackups/.*
 
