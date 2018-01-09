@@ -1,11 +1,15 @@
-##################################################
-################################################## notes about this file
-##################################################
+################################################################################
+################################################################################ notes about this file
+################################################################################
 #
 # This file is a generic file which adds some folders and files to the duplicacy backup ignore list
 # This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/
 #
-##################################################
+# Sources for the ignores:
+#       - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BackupRestore
+#       - CrashPlan config files
+#
+################################################################################
 #
 # note: "^[^/]*"" has the purpose of assuring that there is only 1 "/" before the folder.
 # This means that it should match "c:/Recovery/" or "some_sym_link/Recovery/",
@@ -14,21 +18,20 @@
 #       folders and files which are in root, or in a symlink to root
 #
 
-##################################################
-################################################## generic excludes
-##################################################
+################################################################################
+################################################################################ generic excludes
+################################################################################
 
 ############################## exclude the ".git" subfolder
-e:\.git/.*$
-
+e:(?i)\.git/.*$
 
 ############################## exclude temp files everywhere (case insensitive)
 e:(?i)\.(tmp|temp)$
 
 
-##############################
-############################## online storage solutions
-##############################
+##################################################
+################################################## online storage solutions
+##################################################
 
 ############################## exclude Google Drive cache folder (which is in the google drive folder actually)
 e:\.tmp\.drivedownload/
@@ -41,9 +44,9 @@ e:\.dropbox\.cache/
 
 
 
-##################################################
-################################################## excludes for windows machines
-##################################################
+################################################################################
+################################################################################ excludes for windows machines
+################################################################################
 
 ############################## exclude recycle bin
 e:(?i)\$RECYCLE\.BIN/
@@ -73,12 +76,12 @@ e:^[^/]*/Recovery/
 
 
 ############################## exclude some hidden windows files in C:/
-e:^[^/]*/bootmgr
-e:^[^/]*/BOOTNXT
-e:^[^/]*/BOOTSECT.BAK
-e:^[^/]*/pagefile.sys
-e:^[^/]*/hiberfil.sys
-e:^[^/]*/swapfile.sys
+e:(?i)^[^/]*/bootmgr
+e:(?i)^[^/]*/BOOTNXT
+e:(?i)^[^/]*/BOOTSECT.BAK
+e:(?i)^[^/]*/pagefile.sys
+e:(?i)^[^/]*/hiberfil.sys
+e:(?i)^[^/]*/swapfile.sys
 
 
 ############################## exclude some temp folders
@@ -87,9 +90,9 @@ e:/Local Settings/Temp/
 e:/Local Settings/Temporary Internet Files/
 
 
-##############################
-############################## excludes for OSX
-##############################
+##################################################
+################################################## excludes for OSX
+##################################################
 
 ############################## exclude ".DS_Store" and "._.DS_Store"
 e:\.*DS_Store
@@ -110,3 +113,148 @@ e:/AppData/Local/Downloaded Installations/
 # the following is because of skype modern app which throws an error even with -vss flag. It's so anoying. I have opened a bug.
 e:/AppData/Local/Packages/
 e:/AppData/Local/Microsoft/Windows/INetCache/
+
+
+
+
+
+
+################################################################################
+################################################################################
+################################################################################  windows filters taken from HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BackupRestore
+################################################################################
+################################################################################
+C:\ProgramData\Microsoft\Network\Downloader\*
+%systemroot%\Minidump\* /s
+%systemroot%\memory.dmp
+\Pagefile.sys
+%ProgramData%\Microsoft\Windows\WER\* /s
+%windir%\softwaredistribution\*.* /s
+$UserProfile$\AppData\Local\Packages\Microsoft.Office.Desktop_8wekyb3d8bbwe\LocalCache\Local\Microsoft\Outlook\*.oab /s
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsd
+$UserProfile$\Local Settings\Application Data\Office\15.0\OfficeFileCache\LocalCacheFileEditManager\*.fsf
+$UserProfile$\AppData\Local\Microsoft\Outlook\*.oab
+
+
+
+
+################################################################################
+################################################################################
+################################################################################  mac ignores
+################################################################################
+################################################################################
+.*\.part
+.*/iPhoto Library/iPod Photo Cache/.*
+.*/Music/Subscription/.*
+(?i).*/Google/Chrome/.*cache.*
+(?i).*/Mozilla/Firefox/.*cache.*
+.*/Google/Chrome/Safe Browsing.*
+
+/dev/.*
+.*\.Trash.*
+/\.vol/.*
+/mach.sym
+/mach_kernel
+.*\.hotfiles\.btree.*
+.*/Trash/.*
+.*/Network Trash Folder/.*
+.*/VM Storage
+.*\.fseventsd.*
+.*/Library/Caches/.*
+.*\.Spotlight-.*/.*
+/Network/.*
+/tmp/.*
+/cores/.*
+/afs/.*
+/automount/.*
+/private/Network/.*
+/private/tmp/.*
+/private/var/tmp/.*
+/private/var/folders/.*
+/private/var/run/.*
+/private/var/spool/postfix/.*
+/private/var/vm/.*
+/Previous Systems.*
+.*/lost\+found/.*
+.*/Microsoft User Data/Entourage Temp/.*
+.*/iP.* Software Updates/.*
+.*/Library/Application Support/SyncServices/.*
+.*/Library/Logs/.*
+.*/Library/Mail/Envelope Index
+.*/Library/Mail/AvailableFeeds/.*
+.*/Library/Mirrors/.*
+.*/Library/PubSub/Database/.*
+.*/Library/PubSub/Downloads/.*
+.*/Library/PubSub/Feeds/.*
+.*/Library/Safari/Icons.db
+.*/Library/Safari/WebpageIcons.db
+.*/Library/Safari/HistoryIndex.sk
+.*/Library/Calendars/Calendar Cache
+.*/iTunes/Album Artwork/Cache/.*
+.*/iPhoto Library/iPod Photo Cache.*
+/Desktop DB
+/Desktop DF
+/Network/Servers.*
+/Users/Shared/SC Info.*
+/net/.*
+/private/var/automount/.*
+/private/var/db/dhcpclient/.*
+/private/var/db/fseventsd/.*
+/System/Library/Extensions/Caches/.*
+.*/Library/Saved Application State/.*
+.*/Library/Mail/.*/Info.plist
+.*/Library/Calendars/.*/Info.plist
+.*/Code42/Code 42 Service.app/*
+.*/Code42/SharePlan Helper.app/*
+.*/Code42/SharePlanMenuItem.app/*
+(?i).*/backups.backupdb/.*
+.*MobileBackups/.*
+
+
+
+################################################################################
+################################################################################
+################################################################################  windows ignores
+################################################################################
+################################################################################
+.*\$RECYCLE\.BIN/.*
+.*/System Volume Information/.*
+.*/RECYCLER/.*
+.*/I386.*
+.*/pagefile.sys
+.*/MSOCache.*
+.*UsrClass\.dat\.LOG.*
+.*UsrClass\.dat
+.*/Temporary Internet Files/.*
+(?i).*/ntuser.dat.*
+.*/Local Settings/Temp.*
+.*/AppData/Local/Temp.*
+.*/AppData/Temp.*
+.*/Windows/Temp.*
+(?i).*/Microsoft.*/Windows/.*\.log
+.*/Microsoft.*/Windows/Cookies.*
+.*/Microsoft.*/RecoveryStore.*
+(?i).:/Config\\.Msi.*
+(?i).*\\.rbf
+.*/Windows/Installer.*
+.*/Application Data/Application Data.*
+(?i).:/Config\.Msi.*
+(?i).*\.rbf
+(?i).*/Microsoft.*/Windows/.*\.edb
+.*\.tmp
+.*\.tmp/.*
+.*/swapfile.sys
