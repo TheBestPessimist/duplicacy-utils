@@ -17,36 +17,49 @@
 # In other words, the purpose of that regex is to handle excluding, at least in windows,
 #       folders and files which are in root, or in a symlink to root
 #
+# ==============================================================================
+# ==============================================================================
+# ==============================================================================
+
+
 
 # ==============================================================================
+# ==============================================================================
 # ============================================================================== generic excludes (win and mac)
+# ==============================================================================
 # ==============================================================================
 
 # ============================ exclude the ".git" subfolder
 e:(?i)\.git/.*$
 
-# ============================ exclude temp files everywhere (case insensitive)
+# ============================ exclude temp files/folders everywhere (case insensitive)
 e:(?i)\.(tmp|temp)$
+e:(?i)/temp/
+e:(?i)/tmp/
 
 
 
 # ==============================================================================
-# ============================================================================== online storage solutions
+# ==============================================================================
+# ============================================================================== online storage solutions cache
+# ==============================================================================
 # ==============================================================================
 
-# ============================ exclude Google Drive cache folder (which is in the google drive folder actually)
+# ============================ Google Drive
 e:\.tmp\.drivedownload/
 
-# ============================ exclude Onedrive cache folder
+# ============================ Onedrive
 e:OneDriveTemp/
 
-# ============================ exclude dropbox cache folder
+# ============================ dropbox
 e:\.dropbox\.cache/
 
 
 
 # ==============================================================================
+# ==============================================================================
 # ============================================================================== excludes for windows machines
+# ==============================================================================
 # ==============================================================================
 
 # ================================================
@@ -98,120 +111,71 @@ e:/Windows/Temp/
 # ================================================
 # ================================================ misc windows
 # ================================================
-
+e:/AppData/Local/Downloaded Installations/
 e:/AppData/Local/Microsoft/
 e:/Windows/Installer/
 e:\.rbf
 
 
 # ==============================================================================
+# ==============================================================================
 # ============================================================================== excludes for OSX
+# ==============================================================================
 # ==============================================================================
 
 # ============================ exclude ".DS_Store" and "._.DS_Store"
 e:\.*DS_Store
 
 
-# ============================ exclude trash bin stuff
+# ================================================
+# ================================================ trash/bin stuff
+# ================================================
 e:\.Trash/
+e:/Trash/
+e:/Network Trash Folder/
+
+
+# ================================================
+# ================================================ libraries
+# ================================================
+e:/Library/Application Support/SyncServices/
+e:/Library/Caches/
+e:/Library/Logs/
+e:/Library/Mail/AvailableFeeds/
+e:/Library/Mirrors/
+e:/Library/PubSub/Database/
+e:/Library/PubSub/Downloads/
+e:/Library/PubSub/Feeds/
+e:/Library/Safari/Icons.db
+e:/Library/Safari/WebpageIcons.db
+e:/Library/Safari/HistoryIndex.sk
+e:/iTunes/Album Artwork/Cache/
+e:/System/Library/Extensions/Caches/
+e:.Library/Saved Application State/
+
+
 
 
 # ==============================================================================
+# ==============================================================================
 # ============================================================================== local excludes (user specific)
+# ==============================================================================
 # ==============================================================================
 
 # ============================ jetbrains toolbox location
 e:/AppData/Local/JetBrains/
 
-# ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). It's so anoying. I have opened a bug to for duplicacy.
+# ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
 e:/AppData/Local/Packages/
 
 e:/AppData/Local/Google/
 e:/AppData/Local/Dropbox/
 e:/AppData/Local/Steam/
-e:/AppData/Local/Downloaded Installations/
-e:/AppData/Local/Microsoft/Windows/INetCache/
 
 
 
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================  mac ignores
-# ==============================================================================
-# ==============================================================================
-.*/iPhoto Library/iPod Photo Cache/.*
-.*/Music/Subscription/.*
-(?i).*/Google/Chrome/.*cache.*
-(?i).*/Mozilla/Firefox/.*cache.*
-.*/Google/Chrome/Safe Browsing.*
 
-/dev/.*
-.*\.Trash.*
-/\.vol/.*
-/mach.sym
-/mach_kernel
-.*\.hotfiles\.btree.*
-.*/Trash/.*
-.*/Network Trash Folder/.*
-.*/VM Storage
-.*\.fseventsd.*
-.*/Library/Caches/.*
-.*\.Spotlight-.*/.*
-/Network/.*
-/tmp/.*
-/cores/.*
-/afs/.*
-/automount/.*
-/private/Network/.*
-/private/tmp/.*
-/private/var/tmp/.*
-/private/var/folders/.*
-/private/var/run/.*
-/private/var/spool/postfix/.*
-/private/var/vm/.*
-/Previous Systems.*
-.*/lost\+found/.*
-.*/Microsoft User Data/Entourage Temp/.*
-.*/iP.* Software Updates/.*
-.*/Library/Application Support/SyncServices/.*
-.*/Library/Logs/.*
-.*/Library/Mail/Envelope Index
-.*/Library/Mail/AvailableFeeds/.*
-.*/Library/Mirrors/.*
-.*/Library/PubSub/Database/.*
-.*/Library/PubSub/Downloads/.*
-.*/Library/PubSub/Feeds/.*
-.*/Library/Safari/Icons.db
-.*/Library/Safari/WebpageIcons.db
-.*/Library/Safari/HistoryIndex.sk
-.*/Library/Calendars/Calendar Cache
-.*/iTunes/Album Artwork/Cache/.*
-.*/iPhoto Library/iPod Photo Cache.*
-/Desktop DB
-/Desktop DF
-/Network/Servers.*
-/Users/Shared/SC Info.*
-/net/.*
-/private/var/automount/.*
-/private/var/db/dhcpclient/.*
-/private/var/db/fseventsd/.*
-/System/Library/Extensions/Caches/.*
-.*/Library/Saved Application State/.*
-.*/Library/Mail/.*/Info.plist
-.*/Library/Calendars/.*/Info.plist
-(?i).*/backups.backupdb/.*
-.*MobileBackups/.*
+
 
 
 
@@ -219,12 +183,59 @@ e:/AppData/Local/Microsoft/Windows/INetCache/
 
 # ==============================================================================
 # ==============================================================================
-# ============================================================================== need help to decide
+# ============================================================================== need help to decide -> NEED OPINIONS!
 # ==============================================================================
 # ==============================================================================
 
-# ============================ what about these ones?
 
-#%systemroot%\Minidump\* /s
-#%systemroot%\memory.dmp
-
+# ============================ windows
+##%systemroot%\Minidump\* /s
+##%systemroot%\memory.dmp
+#
+#
+# ============================ macos
+#.*/Music/Subscription/.*
+#e:/Library/Calendars/Calendar Cache/
+#e:/Library/Mail/Envelope Index
+#
+#e:/iPhoto Library/iPod Photo Cache
+#e:/iPhoto Library/iPod Photo Cache/
+#e:.Library/Mail/*/Info.plist
+#e:.Library/Calendars/*/Info.plist
+#
+# (?i).*/Google/Chrome/.*cache.*
+# (?i).*/Mozilla/Firefox/.*cache.*
+# .*/Google/Chrome/Safe Browsing.*
+#
+# /dev/.*
+# /\.vol/.*
+# /mach.sym
+# /mach_kernel
+# .*\.hotfiles\.btree.*
+# .*/VM Storage
+# .*\.fseventsd.*
+# .*\.Spotlight-.*/.*
+# /Network/.*
+# /cores/.*
+# /afs/.*
+# /automount/.*
+# /private/Network/.*
+# /private/var/folders/.*
+# /private/var/run/.*
+# /private/var/spool/postfix/.*
+# /private/var/vm/.*
+# /Previous Systems.*
+# .*/lost\+found/.*
+# .*/Microsoft User Data/Entourage Temp/.*
+# .*/iP.* Software Updates/.*
+#
+# /Desktop DB
+# /Desktop DF
+# /Network/Servers.*
+# /Users/Shared/SC Info.*
+# /net/.*
+# /private/var/automount/.*
+# /private/var/db/dhcpclient/.*
+# /private/var/db/fseventsd/.*
+# (?i).*/backups.backupdb/.*
+# .*MobileBackups/.*
