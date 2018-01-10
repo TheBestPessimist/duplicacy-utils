@@ -1,13 +1,50 @@
-﻿##############################
+﻿# ==============================================================================
+# ==============================================================================
+#
+# User-configurable part. Please don't modify anything else!
+#
+# ==============================================================================
+# ==============================================================================
+
+# ================================================
+# Backup script full path
+$scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
+
+
+# ================================================
+# The name of the Scheduled Task
+$taskName = "Duplicacy Hourly Backup"
+
+
+# ================================================
+# Repetition interval example (just copy the part after "#", which starts with "$"):
+#       1 minute:     run the script every minute,
+#       1 hour:       run the script every hour,
+#       1 day:        run the script every day (once a day)
+# $repetitionInterval = (New-TimeSpan -Minutes 1)
+# $repetitionInterval = (New-TimeSpan -Hours 1)
+# $repetitionInterval = (New-TimeSpan -Days 1)
+#
+# copy repetition interval below:
+$repetitionInterval = (New-TimeSpan -Hours 1)
+
+# ==============================================================================
+# ==============================================================================
+#
+# END of user-configurable part. Please don't modify anything else!
+#
+# ==============================================================================
+# ==============================================================================
+
+
+
+# ================================================
 # created with the help of:
 # - https://blog.netnerds.net/2015/01/create-scheduled-task-or-scheduled-job-to-indefinitely-run-a-powershell-script-every-5-minutes/ (mostly copied)
 # - http://britv8.com/powershell-create-a-scheduled-task/
 #
-# talk about executionpolicy! (shoudl set it before, and unset it after)
-##############################
-
-
-##############################
+#
+#
 # task options
 #
 # - WILL DELETE THE TASK IF IT ALREADY EXISTS!!!!
@@ -19,16 +56,10 @@
 # - don't wake the computer to run the task (as mentioned above, the task will run whenever the computer is turned on, even after it's normal start time)
 # - the task will run for at most 3 days continuously before being quit (Task Scheduler constraint)
 #
-##############################
+# ================================================
 
-##############################
-# Change these three variables to whatever you want
-$scriptName = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
-$taskName = "zzzzzzzzzzzzzzzzzzzzzzzzz"
-$script =  '-NoProfile -ExecutionPolicy Bypass -File "' + $scriptName + '" -Verb RunAs'
-# $repetitionInterval = (New-TimeSpan -Minutes 1)
-$repetitionInterval = (New-TimeSpan -Hours 1)
-##############################
+
+$script =  '-NoProfile -ExecutionPolicy Bypass -File "' + $scriptPath + '" -Verb RunAs'
 
 function main() {
     ##############################
