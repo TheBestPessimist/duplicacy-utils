@@ -1,7 +1,5 @@
 # Duplicacy utils
 
-### About
-
 The aim of these scripts is to help the windows user automate Duplicacy usage as much as possible.
 
 The principle i followed with these is _set it and forget it_.
@@ -24,17 +22,19 @@ The script also creates each day a new log file in a folder inside `[repository]
 with all the details of any backup run or other command, just as if they were run from the console.
 
 
-#### 2. `create scheduled task.ps1`
+##### 2. `create scheduled task.ps1`
 
 The purpose of this script is to create one or multiple Windows `Scheduled Tasks` which will run `backup.ps1` 
 with the options the user set. 
 
-It asks the user for credentials for adding the scheduled task 
+It asks the user for credentials for adding the scheduled task .
 
-#### 3. `filters`
+##### 3. `filters`
 
 This is a duplicacy ignore file which stores some exclude patters for Windows and MacOS. 
+
 It should be edited as needed, either by commenting lines (put `#` at the beginning) or uncommenting them (remove `#` at the beginning).
+
 The way the file is created, there should be no need to edit it currently, as it _should_ remove no user data.
 
 ---
@@ -42,6 +42,7 @@ The way the file is created, there should be no need to edit it currently, as it
 
 ### TODO
 
+- improve the exclude rules for MacOS
 - guide for setting up powershell with minimum system modification
 
     
