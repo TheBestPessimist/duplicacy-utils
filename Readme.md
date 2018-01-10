@@ -4,6 +4,8 @@ The aim of these scripts is to help the windows user automate Duplicacy usage as
 
 The principle i followed with these is _set it and forget it_.
 
+---
+
 Currently there are 2 main scripts: `backup.ps1` and `create scheduled task.ps1`, and a generic `filters` file.
 
 ##### 1. `backup.ps1`
@@ -42,7 +44,8 @@ The way the file is created, there should be no need to edit it currently, as it
 
 ### TODO
 
-- improve the exclude rules for MacOS
+- improve the exclude rules for MacOS (HELP NEEDED)
+- name/organize the scripts better (HELP NEEDED)
 - guide for setting up powershell with minimum system modification
 
     
