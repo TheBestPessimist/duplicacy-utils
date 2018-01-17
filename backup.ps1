@@ -35,9 +35,13 @@ $timings = @{
 # ================================================
 # Info about the logging
 #
-$logFolder = ".duplicacy/tbp-logs/" # relative to repositoryFolder
-# $logFilePath = $logFolder + "backup-log-" + $(Get-Date).toString("yyyy-MM-dd HH") + ".log"
-$logFilePath = $logFolder + "backup-log " + $( Get-Date ).toString("yyyy-MM-dd") + ".log"
+$log = @{
+    basePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
+    folder = $( Get-Date ).toString("yyyy-MM-dd dddd")
+    fileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "." + $( Get-Date ).Ticks + ".log"
+}
+$log.workingPath = $log.basePath + "/" + $log.folder + "/"
+$log.filePath = $log.workingPath + $log.fileName
 # ================================================
 
 # ================================================
@@ -77,7 +81,7 @@ function main
     # ================================================
 
     # doDuplicacyCommand $duplicacy.list
-    doDuplicacyCommand $duplicacy.backup
+    #    doDuplicacyCommand $duplicacy.backup
     # doDuplicacyCommand $duplicacy.prune
     # doDuplicacyCommand $duplicacy.check
 
@@ -93,10 +97,10 @@ function doPreBackupTasks()
 {
     Push-Location $repositoryFolder
 
-    if (!(Test-Path -Path $logFolder))
+    if (!(Test-Path -Path $log.workingPath))
     {
-        New-Item -ItemType directory -Path $logFolder
-        log "Folder $logFolder does not exist. It has just been created"
+        New-Item -ItemType directory -Path $log.workingPath
+        log "Folder ${log.workingPath} does not exist. It has just been created"
     }
 
     logStartBackupProcess
@@ -113,7 +117,7 @@ function logStartBackupProcess()
     log "==== Starting Duplicacy backup process =========================="
     log "======"
     log "====== Start time is: $startTime"
-    log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
+    log ("====== logFile is: " + (Resolve-Path -Path $log.filePath).Path)
     log "================================================================="
 }
 
@@ -122,7 +126,7 @@ function logStartBackupProcess()
 function zipOlderLogFiles()
 {
     [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.VisualBasic")   # needed to delete logFile
-    $logFiles = Get-ChildItem $logFolder -File -Filter *.log |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
+    $logFiles = Get-ChildItem $log.basePath -File -Filter *.log |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
     foreach( $file in $logFiles ) {
         $fullName = $file.FullName
         $zipFileName = Join-Path -Path $file.DirectoryName -ChildPath $file.Basename
@@ -150,7 +154,7 @@ function logFinishBackupProcess()
     log "==== Finished Duplicacy backup process =========================="
     log "======"
     log ("====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}" -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
-    log ("====== logFile is: " + (Resolve-Path -Path $logFilePath).Path)
+    log ("====== logFile is: " + (Resolve-Path -Path $log.filePath).Path)
     log "================================================================="
 }
 
@@ -165,7 +169,7 @@ function doDuplicacyCommand($arg)
 
 function invoke($command)
 {
-    Invoke-Expression " $command | Tee-Object -FilePath '$logFilePath' -Append "
+    Invoke-Expression $command | Tee-Object -FilePath "$( $log.filePath )" -Append
 }
 
 
