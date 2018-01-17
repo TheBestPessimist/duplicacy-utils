@@ -126,14 +126,15 @@ function logStartBackupProcess()
 function zipOlderLogFiles()
 {
     [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.VisualBasic")   # needed to delete logFile
-    $logFiles = Get-ChildItem $log.basePath -File -Filter *.log |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
-    foreach( $file in $logFiles ) {
-        $fullName = $file.FullName
-        $zipFileName = Join-Path -Path $file.DirectoryName -ChildPath $file.Basename
-        log "Zipping (and then deleting) the logFile: $fullName to the zipFile: $zipFileName"
-        Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal
-        # Remove-Item -Path $fullName # not good since it deletes the file. I want to send it to recycle bin.
-        [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
+    $logFiles = Get-ChildItem $log.basePath -Directory |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
+    foreach( $folder in $logFiles )
+    {
+        $fullName = $folder.FullName
+        $zipFileName = "$fullName.zip"
+        echo "Zipping (and then deleting) the folder: $fullName to the zipFile: $zipFileName"
+        Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal -Update
+        # Remove-Item -Path $fullName # not good since it deletes the Folder. I want to send it to recycle bin.
+        [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteDirectory($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
     }
 }
 # @formatter:on
