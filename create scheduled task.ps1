@@ -59,29 +59,52 @@ $repetitionInterval = (New-TimeSpan -Hours 1)
 # ================================================
 
 
-$script =  '-NoProfile -ExecutionPolicy Bypass -File "' + $scriptPath + '" -Verb RunAs'
+$script = '-NoProfile -ExecutionPolicy Bypass -File "' + $scriptPath + '" -Verb RunAs'
 
-function main() {
+$userCredentials = @{
+    username = ""
+    password = ""
+}
+
+function main()
+{
+    ##############################
+    getUserCredentials
+    ##############################
+
     ##############################
     # cleanup: Unregister first the ScheduledTask if it already exists
     Unregister-ScheduledTask -TaskName $taskName -Confirm: $false -ErrorAction SilentlyContinue
     ##############################
 
+        createNewTask
+    
+#    For ($i = 0; $i -le 100; $i++) {
+#        $taskName = "$taskNameInit$i"
+#        createNewTask
+#    }
+}
+
+function getUserCredentials()
+{
+    $msg = "Enter the username and password that will run the task";
+    $credential = $Host.UI.PromptForCredential("Task username and password", $msg, "$env:userdomain\$env:username", $env:userdomain)
+    $userCredentials.username = $credential.UserName
+    $userCredentials.password = $credential.GetNetworkCredential().Password
+}
+
+function createNewTask()
+{
     # The script below will run as the specified user (you will be prompted for credentials)
     # and is set to be elevated to use the highest privileges.
     # In addition, the task will run however long specified in $repetitionInterval above.
     $task = New-ScheduledTaskAction –Execute "powershell.exe" -Argument  "$script; quit"
+    $randomDelay = (New-TimeSpan -Seconds 30)  # 30 seconds of random start delay
     $repetitionDuration = (New-TimeSpan -Days 10000)  # 27 years should be enough
-    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repetitionInterval -RepetitionDuration $repetitionDuration
-
-
-    $msg = "Enter the username and password that will run the task";
-    $credential = $Host.UI.PromptForCredential("Task username and password",$msg,"$env:userdomain\$env:username",$env:userdomain)
-    $username = $credential.UserName
-    $password = $credential.GetNetworkCredential().Password
+    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repetitionInterval -RepetitionDuration $repetitionDuration -RandomDelay $randomDelay
     $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -StartWhenAvailable
 
-    Register-ScheduledTask -TaskName $taskName -Action $task -Trigger $trigger -RunLevel Highest -User $username -Password $password -Settings $settings
+    Register-ScheduledTask -TaskName $taskName -Action $task -Trigger $trigger -RunLevel Highest -User $userCredentials.username -Password $userCredentials.password -Settings $settings
 }
 
 main
