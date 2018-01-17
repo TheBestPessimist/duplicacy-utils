@@ -38,7 +38,7 @@ $timings = @{
 $log = @{
     basePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
     folder = $( Get-Date ).toString("yyyy-MM-dd dddd")
-    fileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "." + $( Get-Date ).Ticks + ".log"
+    fileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
 }
 $log.workingPath = $log.basePath + "/" + $log.folder + "/"
 $log.filePath = $log.workingPath + $log.fileName
