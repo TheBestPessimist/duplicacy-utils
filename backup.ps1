@@ -81,8 +81,8 @@ function main
     # ================================================
 
     # doDuplicacyCommand $duplicacy.list
-    #    doDuplicacyCommand $duplicacy.backup
-    # doDuplicacyCommand $duplicacy.prune
+    doDuplicacyCommand $duplicacy.backup
+    doDuplicacyCommand $duplicacy.prune
     # doDuplicacyCommand $duplicacy.check
 
     # ================================================
@@ -199,12 +199,6 @@ main
 
 
 
-
-# #=========================================================================================================
-# # TODO: We should not exit upon first fail but instead continue and back up as much as possbile
-# # TODO: Check if exe is running already: Get-Process | ?{$_.path -eq "C:\Program Files (x86)\Notepad++\notepad++.exe"}
-# # Version: 0.0.5
-# #=========================================================================================================
 
 # # Config / Global vars
 # $duplicacyMasterDir="C:\duplicacy repo"                       # Logfiles will go here, subdir /Logs
