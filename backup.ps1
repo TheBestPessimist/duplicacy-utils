@@ -131,7 +131,7 @@ function zipOlderLogFiles()
     {
         $fullName = $folder.FullName
         $zipFileName = "$fullName.zip"
-        echo "Zipping (and then deleting) the folder: $fullName to the zipFile: $zipFileName"
+        log "Zipping (and then deleting) the folder: $fullName to the zipFile: $zipFileName"
         Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal -Update
         # Remove-Item -Path $fullName # not good since it deletes the Folder. I want to send it to recycle bin.
         [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteDirectory($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
