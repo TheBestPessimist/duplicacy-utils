@@ -125,7 +125,6 @@ function logStartBackupProcess()
 # intellij formatter derps whilst formatting this method. it doesn't like the "["
 function zipOlderLogFiles()
 {
-    [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.VisualBasic")   # needed to delete logFile
     $logFiles = Get-ChildItem $log.basePath -Directory |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1)}
     foreach( $folder in $logFiles )
     {
@@ -134,7 +133,9 @@ function zipOlderLogFiles()
         log "Zipping (and then deleting) the folder: $fullName to the zipFile: $zipFileName"
         Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal -Update
         # Remove-Item -Path $fullName # not good since it deletes the Folder. I want to send it to recycle bin.
-        [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteDirectory($fullName, 'OnlyErrorDialogs', 'SendToRecycleBin')
+        $shell = new-object -comobject "Shell.Application"
+        $item = $shell.Namespace(0).ParseName("$fullName")
+        $item.InvokeVerb("delete")
     }
 }
 # @formatter:on
