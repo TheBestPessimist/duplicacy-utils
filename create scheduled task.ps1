@@ -82,7 +82,7 @@ if ($duplicacyFolderIndex -ne -1)
     $taskName = $taskName + " for repository " + $scriptPath.Substring(0, $duplicacyFolderIndex - 1).Replace("\", "__").Replace(":", "")
     # it appears that the task name length limit is somewhere around 190 characters :^)
 }
-$taskName = $taskName[0..190] -join ""
+$taskName = $taskName[0..190] -join "" # range operator, like in kotlin :^)
 
 
 function main()
