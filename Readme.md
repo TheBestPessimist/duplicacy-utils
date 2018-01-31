@@ -10,7 +10,8 @@ updated at the same time.
 
 ---
 
-Currently there are 2 main scripts: `backup.ps1` and `create scheduled task.ps1`, and a generic `filters` file.
+Currently there are 2 main scripts: `backup.ps1` and `create scheduled task.ps1`, and a generic `filters` 
+file for Windows and MacOS.
 
 ##### 1. `backup.ps1`
 
@@ -46,17 +47,27 @@ The way the file is created, there should be no need to edit it currently, as it
 ---
 
 
-### TODO
+### TODO (HELP NEEDED)
 
-- improve the exclude rules for MacOS (HELP NEEDED)
-- name/organize the scripts better (HELP NEEDED)
-- guide for setting up powershell with minimum system modification
-
-    
-    - Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unsigned/Bypass
-    - at the end, set executionpolicy to Undefined
+- `filters`
+- - improve the exclude rules for MacOS
 
 
-- explanation of how to run the scripts, and that they need to be in the same folder
-- send mail with the stats of the backup command
-- save mail password to windows credentials manager, not in plaintext or some temp file which is just dumb
+- misc
+- - name/organize the scripts better 
+
+
+- readme
+  - explanation of how to run the scripts, and that they need to be in the same folder
+  
+  
+- backup
+- - send mail/notification with the statistics of the run (and other info)
+- - save mail/notification password/token to windows credentials manager, not in plaintext or some temp file which is just dumb
+
+
+### Changelog
+
+##### 2018.01.31
+
+- There is no need to do anything to powershell. Just running the .bat file to create the Scheduled Task is enough.
