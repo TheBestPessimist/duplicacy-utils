@@ -114,7 +114,17 @@ function createNewTask()
     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repetitionInterval -RepetitionDuration $repetitionDuration -RandomDelay $randomDelay
     $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -StartWhenAvailable
 
-    Register-ScheduledTask -TaskName $taskName -Action $task -Trigger $trigger -RunLevel Highest -User $userCredentials.username -Password $userCredentials.password -Settings $settings
+
+    $scheduledTaskParameters = @{
+        TaskName = $taskName
+        Action = $task
+        Trigger = $trigger
+        RunLevel = "Highest"
+        User = $userCredentials.username
+        Password = $userCredentials.password
+        Settings = $settings
+    }
+    Register-ScheduledTask @scheduledTaskParameters
 }
 
 main
