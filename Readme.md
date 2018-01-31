@@ -4,6 +4,10 @@ The aim of these scripts is to help the windows user automate Duplicacy usage as
 
 The principle i followed with these is _set it and forget it_.
 
+This repository resides both on (github)[https://github.com/TheBestPessimist/duplicacy-utils/] and 
+on (bitbucket)[https://bitbucket.org/thebestpessimist/duplicacy-utils], and both remotes will be 
+updated at the same time.
+
 ---
 
 Currently there are 2 main scripts: `backup.ps1` and `create scheduled task.ps1`, and a generic `filters` file.
