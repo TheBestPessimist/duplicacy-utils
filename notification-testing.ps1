@@ -93,7 +93,7 @@ Function Invoke-BalloonTip
 }
 Invoke-BalloonTip -message "the Freaking Message" -Title "some stupid title"
 
-# from here: https://gist.github.com/altrive/72594b8427b2fff16431
+# from here: https://github.com/proxb/PowerShell_Scripts/blob/master/Invoke-BalloonTip.ps1
 
 # check the events, so that onclick of the notification, the log file is opened!
 #https://msdn.microsoft.com/en-us/library/system.windows.forms.notifyicon.aspx#Events
