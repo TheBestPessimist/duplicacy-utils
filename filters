@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # This file is a generic file which adds some folders and files to the duplicacy backup ignore list
-# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/.
+# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/
 #
 # Sources for the ignore rules:
 #       - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BackupRestore
@@ -11,7 +11,7 @@
 #
 # ==============================================================================
 #
-# note: "^[^\/]* has the purpose of assuring that there is only 1 "/" before the folder.
+# note: "^[^/]* has the purpose of assuring that there is only 1 "/" before the folder.
 # This means that it should match "c:/Recovery/" or "some_sym_link/Recovery/",
 #       but not "c:/a/Recovery/" nor "some_sym_link/a/Recovery/"
 # In other words, the purpose of that regex is to handle excluding, at least in windows,
@@ -30,12 +30,12 @@
 # ==============================================================================
 
 # ============================ exclude the ".git" subfolder
-e:(?i)\.git\/.*$
+e:(?i)\.git/.*$
 
 # ============================ exclude temp files/folders everywhere (case insensitive)
 e:(?i)\.(tmp|temp)$
-e:(?i)\/temp\/
-e:(?i)\/tmp\/
+e:(?i)/temp/
+e:(?i)/tmp/
 
 
 
@@ -46,13 +46,13 @@ e:(?i)\/tmp\/
 # ==============================================================================
 
 # ============================ Google Drive
-e:\.tmp\.drivedownload\/
+e:\.tmp\.drivedownload/
 
 # ============================ Onedrive
-e:OneDriveTemp\/
+e:OneDriveTemp/
 
 # ============================ dropbox
-e:\.dropbox\.cache\/
+e:\.dropbox\.cache/
 
 
 
@@ -67,53 +67,53 @@ e:\.dropbox\.cache\/
 # ================================================
 
 # ============================ exclude recycle bin
-e:(?i)\$RECYCLE\.BIN\/
-e:(?i)\$RECYCLED\/
-e:(?i)\$RECYCLER\/
+e:(?i)\$RECYCLE\.BIN/
+e:(?i)\$RECYCLED/
+e:(?i)\$RECYCLER/
 
 # ============================ THE windows folder should be excluded
-e:^[^\/]*\/Windows\/
+e:^[^/]*/Windows/
 
 # ============================ system files and folders
-e:^[^\/]*\/System Volume Information\/
-e:(?i)^[^\/]*config.msi\/
-e:(?i)^[^\/]*MSOCache\/
-e:^[^\/]*\/Recovery\/
-e:\/Microsoft\/Windows\/
-e:\/Documents and Settings
+e:^[^/]*/System Volume Information/
+e:(?i)^[^/]*config.msi/
+e:(?i)^[^/]*MSOCache/
+e:^[^/]*/Recovery/
+e:/Microsoft/Windows/
+e:/Documents and Settings
 e:(?i)ntuser\.dat
-e:(?i)^[^\/]*\/bootmgr
-e:(?i)^[^\/]*\/BOOTNXT
-e:(?i)^[^\/]*\/BOOTSECT.BAK
-e:(?i)^[^\/]*\/pagefile.sys
-e:(?i)^[^\/]*\/hiberfil.sys
-e:(?i)^[^\/]*\/swapfile.sys
+e:(?i)^[^/]*/bootmgr
+e:(?i)^[^/]*/BOOTNXT
+e:(?i)^[^/]*/BOOTSECT.BAK
+e:(?i)^[^/]*/pagefile.sys
+e:(?i)^[^/]*/hiberfil.sys
+e:(?i)^[^/]*/swapfile.sys
 
 
 # ================================================
 # ================================================ windows update related
 # ================================================
-e:\/ProgramData\/Microsoft\/Network\/Downloader\/
-e:ProgramData\/Microsoft\/Windows\/WER\/
-e:(?i)\$Windows\.\~BT\/
+e:/ProgramData/Microsoft/Network/Downloader/
+e:ProgramData/Microsoft/Windows/WER/
+e:(?i)\$Windows\.\~BT/
 
 
 # ================================================
 # ================================================ some temp folders
 # ================================================
-e:\/AppData\/Local\/Temp\/
-e:\/AppData\/Temp\/
-e:\/Local Settings\/Temp\/
-e:\/Temporary Internet Files\/
-e:\/Windows\/Temp\/
+e:/AppData/Local/Temp/
+e:/AppData/Temp/
+e:/Local Settings/Temp/
+e:/Temporary Internet Files/
+e:/Windows/Temp/
 
 
 # ================================================
 # ================================================ misc windows
 # ================================================
-e:\/AppData\/Local\/Downloaded Installations\/
-e:\/AppData\/Local\/Microsoft\/
-e:\/Windows\/Installer\/
+e:/AppData/Local/Downloaded Installations/
+e:/AppData/Local/Microsoft/
+e:/Windows/Installer/
 e:\.rbf
 
 
@@ -128,30 +128,30 @@ e:\.*DS_Store
 
 
 # ================================================
-# ================================================ trash\/bin stuff
+# ================================================ trash/bin stuff
 # ================================================
-e:\.Trash\/
-e:\/Trash\/
-e:\/Network Trash Folder\/
+e:\.Trash/
+e:/Trash/
+e:/Network Trash Folder/
 
 
 # ================================================
 # ================================================ libraries
 # ================================================
-e:\/Library\/Application Support\/SyncServices\/
-e:\/Library\/Caches\/
-e:\/Library\/Logs\/
-e:\/Library\/Mail\/AvailableFeeds\/
-e:\/Library\/Mirrors\/
-e:\/Library\/PubSub\/Database\/
-e:\/Library\/PubSub\/Downloads\/
-e:\/Library\/PubSub\/Feeds\/
-e:\/Library\/Safari\/Icons.db
-e:\/Library\/Safari\/WebpageIcons.db
-e:\/Library\/Safari\/HistoryIndex.sk
-e:\/iTunes\/Album Artwork\/Cache\/
-e:\/System\/Library\/Extensions\/Caches\/
-e:.Library\/Saved Application State\/
+e:/Library/Application Support/SyncServices/
+e:/Library/Caches/
+e:/Library/Logs/
+e:/Library/Mail/AvailableFeeds/
+e:/Library/Mirrors/
+e:/Library/PubSub/Database/
+e:/Library/PubSub/Downloads/
+e:/Library/PubSub/Feeds/
+e:/Library/Safari/Icons.db
+e:/Library/Safari/WebpageIcons.db
+e:/Library/Safari/HistoryIndex.sk
+e:/iTunes/Album Artwork/Cache/
+e:/System/Library/Extensions/Caches/
+e:.Library/Saved Application State/
 
 
 
@@ -163,14 +163,14 @@ e:.Library\/Saved Application State\/
 # ==============================================================================
 
 # ============================ jetbrains toolbox location
-e:\/AppData\/Local\/JetBrains\/
+e:/AppData/Local/JetBrains/
 
 # ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
-e:\/AppData\/Local\/Packages\/
+e:/AppData/Local/Packages/
 
-e:\/AppData\/Local\/Google\/
-e:\/AppData\/Local\/Dropbox\/
-e:\/AppData\/Local\/Steam\/
+e:/AppData/Local/Google/
+e:/AppData/Local/Dropbox/
+e:/AppData/Local/Steam/
 
 
 
