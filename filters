@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # This file is a generic file which adds some folders and files to the duplicacy backup ignore list
-# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/
+# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/.
 #
 # Sources for the ignore rules:
 #       - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BackupRestore
