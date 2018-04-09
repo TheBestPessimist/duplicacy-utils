@@ -3,20 +3,50 @@
 # ==============================================================================
 #
 # This file is a generic file which adds some folders and files to the duplicacy backup ignore list
-# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/
+# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/.
 #
 # Sources for the ignore rules:
 #       - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BackupRestore
 #       - CrashPlan config files
+#       - Other duplicacy users: NiJoao
 #
 # ==============================================================================
 #
-# note: "^[^/]* has the purpose of assuring that there is only 1 "/" before the folder.
-# This means that it should match "c:/Recovery/" or "some_sym_link/Recovery/",
-#       but not "c:/a/Recovery/" nor "some_sym_link/a/Recovery/"
-# In other words, the purpose of that regex is to handle excluding, at least in windows,
-#       folders and files which are in root, or in a symlink to root
+# Regexes:
 #
+#
+#   1. Reasoning of "/" vs "\/" for folder delimitation:
+#       In my opinion using only "/" instead of "\/" looks cleaner.
+#       Secondly, on https://regex101.com/, if the selected language is golang,
+#           it seems the regex still works only with "/", so it's very easy to test.
+#
+#
+#   2. "[^/]+/": has the purpose of assuring that there is only 1 folder in the matched path (only 1 "/")
+#       Example: "(?i)/AppData/[^/]+/Steam/" matches:
+#       "C__abcd_link/leAdministrateur/AppData/Local/Steam/", but it doesnt match:
+#       "C__abcd_link/leAdministrateur/AppData/Local/someotherfolder/Steam/", as there has to be ONLY 1 FOLDER in between "AppData" and "Steam" folders.
+#
+#
+#   3. When the repository is used in the <symlinking backups> mode:
+#           "^[^/]+/" is used just as above,
+#           with the difference that it assures that any path only has 1 folder before (1 "/").
+#       Example: "(?i)^[^/]+/Recovery/" matches:
+#       "some_sym_link/Recovery/", but not
+#       "some_sym_link/Important App/Recovery/" nor
+#       "c:/Users/something/Recovery/" nor
+#       "Users/something/Recovery/" and nor
+#       "Recovery/".
+#
+#       In other words, the purpose of that regex is to handle excluding, at least in Windows,
+#           folders and files which are in HDD root (c:, d:, etc.), when that root is symlinked from the repository.
+#
+#   4. When the repository is used in the normal <backup everything underneath> mode:
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#
+
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
