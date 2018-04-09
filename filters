@@ -5,11 +5,6 @@
 # This file is a generic file which adds some folders and files to the duplicacy backup ignore list
 # This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/.
 #
-# Sources for the ignore rules:
-#       - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BackupRestore
-#       - CrashPlan config files
-#       - Other duplicacy users: NiJoao
-#
 # ==============================================================================
 #
 # Regexes:
@@ -153,18 +148,9 @@ e:(?i)^[^/]*Windows10Upgrade/
 
 
 # ================================================
-# ================================================ some temp folders
-# ================================================
-e:/AppData/Local/Temp/
-e:/AppData/Temp/
-e:/Local Settings/Temp/
-e:/Temporary Internet Files/
-e:/Windows/Temp/
-
-
-# ================================================
 # ================================================ misc windows
 # ================================================
+e:/Temporary Internet Files/
 e:/AppData/Local/Downloaded Installations/
 e:/Windows/Installer/
 e:\.rbf
@@ -237,19 +223,17 @@ e:(?i)^[^/]+/Program Files[^/]*/
 # ============================ exclude all AppData folders with known useless-but-heavy content
 # ============================ C:\Users\<username>\AppData\ holds app's configurations specific for each user
 # ============================ C:\ProgramData\ holds app's configurations global to all users (everytime you select "Install to all users")
-
-
-e:(?i)/AppData/Local/JetBrains/
-e:(?i)/AppData/Local/Dropbox/
-e:(?i)/AppData/Local/Steam/
+e:(?i)/AppData/[^/]+/JetBrains/
+e:(?i)/AppData/[^/]+/Dropbox/
+e:(?i)/AppData/[^/]+/Steam/
 e:(?i)/AppData/[^/]+/Sun/
 e:(?i)/AppData/[^/]+/Oracle/
 e:(?i)/AppData/[^/]+/Comms/
-/AppData/Local/CrashDumps/
-AppData/Local/Diagnostics/
-/AppData/Local/ElevatedDiagnostics/
-/AppData/Roaming/Adobe/Flash Player/
-AppData/Roaming/NVIDIA
+e:(?i)/AppData/[^/]+/CrashDumps/
+e:(?i)/AppData/[^/]+/Diagnostics/
+e:(?i)/AppData/[^/]+/ElevatedDiagnostics/
+e:(?i)/AppData/[^/]+/Adobe/Flash Player/
+e:(?i)/AppData/[^/]+/NVIDIA
 
 
 e:(?i)^[^/]+/ProgramData/Microsoft[^/]*/
