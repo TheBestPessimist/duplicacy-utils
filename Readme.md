@@ -46,23 +46,27 @@ The way the file is created, there should be no need to edit it currently, as it
 ### TODO (HELP NEEDED)
 
 - `filters`
-- - improve the exclude rules for MacOS
+    - improve the exclude rules for MacOS
 
 
 - misc
-- - name/organize the scripts better
+    - name/organize the scripts better
 
 
 - readme
-  - explanation of how to run the scripts, and that they need to be in the same folder
+    - explanation of how to run the scripts, and that they need to be in the same folder
 
 
 - backup
-- - send mail/notification with the statistics of the run (and other info)
-- - save mail/notification password/token to windows credentials manager, not in plaintext or some temp file which is just dumb
+    - send mail/notification with the statistics of the run (and other info)
+    - save mail/notification password/token to windows credentials manager, not in plaintext or some temp file which is just dumb
 
 
 ### Changelog
+
+##### 2018.04.09
+- Improved the filters file with more (better?) regex from [NiJoao](https://github.com/NiJoao).
+
 
 ##### 2018.01.31
 
