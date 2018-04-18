@@ -71,10 +71,12 @@ e:(?i)/\.hg/
 e:(?i)/\.svn/
 
 
-# ============================ exclude temp files/folders everywhere
+# ============================ exclude temp/cache files/folders everywhere
 e:(?i)\.(tmp|temp)$
 e:(?i)/temp/
 e:(?i)/tmp/
+e:(?i)/cache/
+
 
 
 
@@ -137,6 +139,7 @@ e:(?i)^[^/]+/pagefile\.sys$
 e:(?i)^[^/]+/hiberfil\.sys$
 e:(?i)^[^/]+/swapfile\.sys$
 e:(?i)^[^/]+/thumbs\.db$
+e:(?i)/IconCache.db
 e:/Temporary Internet Files/
 e:/Windows/Installer/
 
@@ -219,9 +222,16 @@ e:(?i)/AppData/[^/]+/Comms/
 e:(?i)/AppData/[^/]+/CrashDumps/
 e:(?i)/AppData/[^/]+/Diagnostics/
 e:(?i)/AppData/[^/]+/ElevatedDiagnostics/
-e:(?i)/AppData/[^/]+/Adobe/Flash Player/
+e:(?i)/AppData/[^/]+/Adobe/
 e:(?i)/AppData/[^/]+/NVIDIA
 e:(?i)/AppData/[^/]+/Downloaded Installations/
+e:(?i)/AppData/[^/]+/ConnectedDevicesPlatform/
+e:(?i)/AppData/[^/]+/DBG/
+e:(?i)/AppData/[^/]+/PackageStaging/
+e:(?i)/AppData/[^/]+/PeerDistRepub/
+e:(?i)/AppData/[^/]+/Publishers/
+e:(?i)/AppData/[^/]+/VirtualStore/
+e:(?i)/AppData/[^/]+/Atlassian/SourceTree/[^/]*local/
 
 
 e:(?i)^[^/]+/ProgramData/Microsoft[^/]*/
@@ -265,12 +275,16 @@ i:(?i)/AppData/[^/]+/Google/Chrome/$
 i:(?i)/AppData/[^/]+/Google/Chrome/User Data/
 e:(?i)/AppData/[^/]+/Google/
 
+
+# ============================ Exclude Golang installation
+e:(?i)^[^/]+/Go/
+
+
 # ============================ useless files anywhere, by extension
 e:(?i)\.cache$
 e:(?i)\.crdownload$
 e:(?i)\.!ut$
 e:(?i)\.rbf$
-e:(?i)\.chk$
 e:(?i)\.dov$
 e:(?i)\.bup$
 e:(?i)\.dmp$
@@ -278,12 +292,17 @@ e:(?i)\.dump$
 e:(?i)\.err$
 e:(?i)\.old$
 e:(?i)\.prv$
+# note about chk: https://groups.google.com/forum/#!topic/mozilla.support.firefox/j4J_gWzoQuw
+# (i don't know if deleting those files from Firefox actually break it. i believe it doesn't affect userdata though)
+e:(?i)\.chk$
 
+# e:(?i).*.msf*$
 # e:(?i)\.part$
 # e:(?i)\.obj$
 # e:(?i)\.bac$
 # e:(?i)\.bak$
 # e:(?i)\.bkp$
+
 
 
 # ====================================================================================================
