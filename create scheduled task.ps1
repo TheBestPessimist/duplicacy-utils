@@ -10,7 +10,8 @@
 # Backup script full path
 #   Recommendation: please place all the util scrips in
 #       [duplicacy repo path]\.duplicacy\duplicacy utils (eg. relative to the repository)
-$scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
+$scriptPath = "$PSScriptRoot\backup.ps1"
+# $scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
 
 
 # ================================================
