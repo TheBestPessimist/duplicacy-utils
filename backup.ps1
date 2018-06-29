@@ -59,6 +59,11 @@ if ($duplicacyDebug)
     $duplicacyOptions_temp += " -d "
 }
 
+$duplicacyPruneAll_temp = ""
+if ($duplicacyPruneAll) {
+    $duplicacyPruneAll_temp = " -all "
+}
+
 # this is a hash table
 $duplicacy = @{
     exe = " $duplicacyExePath "
@@ -68,7 +73,7 @@ $duplicacy = @{
     backup = " backup -stats -threads $duplicacyBackupNumberOfThreads $duplicacyBackupVss_temp "
     list = " list "
     check = " check -tabular "
-    prune = " prune $duplicacyPruneRetentionPolicy "
+    prune = " prune $duplicacyPruneAll_temp $duplicacyPruneRetentionPolicy "
 }
 # ================================================
 
@@ -82,7 +87,7 @@ function main
 
     # doDuplicacyCommand $duplicacy.list
     doDuplicacyCommand $duplicacy.backup
-    doDuplicacyCommand $duplicacy.prune
+    # doDuplicacyCommand $duplicacy.prune
     # doDuplicacyCommand $duplicacy.check
 
     # ================================================

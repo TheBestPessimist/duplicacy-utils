@@ -50,3 +50,8 @@ $duplicacyBackupNumberOfThreads = 18
 # Note: the order has to be from the eldest to the youngest! (hence 30 comes before 7)
 $duplicacyPruneRetentionPolicy = "-keep 7:30 -keep 1:7"
 # $duplicacyPruneRetentionPolicy = "-keep 0:90 -keep 7:30 -keep 1:7"
+
+#=================================================
+# Duplicacy should use prune from 1 computer, with -all (as to take all repositories)
+# if the retetion policies are the same for all repositories
+$duplicacyPruneAll = $true
