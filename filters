@@ -72,9 +72,7 @@ e:(?i)/\.svn/
 
 
 # ============================ exclude temp/cache files/folders everywhere
-e:(?i)\.tmp$
-e:(?i)\.temp$
-e:(?i)\.cache$
+e:(?i)\.(tmp|temp)$
 e:(?i)/temp/
 e:(?i)/tmp/
 e:(?i)/cache/
@@ -125,8 +123,6 @@ e:(?i)^[^/]+/Recovery/
 e:(?i)^[^/]+/Config\.Msi/
 e:(?i)^[^/]+/PerfLogs/
 e:(?i)^[^/]+/Windows/
-
-# ============================ windows update related
 e:(?i)^[^/]+/Windows\.old/
 e:(?i)^[^/]+/\$Windows\.\~BT/
 e:(?i)^[^/]+/\$Windows\.\~WS/
@@ -134,26 +130,25 @@ e:(?i)^[^/]+/Windows10Upgrade/
 
 
 # ============================ system files
+# ntuser.dat may contain come other things at the end, therefore don't end with "$"
+e:(?i)ntuser\.dat
 e:(?i)^[^/]+/bootmgr$
 e:(?i)^[^/]+/BOOTNXT$
 e:(?i)^[^/]+/BOOTSECT\.BAK$
 e:(?i)^[^/]+/pagefile\.sys$
 e:(?i)^[^/]+/hiberfil\.sys$
 e:(?i)^[^/]+/swapfile\.sys$
+e:(?i)^[^/]+/thumbs\.db$
+e:(?i)/IconCache.db
+e:/Temporary Internet Files/
+e:/Windows/Installer/
 
-# ntuser.dat may contain come other things at the end, therefore don't end with "$"
-e:(?i)/ntuser\.dat
-e:(?i)/thumbs\.db$
-e:(?i)/desktop\.ini$
-e:(?i)/IconCache\.db$
-# exclude ".DS_Store" and "._.DS_Store"
-e:(?i)\.DS_Store
 
 # ================================================
 # ================================================ useless folders in root
 # ================================================
 e:(?i)^[^/]+/Logs/
-e:(?i)^[^/]+/Python[^/]*/
+e:(?i)^[^/]+/Python/
 e:(?i)^[^/]+/Intel/
 e:(?i)^[^/]+/NVIDIA/
 e:(?i)^[^/]+/Sun/
@@ -194,7 +189,7 @@ e:(?i)^[^/]+/Users/[^/]+/\.?Tracing/
 # ============================ uneeded folders in Users profiles: runtimes, dev, others
 e:(?i)^[^/]+/Users/[^/]+/\.?gradle/
 e:(?i)^[^/]+/Users/[^/]+/\.?anaconda/
-e:(?i)^[^/]+/Users/[^/]+/\.?android[^/]*/
+e:(?i)^[^/]+/Users/[^/]+/\.?android/
 e:(?i)^[^/]+/Users/[^/]+/\.?astropy/
 e:(?i)^[^/]+/Users/[^/]+/\.?conda/
 e:(?i)^[^/]+/Users/[^/]+/\.?dia/
@@ -207,63 +202,17 @@ e:(?i)^[^/]+/Users/[^/]+/\.?QtWeb/
 
 # ============================ already backed-up and versioned controlled folders (eg. dropbox/google user folders)
 e:(?i)^[^/]+/Users/[^/]+/Dropbox/
-e:(?i)^[^/]+/Users/[^/]+/OneDrive[^/]*/
+e:(?i)^[^/]+/Users/[^/]+/OneDrive/
 
-
-# ============================ Useless files in the default Downloads folder
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.exe$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.iso$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.tgz$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.gz$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.msi$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.cab$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.tor$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.torrent$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.srt$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.sub$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.mp4$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.mp3$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.avi$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.mov$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.zip$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.zip\.\d\d\d$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.rar$
-e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.r\d\d$
-
-
-# ==============================================
-# ============================================== Installed Applications excludes
-# ==============================================
-# ============================================== They are not moveable.
-# ============================================== Optionally backup the apps' names to provide a list of installed applications
-# ==============================================
-
-# ====== Optional: explicitly include program names, to use as a list of installed apps
-i:(?i)^[^/]+/Program Files[^/]*/$
-i:(?i)^[^/]+/Program Files[^/]*/[^/]+/$
-
-i:(?i)^[^/]+/Programs(\.old)?/$
-i:(?i)^[^/]+/Programs(\.old)?/[^/]+/$
-
-# ============================ Installed program files should be ignored
+# ============================ program files should be all ignored
 e:(?i)^[^/]+/Program Files[^/]*/
 
+# ============================ alternative: exclude program files, but keep the folder names to use as a list of installed apps
+# e:(?i)^[^/]+/Program Files[^/]*/[^/]+/.+
 
-# ============================
-# ============================ Application data excludes
-# ============================
 # ============================ exclude all AppData folders with known useless-but-heavy content
 # ============================ C:\Users\<username>\AppData\ holds app's configurations specific for each user
 # ============================ C:\ProgramData\ holds app's configurations global to all users (everytime you select "Install to all users")
-
-# ======= Optional: explicitly include config folders (not files) until the App name, to avoid errors in the next exclusions and to provide the user with an App list
-i:(?i)/AppData/$
-i:(?i)/AppData/[^/]+/$
-i:(?i)/AppData/[^/]+/[^/]+/$
-
-i:(?i)^[^/]+/ProgramData/$
-i:(?i)^[^/]+/ProgramData/[^/]+/$
-
 e:(?i)/AppData/[^/]+/JetBrains/
 e:(?i)/AppData/[^/]+/Dropbox/
 e:(?i)/AppData/[^/]+/Steam/
@@ -283,9 +232,6 @@ e:(?i)/AppData/[^/]+/PeerDistRepub/
 e:(?i)/AppData/[^/]+/Publishers/
 e:(?i)/AppData/[^/]+/VirtualStore/
 e:(?i)/AppData/[^/]+/Atlassian/SourceTree/[^/]*local/
-e:(?i)/AppData/[^/]+/TileDataLayer/
-# ============== Skype AppData holds message history. Better save it
-# e:(?i)/AppData/[^/]+/Skype/
 
 
 e:(?i)^[^/]+/ProgramData/Microsoft[^/]*/
@@ -309,10 +255,6 @@ e:(?i)^[^/]+/ProgramData/Package Cache/
 e:(?i)^[^/]+/ProgramData/SoftwareDistribution/
 e:(?i)^[^/]+/ProgramData/SystemAcCrux/
 e:(?i)^[^/]+/ProgramData/USOPrivate/
-e:(?i)^[^/]+/ProgramData/WindowsHolographicDevices/
-e:(?i)^[^/]+/ProgramData/SupremoRemoteDesktop/
-e:(?i)^[^/]+/ProgramData/AVAST[^/]*/
-
 
 
 # ============================ include microsoft email clients but nothing else from microsoft
@@ -328,12 +270,8 @@ e:(?i)/AppData/[^/]+/Mozilla/
 
 # ============================ include Google Chrome profile but nothing else from Google
 # note that we include the whole profile, because we are unsure how many "users" are added beside the "Default" profile
-# We exclude "Safe Browsing" for obvious reasons
-
 i:(?i)/AppData/[^/]+/Google/$
 i:(?i)/AppData/[^/]+/Google/Chrome/$
-e:(?i)/AppData/[^/]+/Google/Chrome/.*Safe Browsing
-
 i:(?i)/AppData/[^/]+/Google/Chrome/User Data/
 e:(?i)/AppData/[^/]+/Google/
 
@@ -341,21 +279,8 @@ e:(?i)/AppData/[^/]+/Google/
 # ============================ Exclude Golang installation
 e:(?i)^[^/]+/Go/
 
-# ==============================================
-# ============================================== Global excludes
-# ==============================================
-# ============================================== Useless folders and files, anywhere.
-# ============================================== Important to appear after the inclusions of known important apps
-# ==============================================
-
-# ============================ useless folders anywhere
-e:(?i)/cookies/
-e:(?i)/LOCK/
-e:(?i)/thumbnails/
-
 
 # ============================ useless files anywhere, by extension
-
 e:(?i)\.cache$
 e:(?i)\.crdownload$
 e:(?i)\.!ut$
@@ -370,9 +295,6 @@ e:(?i)\.prv$
 # note about chk: https://groups.google.com/forum/#!topic/mozilla.support.firefox/j4J_gWzoQuw
 # (i don't know if deleting those files from Firefox actually break it. i believe it doesn't affect userdata though)
 e:(?i)\.chk$
-e:(?i)\.lck$
-e:(?i)\.ffs_lock$
-e:(?i)\.ffs_tmp$
 
 # e:(?i).*.msf*$
 # e:(?i)\.part$
