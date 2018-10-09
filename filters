@@ -3,19 +3,55 @@
 # ==============================================================================
 #
 # This file is a generic file which adds some folders and files to the duplicacy backup ignore list
-# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/
-#
-# Sources for the ignore rules:
-#       - HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BackupRestore
-#       - CrashPlan config files
+# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/.
 #
 # ==============================================================================
 #
-# note: "^[^/]* has the purpose of assuring that there is only 1 "/" before the folder.
-# This means that it should match "c:/Recovery/" or "some_sym_link/Recovery/",
-#       but not "c:/a/Recovery/" nor "some_sym_link/a/Recovery/"
-# In other words, the purpose of that regex is to handle excluding, at least in windows,
-#       folders and files which are in root, or in a symlink to root
+# Regexes:
+#
+#
+#   1. Reasoning of "/" vs "\/" for folder delimitation:
+#       In my opinion using only "/" instead of "\/" looks cleaner.
+#       Secondly, on https://regex101.com/, if the selected language is golang,
+#           it seems the regex still works only with "/", so it's very easy to test.
+#
+#
+#   2. "[^/]+/": has the purpose of assuring that there is only 1 folder in the matched path (only 1 "/")
+#       Example: "(?i)/AppData/[^/]+/Steam/" matches:
+#       "C__abcd_link/leAdministrateur/AppData/Local/Steam/", but it doesnt match:
+#       "C__abcd_link/leAdministrateur/AppData/Local/someotherfolder/Steam/", as there has to be ONLY 1 FOLDER in between "AppData" and "Steam" folders.
+#
+#
+#   3. When the repository is used in the <symlinking backups> mode:
+#           "^[^/]+/" is used just as above,
+#           with the difference that it assures that any path only has 1 folder before (1 "/").
+#       Example: "(?i)^[^/]+/Recovery/" matches:
+#       "some_sym_link/Recovery/", but not
+#       "some_sym_link/Important App/Recovery/" nor
+#       "c:/Users/something/Recovery/" nor
+#       "Users/something/Recovery/" and nor
+#       "Recovery/".
+#
+#       In other words, the purpose of that regex is to handle excluding, at least in Windows,
+#           folders and files which are in HDD root (c:, d:, etc.), when that root is symlinked from the repository.
+#
+#   4. When the repository is used in the normal <backup everything underneath> mode:
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
+#
+#   5. (?i) means "case insensitive"
+#
+#   6. [^/]*/: has the purpose of matching a folder which "starts with" or "contains" or "is exactly this" (depending on where it is placed).
+#       The difference between this and the above is the "*" instead of "+", which means 0 or more.
+#       Example: "(?i)^[^/]+/ProgramData/Microsoft[^/]*/" matches both
+#       "many/other/folders/ProgramData/Microsoft OneDrive/" (the name of the folder is "Microsoft OneDrive" so it acts as a "starts with")
+#       "many/other/folders/ProgramData/Microsoft/" (the name of the folder is "Microsoft" so it acts also as a "is exactly")
+#       but will not match "many/other/folders/ProgramData/Micro/" (the name of the folder is "Micro" and not "Microsoft")
+#
+#
+#
 #
 # ==============================================================================
 # ==============================================================================
@@ -25,17 +61,24 @@
 
 # ==============================================================================
 # ==============================================================================
-# ============================================================================== generic excludes (win and mac)
+# ============================================================================== generic excludes (OS independant)
 # ==============================================================================
 # ==============================================================================
 
-# ============================ exclude the ".git" subfolder
-e:(?i)\.git/.*$
+# ============================ exclude .VCS subfolder
+e:(?i)/\.git/
+e:(?i)/\.hg/
+e:(?i)/\.svn/
 
-# ============================ exclude temp files/folders everywhere (case insensitive)
-e:(?i)\.(tmp|temp)$
+
+# ============================ exclude temp/cache files/folders everywhere
+e:(?i)\.tmp$
+e:(?i)\.temp$
+e:(?i)\.cache$
 e:(?i)/temp/
 e:(?i)/tmp/
+e:(?i)/cache/
+
 
 
 
@@ -45,15 +88,14 @@ e:(?i)/tmp/
 # ==============================================================================
 # ==============================================================================
 
-# ============================ Google Drive
-e:\.tmp\.drivedownload/
+# ============================ Google Drive Cache
+e:(?i)/\.tmp\.drivedownload/
 
-# ============================ Onedrive
-e:OneDriveTemp/
+# ============================ Onedrive Cache
+e:(?i)/OneDriveTemp/
 
-# ============================ dropbox
-e:\.dropbox\.cache/
-
+# ============================ Dropbox Cache
+e:(?i)/\.dropbox\.cache/
 
 
 # ==============================================================================
@@ -66,55 +108,292 @@ e:\.dropbox\.cache/
 # ================================================ windows/system files
 # ================================================
 
-# ============================ exclude recycle bin
+# ============================ recycle bin
 e:(?i)\$RECYCLE\.BIN/
 e:(?i)\$RECYCLED/
 e:(?i)\$RECYCLER/
 
-# ============================ THE windows folder should be excluded
-e:^[^/]*/Windows/
 
-# ============================ system files and folders
-e:^[^/]*/System Volume Information/
-e:(?i)^[^/]*config.msi/
-e:(?i)^[^/]*MSOCache/
-e:^[^/]*/Recovery/
-e:/Microsoft/Windows/
-e:/Documents and Settings
-e:(?i)ntuser\.dat
-e:(?i)^[^/]*/bootmgr
-e:(?i)^[^/]*/BOOTNXT
-e:(?i)^[^/]*/BOOTSECT.BAK
-e:(?i)^[^/]*/pagefile.sys
-e:(?i)^[^/]*/hiberfil.sys
-e:(?i)^[^/]*/swapfile.sys
+# ============================ system folders
+e:(?i)^[^/]+/System Volume Information/
+e:(?i)^[^/]+/Boot/
+e:(?i)^[^/]+/\$GetCurrent/
+e:(?i)^[^/]+/\$SysReset
+e:(?i)^[^/]+/Documents and Settings/
+e:(?i)^[^/]+/MSOCache/
+e:(?i)^[^/]+/Recovery/
+e:(?i)^[^/]+/Config\.Msi/
+e:(?i)^[^/]+/PerfLogs/
+e:(?i)^[^/]+/Windows/
 
+# ============================ windows update related
+e:(?i)^[^/]+/Windows\.old/
+e:(?i)^[^/]+/\$Windows\.\~BT/
+e:(?i)^[^/]+/\$Windows\.\~WS/
+e:(?i)^[^/]+/Windows10Upgrade/
+
+
+# ============================ system files
+e:(?i)^[^/]+/bootmgr$
+e:(?i)^[^/]+/BOOTNXT$
+e:(?i)^[^/]+/BOOTSECT\.BAK$
+e:(?i)^[^/]+/pagefile\.sys$
+e:(?i)^[^/]+/hiberfil\.sys$
+e:(?i)^[^/]+/swapfile\.sys$
+
+# ntuser.dat may contain come other things at the end, therefore don't end with "$"
+e:(?i)/ntuser\.dat
+e:(?i)/thumbs\.db$
+e:(?i)/desktop\.ini$
+e:(?i)/IconCache\.db$
+# exclude ".DS_Store" and "._.DS_Store"
+e:(?i)\.DS_Store
 
 # ================================================
-# ================================================ windows update related
+# ================================================ useless folders in root
 # ================================================
-e:/ProgramData/Microsoft/Network/Downloader/
-e:ProgramData/Microsoft/Windows/WER/
-e:(?i)\$Windows\.\~BT/
+e:(?i)^[^/]+/Logs/
+e:(?i)^[^/]+/Python[^/]*/
+e:(?i)^[^/]+/Intel/
+e:(?i)^[^/]+/NVIDIA/
+e:(?i)^[^/]+/Sun/
+e:(?i)^[^/]+/MSI/
 
 
-# ================================================
-# ================================================ some temp folders
-# ================================================
-e:/AppData/Local/Temp/
-e:/AppData/Temp/
-e:/Local Settings/Temp/
-e:/Temporary Internet Files/
-e:/Windows/Temp/
+
+# ==============================================================================
+# ==============================================================================
+# ============================================================================== local excludes (user specific)
+# ==============================================================================
+# ============================================================================== Analyze Carefully, and de-exclude anything that might be useful to someone
+# ==============================================================================
+# ==============================================================================
 
 
-# ================================================
-# ================================================ misc windows
-# ================================================
-e:/AppData/Local/Downloaded Installations/
-e:/AppData/Local/Microsoft/
-e:/Windows/Installer/
-e:\.rbf
+# ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
+e:(?i)/AppData/Local/Packages/
+
+
+# ============================ uneeded folders in Users profiles: systems, junctions
+e:(?i)^[^/]+/Users/[^/]+/\.?oracle_jre_usage/
+e:(?i)^[^/]+/Users/[^/]+/\.?Application Data/
+e:(?i)^[^/]+/Users/[^/]+/\.?IntelGraphicsProfiles/
+e:(?i)^[^/]+/Users/[^/]+/\.?Links/
+e:(?i)^[^/]+/Users/[^/]+/\.?Local Settings/
+e:(?i)^[^/]+/Users/[^/]+/\.?MicrosoftEdgeBackups/
+e:(?i)^[^/]+/Users/[^/]+/\.?NetHood/
+e:(?i)^[^/]+/Users/[^/]+/\.?PrintHood/
+e:(?i)^[^/]+/Users/[^/]+/\.?Recent/
+e:(?i)^[^/]+/Users/[^/]+/\.?Searches/
+e:(?i)^[^/]+/Users/[^/]+/\.?SendTo/
+e:(?i)^[^/]+/Users/[^/]+/\.?Start Menu/
+e:(?i)^[^/]+/Users/[^/]+/\.?Templates/
+e:(?i)^[^/]+/Users/[^/]+/\.?Tracing/
+
+
+# ============================ uneeded folders in Users profiles: runtimes, dev, others
+e:(?i)^[^/]+/Users/[^/]+/\.?gradle/
+e:(?i)^[^/]+/Users/[^/]+/\.?anaconda/
+e:(?i)^[^/]+/Users/[^/]+/\.?android[^/]*/
+e:(?i)^[^/]+/Users/[^/]+/\.?astropy/
+e:(?i)^[^/]+/Users/[^/]+/\.?conda/
+e:(?i)^[^/]+/Users/[^/]+/\.?dia/
+e:(?i)^[^/]+/Users/[^/]+/\.?eclipse/
+e:(?i)^[^/]+/Users/[^/]+/\.?kivy/
+e:(?i)^[^/]+/Users/[^/]+/\.?matplotlib/
+e:(?i)^[^/]+/Users/[^/]+/\.?Mendeley Desktop/
+e:(?i)^[^/]+/Users/[^/]+/\.?p2/
+e:(?i)^[^/]+/Users/[^/]+/\.?QtWeb/
+
+# ============================ already backed-up and versioned controlled folders (eg. dropbox/google user folders)
+e:(?i)^[^/]+/Users/[^/]+/Dropbox/
+e:(?i)^[^/]+/Users/[^/]+/OneDrive[^/]*/
+
+
+# ============================ Useless files in the default Downloads folder
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.exe$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.iso$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.tgz$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.gz$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.msi$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.cab$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.tor$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.torrent$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.srt$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.sub$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.mp4$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.mp3$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.avi$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.mov$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.zip$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.zip\.\d\d\d$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.rar$
+e:(?i)^[^/]+/Users/[^/]+/Downloads/.*\.r\d\d$
+
+
+# ==============================================
+# ============================================== Installed Applications excludes
+# ==============================================
+# ============================================== They are not moveable.
+# ============================================== Optionally backup the apps' names to provide a list of installed applications
+# ==============================================
+
+# ====== Optional: explicitly include program names, to use as a list of installed apps
+i:(?i)^[^/]+/Program Files[^/]*/$
+i:(?i)^[^/]+/Program Files[^/]*/[^/]+/$
+
+i:(?i)^[^/]+/Programs(\.old)?/$
+i:(?i)^[^/]+/Programs(\.old)?/[^/]+/$
+
+# ============================ Installed program files should be ignored
+e:(?i)^[^/]+/Program Files[^/]*/
+
+
+# ============================
+# ============================ Application data excludes
+# ============================
+# ============================ exclude all AppData folders with known useless-but-heavy content
+# ============================ C:\Users\<username>\AppData\ holds app's configurations specific for each user
+# ============================ C:\ProgramData\ holds app's configurations global to all users (everytime you select "Install to all users")
+
+# ======= Optional: explicitly include config folders (not files) until the App name, to avoid errors in the next exclusions and to provide the user with an App list
+i:(?i)/AppData/$
+i:(?i)/AppData/[^/]+/$
+i:(?i)/AppData/[^/]+/[^/]+/$
+
+i:(?i)^[^/]+/ProgramData/$
+i:(?i)^[^/]+/ProgramData/[^/]+/$
+
+e:(?i)/AppData/[^/]+/JetBrains/
+e:(?i)/AppData/[^/]+/Dropbox/
+e:(?i)/AppData/[^/]+/Steam/
+e:(?i)/AppData/[^/]+/Sun/
+e:(?i)/AppData/[^/]+/Oracle/
+e:(?i)/AppData/[^/]+/Comms/
+e:(?i)/AppData/[^/]+/CrashDumps/
+e:(?i)/AppData/[^/]+/Diagnostics/
+e:(?i)/AppData/[^/]+/ElevatedDiagnostics/
+e:(?i)/AppData/[^/]+/Adobe/
+e:(?i)/AppData/[^/]+/NVIDIA
+e:(?i)/AppData/[^/]+/Downloaded Installations/
+e:(?i)/AppData/[^/]+/ConnectedDevicesPlatform/
+e:(?i)/AppData/[^/]+/DBG/
+e:(?i)/AppData/[^/]+/PackageStaging/
+e:(?i)/AppData/[^/]+/PeerDistRepub/
+e:(?i)/AppData/[^/]+/Publishers/
+e:(?i)/AppData/[^/]+/VirtualStore/
+e:(?i)/AppData/[^/]+/Atlassian/SourceTree/[^/]*local/
+e:(?i)/AppData/[^/]+/TileDataLayer/
+# ============== Skype AppData holds message history. Better save it
+# e:(?i)/AppData/[^/]+/Skype/
+
+
+e:(?i)^[^/]+/ProgramData/Microsoft[^/]*/
+e:(?i)^[^/]+/ProgramData/Mozilla/
+e:(?i)^[^/]+/ProgramData/Adobe/
+e:(?i)^[^/]+/ProgramData/NVIDIA[^/]*/
+e:(?i)^[^/]+/ProgramData/Dropbox/
+e:(?i)^[^/]+/ProgramData/Oracle/
+e:(?i)^[^/]+/ProgramData/Intel[^/]*/
+e:(?i)^[^/]+/ProgramData/Malwarebytes/
+e:(?i)^[^/]+/ProgramData/Epson/
+e:(?i)^[^/]+/ProgramData/Hp/
+e:(?i)^[^/]+/ProgramData/MiKTeX/
+e:(?i)^[^/]+/ProgramData/Skype/
+e:(?i)^[^/]+/ProgramData/GetSupportService/
+e:(?i)^[^/]+/ProgramData/USOShared/
+e:(?i)^[^/]+/ProgramData/Origin/
+e:(?i)^[^/]+/ProgramData/Battle\.net/
+e:(?i)^[^/]+/ProgramData/Soluto/
+e:(?i)^[^/]+/ProgramData/Package Cache/
+e:(?i)^[^/]+/ProgramData/SoftwareDistribution/
+e:(?i)^[^/]+/ProgramData/SystemAcCrux/
+e:(?i)^[^/]+/ProgramData/USOPrivate/
+e:(?i)^[^/]+/ProgramData/WindowsHolographicDevices/
+e:(?i)^[^/]+/ProgramData/SupremoRemoteDesktop/
+e:(?i)^[^/]+/ProgramData/AVAST[^/]*/
+
+
+
+# ============================ include microsoft email clients but nothing else from microsoft
+i:(?i)/AppData/[^/]+/Microsoft/$
+i:(?i)/AppData/[^/]+/Microsoft/(Outlook|Windows Mail|Windows Live Mail)/
+e:(?i)/AppData/[^/]+/Microsoft[^/]*/
+
+
+# ============================ include Firefox profile but nothing else from Mozilla
+i:(?i)/AppData/[^/]+/Mozilla/$
+i:(?i)/AppData/[^/]+/Mozilla/Firefox/
+e:(?i)/AppData/[^/]+/Mozilla/
+
+# ============================ include Google Chrome profile but nothing else from Google
+# note that we include the whole profile, because we are unsure how many "users" are added beside the "Default" profile
+# We exclude "Safe Browsing" for obvious reasons
+
+i:(?i)/AppData/[^/]+/Google/$
+i:(?i)/AppData/[^/]+/Google/Chrome/$
+e:(?i)/AppData/[^/]+/Google/Chrome/.*Safe Browsing
+
+i:(?i)/AppData/[^/]+/Google/Chrome/User Data/
+e:(?i)/AppData/[^/]+/Google/
+
+
+# ============================ Exclude Golang installation
+e:(?i)^[^/]+/Go/
+
+# ==============================================
+# ============================================== Global excludes
+# ==============================================
+# ============================================== Useless folders and files, anywhere.
+# ============================================== Important to appear after the inclusions of known important apps
+# ==============================================
+
+# ============================ useless folders anywhere
+e:(?i)/cookies/
+e:(?i)/LOCK/
+e:(?i)/thumbnails/
+
+
+# ============================ useless files anywhere, by extension
+
+e:(?i)\.cache$
+e:(?i)\.crdownload$
+e:(?i)\.!ut$
+e:(?i)\.rbf$
+e:(?i)\.dov$
+e:(?i)\.bup$
+e:(?i)\.dmp$
+e:(?i)\.dump$
+e:(?i)\.err$
+e:(?i)\.old$
+e:(?i)\.prv$
+# note about chk: https://groups.google.com/forum/#!topic/mozilla.support.firefox/j4J_gWzoQuw
+# (i don't know if deleting those files from Firefox actually break it. i believe it doesn't affect userdata though)
+e:(?i)\.chk$
+e:(?i)\.lck$
+e:(?i)\.ffs_lock$
+e:(?i)\.ffs_tmp$
+
+# e:(?i).*.msf*$
+# e:(?i)\.part$
+# e:(?i)\.obj$
+# e:(?i)\.bac$
+# e:(?i)\.bak$
+# e:(?i)\.bkp$
+
+
+
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+# ====================================================================================================
+
 
 
 # ==============================================================================
@@ -156,43 +435,31 @@ e:.Library/Saved Application State/
 
 
 
-# ==============================================================================
-# ==============================================================================
-# ============================================================================== local excludes (user specific)
-# ==============================================================================
-# ==============================================================================
 
-# ============================ jetbrains toolbox location
-e:/AppData/Local/JetBrains/
-
-# ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
-e:/AppData/Local/Packages/
-
-e:/AppData/Local/Google/
-e:/AppData/Local/Dropbox/
-e:/AppData/Local/Steam/
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ================================================================================================== possibly wrong / untested
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
 
 
 
 
 
 
+# ============================ include Thunderbird email profile but nothing else
+# note: may be wrong!
+# i:(?i)/AppData/[^/]+/Thunderbird/$
+# i:(?i)/AppData/[^/]+/Thunderbird/Profiles/
+# e:(?i)/AppData/[^/]+/Thunderbird/
 
 
 
 
-# ==============================================================================
-# ==============================================================================
-# ============================================================================== need help to decide -> NEED OPINIONS!
-# ==============================================================================
-# ==============================================================================
-
-
-# ============================ windows
-##%systemroot%\Minidump\* /s
-##%systemroot%\memory.dmp
-#
-#
 # ============================ macos
 #.*/Music/Subscription/.*
 #e:/Library/Calendars/Calendar Cache/

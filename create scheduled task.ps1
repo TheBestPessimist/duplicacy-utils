@@ -6,18 +6,31 @@
 # ==============================================================================
 # ==============================================================================
 
+
+# ================================================
+# Import the global and local config file 
+#
+. "$PSScriptRoot\backup config.ps1"
+. "$PSScriptRoot\local config.ps1"
+# ================================================
+
+
 # ================================================
 # Backup script full path
 #   Recommendation: please place all the util scrips in
 #       [duplicacy repo path]\.duplicacy\duplicacy utils (eg. relative to the repository)
-$scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
+$scriptPath = "$PSScriptRoot\backup.ps1"
+# $scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
 
 
 # ================================================
 # The name of the Scheduled Task
 #   Recommendation: please use unique names for each different task (backup prune, etc.),
 #       as tasks which already exist WILL BE REPLACED!
-$taskName = "Duplicacy Hourly Backup"
+if (-Not $taskName)
+{
+    $taskName = "Duplicacy Hourly Backup"
+}
 
 
 # ================================================
@@ -122,7 +135,7 @@ function createNewTask()
     $randomDelay = (New-TimeSpan -Seconds 30)  # 30 seconds of random start delay
     $repetitionDuration = (New-TimeSpan -Days 10000)  # 27 years should be enough
     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repetitionInterval -RepetitionDuration $repetitionDuration -RandomDelay $randomDelay
-    $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -StartWhenAvailable
+    $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew
 
 
     $scheduledTaskParameters = @{
