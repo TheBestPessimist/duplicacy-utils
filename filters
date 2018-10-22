@@ -255,6 +255,10 @@ e:(?i)^[^/]+/ProgramData/Package Cache/
 e:(?i)^[^/]+/ProgramData/SoftwareDistribution/
 e:(?i)^[^/]+/ProgramData/SystemAcCrux/
 e:(?i)^[^/]+/ProgramData/USOPrivate/
+e:(?i)^[^/]+/ProgramData/Eset/
+e:(?i)^[^/]+/ProgramData/GOG.com/
+e:(?i)^[^/]+/ProgramData/Origin/
+e:(?i)^[^/]+/ProgramData/CrashPlan/cache
 
 
 # ============================ include microsoft email clients but nothing else from microsoft
