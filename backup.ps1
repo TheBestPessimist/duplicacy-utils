@@ -145,7 +145,7 @@ function zipOlderLogFiles()
 function doPostBackupTasks()
 {
     logFinishBackupProcess
-	if ($enableSlackNotifications) {createSlackMessage}  
+    if ($enableSlackNotifications) {createSlackMessage}  
     Pop-Location
 }
 
@@ -175,14 +175,14 @@ function createSlackMessage()
 
 function slackNotify($notify_text)
 {
-$payload = @{
-	"text" = $notify_text #what you want the message to say, do not change this as it pulls text from the log
-  }
+    $payload = @{
+      "text" = $notify_text #what you want the message to say, do not change this as it pulls text from the log
+      }
 
-Invoke-WebRequest `
-	-Body (ConvertTo-Json -Compress -InputObject $payload) `
-	-Method Post `
-	-Uri "$slackWebhookURL" | Out-Null
+    Invoke-WebRequest `
+      -Body (ConvertTo-Json -Compress -InputObject $payload) `
+      -Method Post `
+      -Uri "$slackWebhookURL" | Out-Null
 }
 
 function doDuplicacyCommand($arg)
