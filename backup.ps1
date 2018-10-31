@@ -172,7 +172,7 @@ function splitStatsforSlack($SlackOutput)
 {
     $slackNotifyArr = $SlackOutput.Split("`n")
 	#inputs header above slack notification from log
-    slackNotify("*** DUPLICACY B2 BACKUP PROCESS COMPLETE ***")
+    slackNotify("*** DUPLICACY BACKUP PROCESS COMPLETE ***")
     foreach ($line in $slackNotifyArr)
     {
     slackNotify($line)
