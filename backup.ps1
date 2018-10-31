@@ -145,11 +145,7 @@ function zipOlderLogFiles()
 function doPostBackupTasks()
 {
     logFinishBackupProcess
-	if ($enableSlackNotifications)
-	{
-    $SlackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
-    splitStatsforSlack($SlackOut)
-    }    
+	if ($enableSlackNotifications) {createSlackMessage}  
     Pop-Location
 }
 
@@ -168,21 +164,19 @@ function logFinishBackupProcess()
 }
 
 #function to split the lines at the end of the log file into individual slack notifications
-function splitStatsforSlack($SlackOutput)
+
+function createSlackMessage()
 {
-    $slackNotifyArr = $SlackOutput.Split("`n")
-	#inputs header above slack notification from log
+    $SlackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
+    $slackMessage = "-- $($SlackOut -join "`n -- ")"
     slackNotify("*** DUPLICACY BACKUP PROCESS COMPLETE ***")
-    foreach ($line in $slackNotifyArr)
-    {
-    slackNotify($line)
-    }
+    slackNotify($slackMessage)
 }
 
 function slackNotify($notify_text)
 {
 $payload = @{
-	"text" = $notify_text #what you want tne message to say, do not change this as it pulls text from the log
+	"text" = $notify_text #what you want the message to say, do not change this as it pulls text from the log
   }
 
 Invoke-WebRequest `
