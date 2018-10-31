@@ -145,6 +145,11 @@ function zipOlderLogFiles()
 function doPostBackupTasks()
 {
     logFinishBackupProcess
+	if ($enableSlackNotifications)
+	{
+    $SlackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
+    splitStatsforSlack($SlackOut)
+    }    
     Pop-Location
 }
 
@@ -160,6 +165,30 @@ function logFinishBackupProcess()
     log ("====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}" -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
     log ("====== logFile is: " + (Resolve-Path -Path $log.filePath).Path)
     log "================================================================="
+}
+
+#function to split the lines at the end of the log file into individual slack notifications
+function splitStatsforSlack($SlackOutput)
+{
+    $slackNotifyArr = $SlackOutput.Split("`n")
+	#inputs header above slack notification from log
+    slackNotify("*** DUPLICACY B2 BACKUP PROCESS COMPLETE ***")
+    foreach ($line in $slackNotifyArr)
+    {
+    slackNotify($line)
+    }
+}
+
+function slackNotify($notify_text)
+{
+$payload = @{
+	"text" = $notify_text #what you want tne message to say, do not change this as it pulls text from the log
+  }
+
+Invoke-WebRequest `
+	-Body (ConvertTo-Json -Compress -InputObject $payload) `
+	-Method Post `
+	-Uri "$slackWebhookURL" | Out-Null
 }
 
 function doDuplicacyCommand($arg)
