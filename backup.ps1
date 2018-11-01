@@ -167,10 +167,9 @@ function logFinishBackupProcess()
 
 function createSlackMessage()
 {
-    $SlackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
-    $slackMessage = "-- $($SlackOut -join "`n -- ")"
-    slackNotify("*** DUPLICACY BACKUP PROCESS COMPLETE ***")
-    slackNotify($slackMessage)
+    $slackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
+    $slackMessage = "*** DUPLICACY BACKUP PROCESS COMPLETE ***`n" + "-- " + "$($slackOut -join "`n -- ")"
+	slackNotify($slackMessage)
 }
 
 function slackNotify($notify_text)
