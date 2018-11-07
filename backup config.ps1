@@ -41,6 +41,16 @@ $duplicacyVssOption = $false    # or $true
 $duplicacyBackupNumberOfThreads = 18
 
 # ================================================
+# Section to enable Slack notifications if desired
+$enableSlackNotifications = $false #change to $true to enable
+
+# $slackWebhookURL = "https://hooks.slack.com/services/INSERTYOURCUSTOMSTRINGHERE"
+# More information on webhook setup here: https://get.slack.help/hc/en-us/articles/115005265063-Incoming-WebHooks-for-Slack
+$slackWebhookURL = "REPLACEYOURURLHERE"
+$logLinestoSlack = 10 # number of lines in the log to send via slack notification
+
+
+# ================================================
 # The retention policy used for pruning.
 #
 # prune explanation (from here: https://github.com/gilbertchen/duplicacy/wiki/prune ):
