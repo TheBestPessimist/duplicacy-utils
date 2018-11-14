@@ -38,7 +38,7 @@ $timings = @{
 
 # ================================================
 # Info about the logging
-#
+
 $log = @{
     basePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
     folder = $( Get-Date ).toString("yyyy-MM-dd dddd")
@@ -51,7 +51,7 @@ $log.filePath = $log.workingPath + $log.fileName
 
 # ================================================
 # Duplicacy global options
-#
+
 $duplicacyOptions_temp = " -log "
 if ($duplicacyDebug)
 {
@@ -78,12 +78,6 @@ if ($duplicacyMaxUploadRate)
 # ================================================
 # Duplicacy prune options
 #
-# $duplicacyPruneAll_temp = ""
-# if ($duplicacyPruneAll) {
-#     $duplicacyPruneAll_temp = " -all "
-# }
-
-
 $duplicacyPruneOptions_temp = $duplicacyPruneRetentionPolicy
 $duplicacyPruneOptionsOffsite_temp = $duplicacyPruneRetentionPolicy
 
@@ -112,6 +106,7 @@ if ($duplicacyCopyNumberOfThreads)
 {
     $duplicacyCopyOptions_temp += " -threads " + $duplicacyCopyNumberOfThreads
 }
+
 if ($duplicacyMaxCopyRate)
 {
     $duplicacyCopyOptions_temp += " -upload-limit-rate " + $duplicacyMaxCopyRate
@@ -131,10 +126,10 @@ $duplicacy = @{
 
     backup = " backup -stats $duplicacyBackupOptions_temp "
     list = " list "
-    check = " check -tabular "
+    check = " check "
 
     prune = " prune $duplicacyPruneOptions_temp "
-    pruneoffsite = " prune $duplicacyPruneOptionsOffsite_temp "
+    pruneOffsite = " prune $duplicacyPruneOptionsOffsite_temp "
     copy = " copy -to offsite $duplicacyCopyOptions_temp "
 }
 # ================================================
@@ -156,7 +151,7 @@ function main
     # doDuplicacyCommand $duplicacy.copy
 
     # doDuplicacyCommand $duplicacy.prune
-    # doDuplicacyCommand $duplicacy.pruneoffsite
+    # doDuplicacyCommand $duplicacy.pruneOffsite
 
 
 
@@ -205,6 +200,7 @@ function zipOlderLogFiles()
         $zipFileName = "$fullName.zip"
         log "Zipping (and then deleting) the folder: $fullName to the zipFile: $zipFileName"
         Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal -Update
+
         # Remove-Item -Path $fullName # not good since it deletes the Folder. I want to send it to recycle bin.
         $shell = New-Object -ComObject "Shell.Application"
         $item = $shell.Namespace(0).ParseName("$fullName")
@@ -215,6 +211,7 @@ function zipOlderLogFiles()
 function doPostBackupTasks()
 {
     logFinishBackupProcess
+
     if ($enableSlackNotifications)
     {
         createSlackMessage
@@ -237,8 +234,7 @@ function logFinishBackupProcess()
     log "================================================================="
 }
 
-#function to split the lines at the end of the log file into individual slack notifications
-
+# function to split the lines at the end of the log file into individual slack notifications
 function createSlackMessage()
 {
     $slackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
