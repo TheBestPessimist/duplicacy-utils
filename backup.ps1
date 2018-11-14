@@ -7,7 +7,7 @@
 # which can only be used as an Administrator.
 #
 # Thanks to <bassebaba/DuplicacyPowershell> for the initial script which
-# inspired this one and from which i borrowed some parts.
+# inspired this one and from which I borrowed some parts.
 #
 # The script can be run manually (after setting the correct paths and variable names) like this:
 #       powershell -NoProfile -ExecutionPolicy Bypass -File "C:\duplicacy repo\backup.ps1" -Verb RunAs;
@@ -17,9 +17,13 @@
 
 
 # ================================================
-# Import the backup config file
-#
+# Import the global and local config file
+
 . "$PSScriptRoot\backup config.ps1"
+. "$PSScriptRoot\local config.ps1"
+# ================================================
+
+
 # ================================================
 
 # ================================================
@@ -31,6 +35,7 @@ $timings = @{
     scriptTotalRuntime = 0
 }
 # ================================================
+
 
 # ================================================
 # Info about the logging
@@ -44,39 +49,99 @@ $log.workingPath = $log.basePath + "/" + $log.folder + "/"
 $log.filePath = $log.workingPath + $log.fileName
 # ================================================
 
-# ================================================
-# The duplicacy commands
-#
-$duplicacyBackupVss_temp = ""
-if ($duplicacyVssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator"))
-{
-    $duplicacyBackupVss_temp = " -vss "
-}
 
+# ================================================
+# Duplicacy global options
+#
 $duplicacyOptions_temp = " -log "
 if ($duplicacyDebug)
 {
     $duplicacyOptions_temp += " -d "
 }
 
-$duplicacyPruneAll_temp = ""
-if ($duplicacyPruneAll) {
-    $duplicacyPruneAll_temp = " -all "
+
+# ================================================
+# Duplicacy backup options
+
+$duplicacyBackupOptions_temp = ""
+if ($duplicacyVssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator"))
+{
+    $duplicacyBackupOptions_temp += " -vss "
+    $duplicacyBackupOptions_temp += " -vss-timeout " + $duplicacyVssTimeout
 }
 
-# this is a hash table
+if ($duplicacyMaxUploadRate)
+{
+    $duplicacyBackupOptions_temp += " -limit-rate " + $duplicacyMaxUploadRate
+}
+
+
+# ================================================
+# Duplicacy prune options
+#
+# $duplicacyPruneAll_temp = ""
+# if ($duplicacyPruneAll) {
+#     $duplicacyPruneAll_temp = " -all "
+# }
+
+
+$duplicacyPruneOptions_temp = $duplicacyPruneRetentionPolicy
+$duplicacyPruneOptionsOffsite_temp = $duplicacyPruneRetentionPolicy
+
+if ($duplicacyPruneNumberOfThreads)
+{
+    $duplicacyPruneOptions_temp += " -threads " + $duplicacyPruneNumberOfThreads
+    $duplicacyPruneOptionsOffsite_temp += " -threads " + $duplicacyPruneNumberOfThreads
+}
+
+if ($duplicacyPruneExtraOptionsLocal)
+{
+    $duplicacyPruneOptions_temp += " $duplicacyPruneExtraOptionsLocal "
+}
+
+if ($duplicacyPruneExtraOptionsOffsite)
+{
+    $duplicacyPruneOptionsOffsite_temp += " $duplicacyPruneExtraOptionsOffsite "
+}
+
+
+# ================================================
+# Duplicacy copy options
+
+$duplicacyCopyOptions_temp = ""
+if ($duplicacyCopyNumberOfThreads)
+{
+    $duplicacyCopyOptions_temp += " -threads " + $duplicacyCopyNumberOfThreads
+}
+if ($duplicacyMaxCopyRate)
+{
+    $duplicacyCopyOptions_temp += " -upload-limit-rate " + $duplicacyMaxCopyRate
+}
+
+
+
+
+# ================================================
+# ================================================
+# Create the commands in a hash table
+
 $duplicacy = @{
     exe = " $duplicacyExePath "
     options = " $duplicacyOptions_temp "
     command = " $duplicacyExePath $duplicacyOptions_temp "
 
-    backup = " backup -stats -threads $duplicacyBackupNumberOfThreads $duplicacyBackupVss_temp "
+    backup = " backup -stats $duplicacyBackupOptions_temp "
     list = " list "
     check = " check -tabular "
-    prune = " prune $duplicacyPruneAll_temp $duplicacyPruneRetentionPolicy "
+
+    prune = " prune $duplicacyPruneOptions_temp "
+    pruneoffsite = " prune $duplicacyPruneOptionsOffsite_temp "
+    copy = " copy -to offsite $duplicacyCopyOptions_temp "
 }
 # ================================================
 
+
+$sucessRun = $true
 
 function main
 {
@@ -85,10 +150,17 @@ function main
     # ================================================
     # ================================================
 
+    # ===================================================
+    # ===== Execute the commands. Select which ones =====
+    # doDuplicacyCommand $duplicacy.backup
     # doDuplicacyCommand $duplicacy.list
-    doDuplicacyCommand $duplicacy.backup
-    # doDuplicacyCommand $duplicacy.prune
     # doDuplicacyCommand $duplicacy.check
+
+    # doDuplicacyCommand $duplicacy.prune
+    # doDuplicacyCommand $duplicacy.pruneoffsite
+    # doDuplicacyCommand $duplicacy.copy
+
+
 
     # ================================================
     # ================================================
@@ -145,7 +217,12 @@ function zipOlderLogFiles()
 function doPostBackupTasks()
 {
     logFinishBackupProcess
-    if ($enableSlackNotifications) {createSlackMessage}  
+    if ($enableSlackNotifications) {createSlackMessage}
+
+    if($getURLWhenDone -And $global:sucessRun) {
+        Invoke-RestMethod $getURLWhenDone
+    }
+
     Pop-Location
 }
 
@@ -156,7 +233,12 @@ function logFinishBackupProcess()
     $startTime = $timings.scriptStartTime.ToString("yyyy-MM-dd HH:mm:ss")
     $endTime = $timings.scriptEndTime.ToString("yyyy-MM-dd HH:mm:ss")
     log "================================================================="
-    log "==== Finished Duplicacy backup process =========================="
+    if(-Not $global:sucessRun)
+    {
+        log "==== Finished Duplicacy process with status: FAILED =========================="
+    } else {
+        log "==== Finished Duplicacy process with status: SUCCESS =========================="
+    }
     log "======"
     log ("====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}" -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
     log ("====== logFile is: " + (Resolve-Path -Path $log.filePath).Path)
@@ -214,7 +296,9 @@ function elevateAsAdmin()
 }
 
 # elevateAsAdmin
+
 main
+
 # Read-Host "Press ENTER to exit: "
 
 
