@@ -141,7 +141,6 @@ $duplicacy = @{
 # ================================================
 
 
-$sucessRun = $true
 
 function main
 {
@@ -152,13 +151,13 @@ function main
 
     # ===================================================
     # ===== Execute the commands. Select which ones =====
-    # doDuplicacyCommand $duplicacy.backup
+    doDuplicacyCommand $duplicacy.backup
     # doDuplicacyCommand $duplicacy.list
     # doDuplicacyCommand $duplicacy.check
+    # doDuplicacyCommand $duplicacy.copy
 
     # doDuplicacyCommand $duplicacy.prune
     # doDuplicacyCommand $duplicacy.pruneoffsite
-    # doDuplicacyCommand $duplicacy.copy
 
 
 
@@ -217,10 +216,9 @@ function zipOlderLogFiles()
 function doPostBackupTasks()
 {
     logFinishBackupProcess
-    if ($enableSlackNotifications) {createSlackMessage}
-
-    if($getURLWhenDone -And $global:sucessRun) {
-        Invoke-RestMethod $getURLWhenDone
+    if ($enableSlackNotifications)
+    {
+        createSlackMessage
     }
 
     Pop-Location
@@ -233,12 +231,7 @@ function logFinishBackupProcess()
     $startTime = $timings.scriptStartTime.ToString("yyyy-MM-dd HH:mm:ss")
     $endTime = $timings.scriptEndTime.ToString("yyyy-MM-dd HH:mm:ss")
     log "================================================================="
-    if(-Not $global:sucessRun)
-    {
-        log "==== Finished Duplicacy process with status: FAILED =========================="
-    } else {
-        log "==== Finished Duplicacy process with status: SUCCESS =========================="
-    }
+    log "==== Finished Duplicacy backup process =========================="
     log "======"
     log ("====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}" -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
     log ("====== logFile is: " + (Resolve-Path -Path $log.filePath).Path)
@@ -250,15 +243,15 @@ function logFinishBackupProcess()
 function createSlackMessage()
 {
     $slackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
-    $slackMessage = "*** DUPLICACY BACKUP PROCESS COMPLETE ***`n" + "-- " + "$($slackOut -join "`n -- ")"
-	slackNotify($slackMessage)
+    $slackMessage = "*** DUPLICACY BACKUP PROCESS COMPLETE ***`n" + "-- " + "$( $slackOut -join "`n -- " )"
+    slackNotify($slackMessage)
 }
 
 function slackNotify($notify_text)
 {
     $payload = @{
-      "text" = $notify_text #what you want the message to say, do not change this as it pulls text from the log
-      }
+        "text" = $notify_text
+    }
 
     Invoke-WebRequest `
       -Body (ConvertTo-Json -Compress -InputObject $payload) `
