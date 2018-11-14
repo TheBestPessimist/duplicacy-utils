@@ -73,6 +73,7 @@ e:(?i)/\.svn/
 
 # ============================ exclude temp/cache files/folders everywhere
 e:(?i)\.(tmp|temp)$
+e:(?i)\.cache$
 e:(?i)/temp/
 e:(?i)/tmp/
 e:(?i)/cache/
@@ -115,8 +116,6 @@ e:(?i)\$RECYCLER/
 # ============================ system folders
 e:(?i)^[^/]+/\$GetCurrent/
 e:(?i)^[^/]+/\$SysReset
-e:(?i)^[^/]+/\$Windows\.\~BT/
-e:(?i)^[^/]+/\$Windows\.\~WS/
 e:(?i)^[^/]+/Boot/
 e:(?i)^[^/]+/Config\.Msi/
 e:(?i)^[^/]+/Documents and Settings/
@@ -125,24 +124,32 @@ e:(?i)^[^/]+/PerfLogs/
 e:(?i)^[^/]+/Recovery/
 e:(?i)^[^/]+/System Volume Information/
 e:(?i)^[^/]+/Windows/
+e:(?i)/Temporary Internet Files/
+#e(?i):/Windows/Installer/ ####### i think this may exclude too much!
+
+# ============================ windows update related
+e:(?i)^[^/]+/\$Windows\.\~BT/
+e:(?i)^[^/]+/\$Windows\.\~WS/
 e:(?i)^[^/]+/Windows10Upgrade/
 e:(?i)^[^/]+/Windows\.old/
-e:/Temporary Internet Files/
-#e:/Windows/Installer/ ####### i think this may exclude too much!
 
 
-# ============================ system files
-e:(?i)/IconCache.db
+# ============================ system files in root
 e:(?i)^[^/]+/bootmgr$
 e:(?i)^[^/]+/BOOTNXT$
 e:(?i)^[^/]+/BOOTSECT\.BAK$
 e:(?i)^[^/]+/hiberfil\.sys$
 e:(?i)^[^/]+/pagefile\.sys$
 e:(?i)^[^/]+/swapfile\.sys$
-e:(?i)^[^/]+/thumbs\.db$
 
+# ============================ system files anywhere
 # ntuser.dat may contain come other things at the end, therefore don't end with "$"
 e:(?i)ntuser\.dat
+
+# is this thumbs db correct?
+e:(?i)^[^/]+/thumbs\.db$
+e:(?i)/IconCache\.db
+
 
 
 # ================================================
@@ -234,13 +241,6 @@ e:(?i)^[^/]+/Program Files[^/]*/
 # ================================================ Exclude all AppData folders with known useless-but-heavy content
 # ============================ C:\Users\<username>\AppData\ holds app's configurations specific for each user
 # ============================ C:\ProgramData\ holds app's configurations global to all users (everytime you select "Install to all users")
-
-# ======= Optional: explicitly include AppData/ProgramData folders to provide the user with an App list
-#i:(?i)/AppData/$
-#i:(?i)/AppData/[^/]+/$
-#i:(?i)/AppData/[^/]+/[^/]+/$
-#i:(?i)^[^/]+/ProgramData/$
-#i:(?i)^[^/]+/ProgramData/[^/]+/$
 
 # ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
 e:(?i)/AppData/Local/Packages/
