@@ -17,10 +17,9 @@
 
 
 # ================================================
-# Import the global and local config file
-
-. "$PSScriptRoot\backup config.ps1"
-. "$PSScriptRoot\local config.ps1"
+# Import the global and local config files
+. "$PSScriptRoot\default_config.ps1"
+. "$PSScriptRoot\user_config.ps1"
 # ================================================
 
 
