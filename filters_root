@@ -58,8 +58,7 @@ e:(?i)(^|/)\.svn/
 
 
 # ============================ exclude temp/cache files/folders everywhere
-e:(?i)\.tmp$
-e:(?i)\.temp$
+e:(?i)\.(tmp|temp)$
 e:(?i)\.cache$
 e:(?i)(^|/)temp/
 e:(?i)(^|/)tmp/
@@ -75,13 +74,13 @@ e:(?i)(^|/)cache/
 # ==============================================================================
 
 # ============================ Google Drive Cache
-e:(?i)(^|/)\.tmp\.drivedownload/
+e:(?i)/\.tmp\.drivedownload/
 
 # ============================ Onedrive Cache
-e:(?i)(^|/)OneDriveTemp/
+e:(?i)/OneDriveTemp/
 
 # ============================ Dropbox Cache
-e:(?i)(^|/)\.dropbox\.cache/
+e:(?i)/\.dropbox\.cache/
 
 
 # ==============================================================================
@@ -101,75 +100,77 @@ e:(?i)\$RECYCLER/
 
 
 # ============================ system folders
-e:(?i)^System Volume Information/
-e:(?i)^Boot/
 e:(?i)^\$GetCurrent/
 e:(?i)^\$SysReset
+e:(?i)^Boot/
+e:(?i)^Config\.Msi/
 e:(?i)^Documents and Settings/
 e:(?i)^MSOCache/
-e:(?i)^Recovery/
-e:(?i)^Config\.Msi/
 e:(?i)^PerfLogs/
+e:(?i)^Recovery/
+e:(?i)^System Volume Information/
 e:(?i)^Windows/
+e:(?i)/Temporary Internet Files/
+#e(?i):/Windows/Installer/ ####### i think this may exclude too much!
 
 # ============================ windows update related
-e:(?i)^Windows\.old/
 e:(?i)^\$Windows\.\~BT/
 e:(?i)^\$Windows\.\~WS/
 e:(?i)^Windows10Upgrade/
+e:(?i)^Windows\.old/
 
 
 # ============================ system files in root
 e:(?i)^bootmgr$
 e:(?i)^BOOTNXT$
 e:(?i)^BOOTSECT\.BAK$
-e:(?i)^pagefile\.sys$
 e:(?i)^hiberfil\.sys$
+e:(?i)^pagefile\.sys$
 e:(?i)^swapfile\.sys$
 
 # ============================ system files anywhere
 # ntuser.dat may contain come other things at the end, therefore don't end with "$"
-e:(?i)(^|/)ntuser\.dat
+e:(?i)ntuser\.dat
+
+# is this thumbs db correct?
 e:(?i)(^|/)thumbs\.db$
-e:(?i)(^|/)desktop\.ini$
-e:(?i)(^|/)IconCache\.db$
-# exclude ".DS_Store" and "._.DS_Store"
-e:(?i)\.DS_Store
+e:(?i)(^|/)IconCache\.db
+
+
 
 # ================================================
 # ================================================ useless folders in root
 # ================================================
-e:(?i)^Logs/
-# Exclude all versions of python installed
-e:(?i)^Python[^/]*/
-e:(?i)^Intel/
-e:(?i)^NVIDIA/
-e:(?i)^Sun/
-e:(?i)^MSI/
 e:(?i)^ActiveTcl/
 e:(?i)^Android/
 e:(?i)^Binaries/
 e:(?i)^Cygw[^/]*/
 e:(?i)^Go/
 e:(?i)^InetPub/
-e:(?i)^PerfLogs/
+e:(?i)^Intel/
+e:(?i)^Logs/
 e:(?i)^Ming[^/]*/
-# Drivepool Folder, "belongs" to another drive
-e:(?i)^PoolPart\.[^/]+/
+e:(?i)^MSI/
+e:(?i)^NVIDIA/
+e:(?i)^PerfLogs/
+# Exclude all versions of python installed
+e:(?i)^Python[^/]*/
+e:(?i)^Sun/
 
 
-# ==============================================
-# ============================================== User profiles fiels and folders
-# ==============================================
-# ============================================== Analyze Carefully, and de-exclude anything that might be useful to someone
-# ==============================================
+# ==============================================================================
+# ==============================================================================
+# ============================================================================== Local excludes (user specific)
+# ==============================================================================
+# ============================================================================== Analyze carefully and de-exclude anything that might be useful to someone
+# ==============================================================================
+# ==============================================================================
 
 
 # ============================ Should we exclude all system's users profiles?
 #e:(?i)^Users/All Users/
-#e:(?i)^Users/Public/
-#e:(?i)^Users/UpdatusUser/
 #e:(?i)^Users/Default[^/]*/
+#e:(?i)^Users/Public/
 
 
 # ============================ uneeded folders in Users profiles: systems, junctions
@@ -188,18 +189,15 @@ e:(?i)^Users/[^/]+/\.?Start Menu/
 e:(?i)^Users/[^/]+/\.?Templates/
 e:(?i)^Users/[^/]+/\.?Tracing/
 
-# ==== I still haven't found anyone with a music folder worth backing up. Uncomment if you agree
-#e:(?i)^Users/[^/]+/Music/
-
 
 # ============================ uneeded folders in Users profiles: runtimes, dev, others
-e:(?i)^Users/[^/]+/\.?gradle/
 e:(?i)^Users/[^/]+/\.?anaconda/
 e:(?i)^Users/[^/]+/\.?android[^/]*/
 e:(?i)^Users/[^/]+/\.?astropy/
 e:(?i)^Users/[^/]+/\.?conda/
 e:(?i)^Users/[^/]+/\.?dia/
 e:(?i)^Users/[^/]+/\.?eclipse/
+e:(?i)^Users/[^/]+/\.?gradle/
 e:(?i)^Users/[^/]+/\.?kivy/
 e:(?i)^Users/[^/]+/\.?matplotlib/
 e:(?i)^Users/[^/]+/\.?Mendeley Desktop/
@@ -210,82 +208,42 @@ e:(?i)^Users/[^/]+/\.?QtWeb/
 
 # ============================ already backed-up and versioned controlled folders (eg. dropbox/google user folders)
 e:(?i)^Users/[^/]+/Dropbox/
-e:(?i)^Users/[^/]+/OneDrive[^/]*/
+e:(?i)^Users/[^/]+/OneDrive/
 
 
-# ============================ Useless files in the default Downloads folder
-e:(?i)^Users/[^/]+/Downloads/.*\.exe$
-e:(?i)^Users/[^/]+/Downloads/.*\.iso$
-e:(?i)^Users/[^/]+/Downloads/.*\.tgz$
-e:(?i)^Users/[^/]+/Downloads/.*\.gz$
-e:(?i)^Users/[^/]+/Downloads/.*\.msi$
-e:(?i)^Users/[^/]+/Downloads/.*\.cab$
-e:(?i)^Users/[^/]+/Downloads/.*\.tor$
-e:(?i)^Users/[^/]+/Downloads/.*\.torrent$
-e:(?i)^Users/[^/]+/Downloads/.*\.srt$
-e:(?i)^Users/[^/]+/Downloads/.*\.sub$
-e:(?i)^Users/[^/]+/Downloads/.*\.mp4$
-e:(?i)^Users/[^/]+/Downloads/.*\.mp3$
-e:(?i)^Users/[^/]+/Downloads/.*\.avi$
-e:(?i)^Users/[^/]+/Downloads/.*\.mov$
-e:(?i)^Users/[^/]+/Downloads/.*\.zip$
-e:(?i)^Users/[^/]+/Downloads/.*\.zip\.\d\d\d$
-e:(?i)^Users/[^/]+/Downloads/.*\.rar$
-e:(?i)^Users/[^/]+/Downloads/.*\.r\d\d$
 
 
-# ==============================================
-# ============================================== Installed Applications excludes
-# ==============================================
-# ============================================== They are not moveable.
-# ============================================== Optionally backup the apps' names to provide a list of installed applications
-# ==============================================
+# ================================================ Program files should be all ignored
+# ================================================ Optionally backup the apps' names to provide a list of installed applications
 
-# ====== Optional: explicitly include program names, to use as a list of installed apps
-i:(?i)^Program Files[^/]*/$
-i:(?i)^Program Files[^/]*/[^/]+/$
+# ============================ Optional: explicitly include program names, to use as a list of installed apps
+#i:(?i)^Program Files[^/]*/$
+#i:(?i)^Program Files[^/]*/[^/]+/$
 
-i:(?i)^Programs(\.old)?/$
-i:(?i)^Programs(\.old)?/[^/]+/$
-
-# ============================ Installed program files should be ignored
+# ============================ ignore program files
 e:(?i)^Program Files[^/]*/
-e:(?i)^Programs(\.old)?/
 
 
-# ==============================================
-# ============================================== Application data excludes
-# ==============================================
-# ============================================== Exclude all AppData folders with known useless-but-heavy content
-# ============================================== C:\Users\<username>\AppData\ holds app's configurations specific for each user
-# ============================================== C:\ProgramData\ holds app's configurations global to all users (everytime you select "Install to all users")
-# ==============================================
-
-# ======= Optional: explicitly include config folders names, to avoid errors in the next exclusions and to provide the user with an App list
-i:(?i)/AppData/$
-i:(?i)/AppData/[^/]+/$
-i:(?i)/AppData/[^/]+/[^/]+/$
-
-i:(?i)^ProgramData/$
-i:(?i)^ProgramData/[^/]+/$
-
-# ============================ exclude all *Cache* folders, anywhere inside AppData and ProgramaData folders
-e:(?i)/AppData/.*/[^/]*Cache[^/]*/
-e:(?i)^ProgramData/.*/[^/]*Cache[^/]*/
-
+# ================================================ Exclude all AppData folders with known useless-but-heavy content
+# ============================ C:\Users\<username>\AppData\ holds app's configurations specific for each user
+# ============================ C:\ProgramData\ holds app's configurations global to all users (everytime you select "Install to all users")
 
 # ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
-# ============== Ordered alphabetically for easier edit
+e:(?i)/AppData/Local/Packages/
 
+
+e:(?i)/AppData/[^/]+/Acronis/
 e:(?i)/AppData/[^/]+/Adobe/
 e:(?i)/AppData/[^/]+/Atlassian/SourceTree/[^/]*local/
-e:(?i)/AppData/[^/]+/ConnectedDevicesPlatform/
 e:(?i)/AppData/[^/]+/Comms/
+e:(?i)/AppData/[^/]+/ConnectedDevicesPlatform/
 e:(?i)/AppData/[^/]+/CrashDumps/
+e:(?i)/AppData/[^/]+/CrashPlan/
 e:(?i)/AppData/[^/]+/DBG/
 e:(?i)/AppData/[^/]+/Diagnostics/
 e:(?i)/AppData/[^/]+/Downloaded Installations/
 e:(?i)/AppData/[^/]+/Dropbox/
+e:(?i)/AppData/[^/]+/Duplicati/
 e:(?i)/AppData/[^/]+/ElevatedDiagnostics/
 e:(?i)/AppData/[^/]+/JetBrains/
 e:(?i)/AppData/[^/]+/NVIDIA[^/]*/
@@ -296,15 +254,21 @@ e:(?i)/AppData/[^/]+/PeerDistRepub/
 e:(?i)/AppData/[^/]+/Publishers/
 e:(?i)/AppData/[^/]+/Sun/
 e:(?i)/AppData/[^/]+/TileDataLayer/
+e:(?i)/AppData/[^/]+/Veeam/
 e:(?i)/AppData/[^/]+/VirtualStore/
+
+
 
 # ============== Skype AppData holds message history. Better save it
 # e:(?i)/AppData/[^/]+/Skype/
 
 
+e:(?i)^ProgramData/Acronis/
 e:(?i)^ProgramData/Adobe/
 e:(?i)^ProgramData/AVAST[^/]*/
+e:(?i)^ProgramData/CrashPlan/
 e:(?i)^ProgramData/Dropbox/
+e:(?i)^ProgramData/Duplicati/
 e:(?i)^ProgramData/Epson/
 e:(?i)^ProgramData/Eset/
 e:(?i)^ProgramData/GetSupportService/
@@ -316,8 +280,8 @@ e:(?i)^ProgramData/MiKTeX/
 e:(?i)^ProgramData/Mozilla/
 e:(?i)^ProgramData/NVIDIA[^/]*/
 e:(?i)^ProgramData/Oracle/
-e:(?i)^ProgramData/Packages/
 e:(?i)^ProgramData/Package Cache/
+e:(?i)^ProgramData/Packages/
 e:(?i)^ProgramData/Skype/
 e:(?i)^ProgramData/SoftwareDistribution/
 e:(?i)^ProgramData/Soluto/
@@ -326,31 +290,15 @@ e:(?i)^ProgramData/SupremoRemoteDesktop/
 e:(?i)^ProgramData/SystemAcCrux/
 e:(?i)^ProgramData/USOPrivate/
 e:(?i)^ProgramData/USOShared/
+e:(?i)^ProgramData/Veeam/
 e:(?i)^ProgramData/WindowsHolographicDevices/
 
 
 # ============== Gaming stuff, but no savegames
-
 e:(?i)/AppData/[^/]+/Steam/
 e:(?i)^ProgramData/Battle\.net/
 e:(?i)^ProgramData/GOG.com/
 e:(?i)^ProgramData/Origin/
-
-
-# ============== Should we backup backup-related data ?
-
-e:(?i)^ProgramData/Acronis/
-e:(?i)/AppData/[^/]+/Acronis/
-
-e:(?i)^ProgramData/CrashPlan/
-e:(?i)/AppData/[^/]+/CrashPlan/
-
-e:(?i)^ProgramData/Duplicati/
-e:(?i)/AppData/[^/]+/Duplicati/
-
-e:(?i)^ProgramData/Veeam/
-e:(?i)/AppData/[^/]+/Veeam/
-
 
 # ============================ include microsoft email clients but nothing else from microsoft
 i:(?i)/AppData/[^/]+/Microsoft/$
@@ -365,9 +313,7 @@ e:(?i)/AppData/[^/]+/Mozilla/
 
 
 # ============================ include Chrome profile and Picasa data, but nothing else from Google
-# note that we include the whole profile, because we are unsure how many "users" are added beside the "Default" profile
-# We exclude "Safe Browsing" for obvious reasons
-
+# ============================ note that we include the whole profile, because we are unsure how many "users" are added beside the "Default" profile
 i:(?i)/AppData/[^/]+/Google/$
 i:(?i)/AppData/[^/]+/Google/Chrome/$
 e:(?i)/AppData/[^/]+/Google/Chrome/.*Safe Browsing
@@ -385,34 +331,47 @@ e:(?i)/AppData/[^/]+/Google/
 # ============================================== Important to appear after the inclusions of known important apps
 # ==============================================
 
-# ============================ useless folders anywhere
-e:(?i)(^|/)cookies/
-e:(?i)(^|/)LOCK/
-e:(?i)(^|/)thumbnails/
 
 
 # ============================ useless files anywhere, by extension
-e:(?i)\.cache$
-e:(?i)\.crdownload$
-e:(?i)\.!ut$
-e:(?i)\.rbf$
-e:(?i)\.dov$
-e:(?i)\.bup$
-e:(?i)\.dmp$
-e:(?i)\.dump$
-e:(?i)\.err$
-e:(?i)\.old$
-e:(?i)\.prv$
-e:(?i)\.lck$
-e:(?i)\.ffs_lock$
-e:(?i)\.ffs_tmp$
-
-# e:(?i)\.part$
-# e:(?i)\.obj$
+# e:(?i).*.msf*$
 # e:(?i)\.bac$
+# e:(?i)\.back$
 # e:(?i)\.bak$
 # e:(?i)\.bkp$
-# e:(?i)\.back$
+# e:(?i)\.obj$
+# e:(?i)\.old$
+# e:(?i)\.part$
+
+e:(?i)\.!ut$
+e:(?i)\.bup$
+e:(?i)\.cache$
+e:(?i)\.crdownload$
+e:(?i)\.dmp$
+e:(?i)\.dov$
+e:(?i)\.dump$
+e:(?i)\.err$
+e:(?i)\.ffs_lock$
+e:(?i)\.ffs_tmp$
+e:(?i)\.lck$
+e:(?i)\.prv$
+e:(?i)\.rbf$
+
+# note about chk: https://groups.google.com/forum/#!topic/mozilla.support.firefox/j4J_gWzoQuw
+# (i don't know if deleting those files from Firefox actually break it. i believe it doesn't affect userdata though)
+e:(?i)\.chk$
+
+
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
 
 
 
@@ -422,6 +381,10 @@ e:(?i)\.ffs_tmp$
 # ==============================================================================
 # ==============================================================================
 
+# ============================ exclude ".DS_Store" and "._.DS_Store"
+e:\.*DS_Store
+
+
 # ================================================
 # ================================================ trash/bin stuff
 # ================================================
@@ -430,23 +393,98 @@ e:(?i)(^|/)Trash/
 e:(?i)(^|/)Network Trash Folder/
 
 
+
+
+
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ================================================================================================== possibly wrong / untested
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+# ==================================================================================================
+
+
+
+
+
+
+# ============================ include Thunderbird email profile but nothing else
+# note: may be wrong!
+# i:(?i)/AppData/[^/]+/Thunderbird/$
+# i:(?i)/AppData/[^/]+/Thunderbird/Profiles/
+# e:(?i)/AppData/[^/]+/Thunderbird/
+
+
+
+
 # ================================================
-# ================================================ libraries
+# ================================================ macos libraries
 # ================================================
-e:(?i)/Library/Application Support/SyncServices/
-e:(?i)/Library/Caches/
-e:(?i)/Library/Logs/
-e:(?i)/Library/Mail/AvailableFeeds/
-e:(?i)/Library/Mirrors/
-e:(?i)/Library/PubSub/Database/
-e:(?i)/Library/PubSub/Downloads/
-e:(?i)/Library/PubSub/Feeds/
-e:(?i)/Library/Safari/Icons.db
-e:(?i)/Library/Safari/WebpageIcons.db
-e:(?i)/Library/Safari/HistoryIndex.sk
-e:(?i)/iTunes/Album Artwork/Cache/
-e:(?i)^System/Library/Extensions/Caches/
-e:(?i)\.Library/Saved Application State/
+# e:(?i).Library/Saved Application State/
+# e:(?i)/iTunes/Album Artwork/Cache/
+# e:(?i)/Library/Application Support/SyncServices/
+# e:(?i)/Library/Caches/
+# e:(?i)/Library/Logs/
+# e:(?i)/Library/Mail/AvailableFeeds/
+# e:(?i)/Library/Mirrors/
+# e:(?i)/Library/PubSub/Database/
+# e:(?i)/Library/PubSub/Downloads/
+# e:(?i)/Library/PubSub/Feeds/
+# e:(?i)/Library/Safari/HistoryIndex.sk
+# e:(?i)/Library/Safari/Icons.db
+# e:(?i)/Library/Safari/WebpageIcons.db
+# e:(?i)^System/Library/Extensions/Caches/
+# e:(?i)\.Library/Saved Application State/
+# e:(?i)^[^/]+/System/Library/Extensions/Caches/
 
 
 
+# ============================ macos
+#.*/Music/Subscription/.*
+#e:/Library/Calendars/Calendar Cache/
+#e:/Library/Mail/Envelope Index
+#
+#e:/iPhoto Library/iPod Photo Cache
+#e:/iPhoto Library/iPod Photo Cache/
+#e:.Library/Mail/*/Info.plist
+#e:.Library/Calendars/*/Info.plist
+#
+# (?i).*/Google/Chrome/.*cache.*
+# (?i).*/Mozilla/Firefox/.*cache.*
+# .*/Google/Chrome/Safe Browsing.*
+#
+# /dev/.*
+# /\.vol/.*
+# /mach.sym
+# /mach_kernel
+# .*\.hotfiles\.btree.*
+# .*/VM Storage
+# .*\.fseventsd.*
+# .*\.Spotlight-.*/.*
+# /Network/.*
+# /cores/.*
+# /afs/.*
+# /automount/.*
+# /private/Network/.*
+# /private/var/folders/.*
+# /private/var/run/.*
+# /private/var/spool/postfix/.*
+# /private/var/vm/.*
+# /Previous Systems.*
+# .*/lost\+found/.*
+# .*/Microsoft User Data/Entourage Temp/.*
+# .*/iP.* Software Updates/.*
+#
+# /Desktop DB
+# /Desktop DF
+# /Network/Servers.*
+# /Users/Shared/SC Info.*
+# /net/.*
+# /private/var/automount/.*
+# /private/var/db/dhcpclient/.*
+# /private/var/db/fseventsd/.*
+# (?i).*/backups.backupdb/.*
+# .*MobileBackups/.*
