@@ -17,17 +17,18 @@
 
 
 # ================================================
+# ================================================
 # Import the global and local config files
+
 . "$PSScriptRoot\default_config.ps1"
 . "$PSScriptRoot\user_config.ps1"
 # ================================================
 
 
 # ================================================
-
 # ================================================
 # Various timers keeping time
-#
+
 $timings = @{
     scriptStartTime = 0
     scriptEndTime = 0
@@ -35,103 +36,27 @@ $timings = @{
 }
 # ================================================
 
-
+# ================================================
 # ================================================
 # Info about the logging
 
 $log = @{
     basePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
-    folder = $( Get-Date ).toString("yyyy-MM-dd dddd")
     fileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
 }
-$log.workingPath = $log.basePath + "/" + $log.folder + "/"
+$log.workingPath = $log.basePath + "/" + $( Get-Date ).toString("yyyy-MM-dd dddd") + "/"
 $log.filePath = $log.workingPath + $log.fileName
 # ================================================
 
 
-# ================================================
-# Duplicacy global options
-
-$duplicacyOptions_temp = " -log "
-if ($duplicacyDebug)
-{
-    $duplicacyOptions_temp += " -d "
-}
-
-
-# ================================================
-# Duplicacy backup options
-
-$duplicacyBackupOptions_temp = ""
-if ($duplicacyVssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator"))
-{
-    $duplicacyBackupOptions_temp += " -vss "
-    $duplicacyBackupOptions_temp += " -vss-timeout " + $duplicacyVssTimeout
-}
-
-if ($duplicacyMaxUploadRate)
-{
-    $duplicacyBackupOptions_temp += " -limit-rate " + $duplicacyMaxUploadRate
-}
-
-
-# ================================================
-# Duplicacy prune options
-#
-$duplicacyPruneOptions_temp = $duplicacyPruneRetentionPolicy
-$duplicacyPruneOptionsOffsite_temp = $duplicacyPruneRetentionPolicy
-
-if ($duplicacyPruneNumberOfThreads)
-{
-    $duplicacyPruneOptions_temp += " -threads " + $duplicacyPruneNumberOfThreads
-    $duplicacyPruneOptionsOffsite_temp += " -threads " + $duplicacyPruneNumberOfThreads
-}
-
-if ($duplicacyPruneExtraOptionsLocal)
-{
-    $duplicacyPruneOptions_temp += " $duplicacyPruneExtraOptionsLocal "
-}
-
-if ($duplicacyPruneExtraOptionsOffsite)
-{
-    $duplicacyPruneOptionsOffsite_temp += " $duplicacyPruneExtraOptionsOffsite "
-}
-
-
-# ================================================
-# Duplicacy copy options
-
-$duplicacyCopyOptions_temp = ""
-if ($duplicacyCopyNumberOfThreads)
-{
-    $duplicacyCopyOptions_temp += " -threads " + $duplicacyCopyNumberOfThreads
-}
-
-if ($duplicacyMaxCopyRate)
-{
-    $duplicacyCopyOptions_temp += " -upload-limit-rate " + $duplicacyMaxCopyRate
-}
-
-
 
 
 # ================================================
 # ================================================
-# Create the commands in a hash table
+# Initialize the script-level duplicacy table.
+# It is empty now but filled in the function initDuplicacyOptions
 
-$duplicacy = @{
-    exe = " $duplicacyExePath "
-    options = " $duplicacyOptions_temp "
-    command = " $duplicacyExePath $duplicacyOptions_temp "
-
-    backup = " backup -stats $duplicacyBackupOptions_temp "
-    list = " list "
-    check = " check "
-
-    prune = " prune $duplicacyPruneOptions_temp "
-    pruneOffsite = " prune $duplicacyPruneOptionsOffsite_temp "
-    copy = " copy -to offsite $duplicacyCopyOptions_temp "
-}
+$duplicacy = @{ }
 # ================================================
 
 
@@ -165,6 +90,7 @@ function main
 #
 function doPreBackupTasks()
 {
+    initDuplicacyOptions
     Push-Location $repositoryFolder
 
     if (!(Test-Path -Path $log.workingPath))
@@ -282,6 +208,89 @@ function elevateAsAdmin()
         Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
     }
 }
+
+
+
+
+function initDuplicacyOptions {
+    # ================================================
+    # Duplicacy global options
+
+    $globalOpts = " -log "
+    if ($duplicacyDebug)
+    {
+        $globalOpts += " -d "
+    }
+
+
+    # ================================================
+    # Duplicacy backup options
+
+    $backupOpts = ""
+    if ($duplicacyVssOption -And ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator"))
+    {
+        $backupOpts += " -vss "
+        $backupOpts += " -vss-timeout " + $duplicacyVssTimeout
+    }
+
+    if ($duplicacyMaxUploadRate)
+    {
+        $backupOpts += " -limit-rate " + $duplicacyMaxUploadRate
+    }
+
+
+    # ================================================
+    # Duplicacy prune options
+    #
+    $pruneOpts = $duplicacyPruneRetentionPolicy
+    $pruneOffsiteOpts = $duplicacyPruneRetentionPolicy
+
+    if ($duplicacyPruneNumberOfThreads)
+    {
+        $pruneOpts += " -threads " + $duplicacyPruneNumberOfThreads
+        $pruneOffsiteOpts += " -threads " + $duplicacyPruneNumberOfThreads
+    }
+
+    if ($duplicacyPruneExtraOptionsLocal)
+    {
+        $pruneOpts += " $duplicacyPruneExtraOptionsLocal "
+    }
+
+    if ($duplicacyPruneExtraOptionsOffsite)
+    {
+        $pruneOffsiteOpts += " $duplicacyPruneExtraOptionsOffsite "
+    }
+
+
+    # ================================================
+    # Duplicacy copy options
+    $copyOpts = ""
+    if ($duplicacyCopyNumberOfThreads)
+    {
+        $copyOpts += " -threads " + $duplicacyCopyNumberOfThreads
+    }
+
+    if ($duplicacyMaxCopyRate)
+    {
+        $copyOpts += " -upload-limit-rate " + $duplicacyMaxCopyRate
+    }
+
+
+    # ================================================
+    # Initialize the script-level duplicacy table with all the precomputed strings
+    $script:duplicacy.exe = " $duplicacyExePath "
+    $script:duplicacy.options = " $globalOpts "
+    $script:duplicacy.command = " $duplicacyExePath $globalOpts "
+
+    $script:duplicacy.backup = " backup -stats $backupOpts "
+    $script:duplicacy.list = " list "
+    $script:duplicacy.check = " check "
+
+    $script:duplicacy.prune = " prune $pruneOpts "
+    $script:duplicacy.pruneOffsite = " prune $pruneOffsiteOpts "
+    $script:duplicacy.copy = " copy -to offsite $copyOpts "
+}
+
 
 # elevateAsAdmin
 
