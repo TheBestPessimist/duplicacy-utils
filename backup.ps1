@@ -61,11 +61,11 @@ function main
 {
     # http://www.wallacetech.co.uk/?p=693
     doPreBackupTasks
-    # ================================================
-    # ================================================
+    # ============================================
+    # ============================================
 
-    # ===================================================
-    # ===== Execute the commands. Select which ones =====
+    # ============================================
+    # == Execute the commands. Select which ones =
     doDuplicacyCommand $duplicacy.backup
     # doDuplicacyCommand $duplicacy.list
     # doDuplicacyCommand $duplicacy.check
@@ -76,8 +76,8 @@ function main
 
 
 
-    # ================================================
-    # ================================================
+    # ============================================
+    # ============================================
     doPostBackupTasks
 }
 
@@ -196,7 +196,7 @@ function log($str)
 
 function initDuplicacyOptions
 {
-    # ================================================
+    # ============================================
     # Duplicacy global options
 
     $globalOpts = " -log "
@@ -206,7 +206,7 @@ function initDuplicacyOptions
     }
 
 
-    # ================================================
+    # ============================================
     # Duplicacy backup options
 
     $backupOpts = ""
@@ -222,7 +222,7 @@ function initDuplicacyOptions
     }
 
 
-    # ================================================
+    # ============================================
     # Duplicacy prune options
     #
     $pruneOpts = $duplicacyPruneRetentionPolicy
@@ -245,7 +245,7 @@ function initDuplicacyOptions
     }
 
 
-    # ================================================
+    # ============================================
     # Duplicacy copy options
     $copyOpts = ""
     if ($duplicacyCopyNumberOfThreads)
@@ -259,7 +259,7 @@ function initDuplicacyOptions
     }
 
 
-    # ================================================
+    # ============================================
     # Initialize the script-level duplicacy table with all the precomputed strings
     $script:duplicacy.exe = " $duplicacyExePath "
     $script:duplicacy.options = " $globalOpts "
