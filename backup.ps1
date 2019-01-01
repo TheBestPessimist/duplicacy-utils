@@ -38,14 +38,10 @@ $timings = @{
 
 # ================================================
 # ================================================
-# Info about the logging
+# Info about log paths
+# It is empty now but filled in the function initLoggingOptions
 
-$log = @{
-    basePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
-    fileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
-}
-$log.workingPath = $log.basePath + "/" + $( Get-Date ).toString("yyyy-MM-dd dddd") + "/"
-$log.filePath = $log.workingPath + $log.fileName
+$log = @{ }
 # ================================================
 
 
@@ -91,6 +87,8 @@ function main
 function doPreBackupTasks()
 {
     initDuplicacyOptions
+    initLoggingOptions
+
     Push-Location $repositoryFolder
 
     if (!(Test-Path -Path $log.workingPath))
@@ -291,6 +289,14 @@ function initDuplicacyOptions {
     $script:duplicacy.copy = " copy -to offsite $copyOpts "
 }
 
+function initLoggingOptions
+{
+    $log = $script:log
+    $log.logbasePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
+    $log.logfileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
+    $log.workingPath = $log.basePath + "/" + $( Get-Date ).toString("yyyy-MM-dd dddd") + "/"
+    $log.filePath = $log.workingPath + $log.fileName
+}
 
 # elevateAsAdmin
 
