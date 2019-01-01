@@ -131,11 +131,6 @@ function doPostBackupTasks()
 {
     logFinishBackupProcess
 
-    if ($enableSlackNotifications)
-    {
-        createSlackMessage
-    }
-
     Pop-Location
 }
 
@@ -153,25 +148,7 @@ function logFinishBackupProcess()
     log "================================================================="
 }
 
-# function to split the lines at the end of the log file into individual slack notifications
-function createSlackMessage()
-{
-    $slackOut = Get-Content -Tail $logLinestoSlack -Path $log.filePath
-    $slackMessage = "*** DUPLICACY BACKUP PROCESS COMPLETE ***`n" + "-- " + "$( $slackOut -join "`n -- " )"
-    slackNotify($slackMessage)
-}
 
-function slackNotify($notify_text)
-{
-    $payload = @{
-        "text" = $notify_text
-    }
-
-    Invoke-WebRequest `
-      -Body (ConvertTo-Json -Compress -InputObject $payload) `
-      -Method Post `
-      -Uri "$slackWebhookURL" | Out-Null
-}
 
 function doDuplicacyCommand($arg)
 {

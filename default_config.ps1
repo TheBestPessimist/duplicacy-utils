@@ -84,21 +84,3 @@ $duplicacyCopyNumberOfThreads = 4
 # Other options for offiste prune (retention is the same as local)
 # -exhaustive, -exclusive, or other
 $duplicacyPruneExtraOptionsOffsite = " -all -exclusive -storage offsite "
-
-
-
-
-
-
-
-# ==============================================================================
-# ==============================================================================
-# ========        Slack notifications
-
-$enableSlackNotifications = $false #change to $true to enable
-
-# $slackWebhookURL = "https://hooks.slack.com/services/INSERTYOURCUSTOMSTRINGHERE"
-# More information on webhook setup here: https://get.slack.help/hc/en-us/articles/115005265063-Incoming-WebHooks-for-Slack
-$slackWebhookURL = "REPLACEYOURURLHERE"
-$logLinestoSlack = 10 # number of lines in the log to send via slack notification
-
