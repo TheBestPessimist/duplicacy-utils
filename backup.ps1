@@ -87,16 +87,11 @@ function main
 function doPreBackupTasks()
 {
     initDuplicacyOptions
-    initLoggingOptions
 
     Push-Location $repositoryFolder
 
-    if (!(Test-Path -Path $log.workingPath))
-    {
-        New-Item -ItemType directory -Path $log.workingPath
-        log "Folder ${log.workingPath} does not exist. It has just been created"
-    }
-
+    initLoggingOptions
+    createLogFolder
     logStartBackupProcess
     zipOlderLogFiles
 }
@@ -279,13 +274,25 @@ function initDuplicacyOptions
     $script:duplicacy.copy = " copy -to offsite $copyOpts "
 }
 
+
 function initLoggingOptions
 {
+    # Init the logging paths and files
     $log = $script:log
     $log.logbasePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
     $log.logfileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
     $log.workingPath = $log.basePath + "/" + $( Get-Date ).toString("yyyy-MM-dd dddd") + "/"
     $log.filePath = $log.workingPath + $log.fileName
+}
+
+
+function createLogFolder
+{
+    if (!(Test-Path -Path $log.workingPath))
+    {
+        New-Item -ItemType directory -Path $log.workingPath
+        log "Folder ${log.workingPath} does not exist. It has just been created"
+    }
 }
 
 # elevateAsAdmin
