@@ -199,18 +199,8 @@ function log($str)
     invoke " Write-Output '${date} $str' "
 }
 
-function elevateAsAdmin()
+function initDuplicacyOptions
 {
-    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator"))
-    {
-        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
-    }
-}
-
-
-
-
-function initDuplicacyOptions {
     # ================================================
     # Duplicacy global options
 
@@ -301,77 +291,3 @@ function initLoggingOptions
 # elevateAsAdmin
 
 main
-
-# Read-Host "Press ENTER to exit: "
-
-
-
-
-
-
-
-
-
-# # Config / Global vars
-# $duplicacyMasterDir="C:\duplicacy repo"                       # Logfiles will go here, subdir /Logs
-# $repoLocations=@("C:\duplicacy repo")         # All repos to backup
-# $duplicacyExe="C:\duplicacy repo\z.exe"          # Path to .exe
-# $duplicacyGlobalOptions="-d -log"                                 # Global options to add to duplicacy commands
-# $backupCmd="backup -stats -threads 20"                                        # Backup command. TODO: Needs improvement, we should use some sort of backup-class instead to have per-repo specifics here...
-# #$backupCmd="list"
-
-# # Pushover, leave empty for none
-# $sendPushoverOnSuccess=$false
-# $pushoverUserKey=""
-# $pushoverToken=""
-
-
-# # Main
-# function main {
-#         $msg = ""
-#         foreach($repo in $repoLocations){
-#             log ""
-#             logDivider "Repo: $repo"
-#             cd $repo
-#             log "Running Duplicacy backup ..."
-
-#             Invoke-Expression "& '$duplicacyExe' $duplicacyGlobalOptions $backupCmd" | Tee-Object -Variable dupOut
-#             if($lastexitcode){
-#                 throw "Duplicacy non zero exit code"
-#             }
-#             logDivider "Done backing up: $repo"
-#             $stats = logStats $dupOut
-#             $msg += "$repo :: $stats `n"
-#         }
-#         if($sendPushoverOnSuccess){
-#             sendPushover "Backup success" $msg
-#         }
-
-
-# }
-
-# function logStats($dupOutput) {
-#     try {
-#         $backupStats = $dupOutput.Split("`n") | Select-String -Pattern 'All chunks'
-#         $match = ([regex]::Match($backupStats,'(.*)total, (.*) bytes; (.*) new, (.*) bytes, (.*) bytes'))
-#         $tot = formatData $match.Groups[2].Value
-#         $new = formatData $match.Groups[4].Value
-#         $upload = formatData $match.Groups[5].Value
-#     return "$tot, $new -> upload $upload"
-#     } Catch {
-#         return "Could not parse stats"
-#     }
-# }
-
-# function formatData($str){
-#     $last = $str[-1]
-#     $foo =  ($str -replace ".$")/1000
-#     $bar = [int]$foo
-#     if($last -eq "K"){
-#         return "$bar MB"
-#     } elseif ($last -eq "M"){
-#         return "$bar GB"
-#     }
-#     return $str
-
-# }
