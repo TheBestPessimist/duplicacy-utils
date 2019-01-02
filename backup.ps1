@@ -256,8 +256,8 @@ function initLoggingOptions
 {
     # Init the logging paths and files
     $log = $script:log
-    $log.logbasePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
-    $log.logfileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
+    $log.basePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
+    $log.fileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
     $log.workingPath = $log.basePath + "/" + $( Get-Date ).toString("yyyy-MM-dd dddd") + "/"
     $log.filePath = $log.workingPath + $log.fileName
 }
