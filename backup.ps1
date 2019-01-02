@@ -67,7 +67,6 @@ function main
     # ============================================
     # == Execute the commands. Select which ones =
     doDuplicacyCommand $duplicacy.backup
-    # doDuplicacyCommand $duplicacy.list
     # doDuplicacyCommand $duplicacy.check
     # doDuplicacyCommand $duplicacy.copy
 
@@ -81,9 +80,6 @@ function main
     doPostBackupTasks
 }
 
-# ================================================
-# Helper functions
-#
 function doPreBackupTasks()
 {
     initDuplicacyOptions
@@ -243,7 +239,6 @@ function initDuplicacyOptions
     $script:duplicacy.command = " $duplicacyExePath $globalOpts "
 
     $script:duplicacy.backup = " backup -stats $backupOpts "
-    $script:duplicacy.list = " list "
     $script:duplicacy.check = " check "
 
     $script:duplicacy.prune = " prune $pruneOpts "
@@ -271,7 +266,5 @@ function createLogFolder
         log "Folder ${log.workingPath} does not exist. It has just been created"
     }
 }
-
-# elevateAsAdmin
 
 main
