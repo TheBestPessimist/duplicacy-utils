@@ -9,7 +9,7 @@
 
 # ================================================
 # Import the global and local config file 
-#
+
 #. "$PSScriptRoot\default_config.ps1"
 #. "$PSScriptRoot\user_config.ps1"
 # ================================================
@@ -127,7 +127,6 @@ function createNewTask()
     $repetitionDuration = (New-TimeSpan -Days 10000)  # 27 years should be enough
     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repetitionInterval -RepetitionDuration $repetitionDuration -RandomDelay $randomDelay
     $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -StartWhenAvailable
-
 
     $scheduledTaskParameters = @{
         TaskName = $taskName
