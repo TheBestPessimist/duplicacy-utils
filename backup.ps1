@@ -22,6 +22,7 @@
 
 . "$PSScriptRoot\default_config.ps1"
 . "$PSScriptRoot\user_config.ps1"
+. "$PSScriptRoot\remote_notifications_util.ps1"
 # ================================================
 
 
@@ -116,8 +117,18 @@ function logStartBackupProcess()
     log "==== Starting Duplicacy backup process =========================="
     log "======"
     log "====== Start time is: $startTime"
-    log ("====== logFile is: " + (Resolve-Path -Path $log.filePath).Path)
     log "================================================================="
+
+    $msg = @"
+<code>`n`n`n`n`n`n`n`n
+=========================================================
+==== Starting Duplicacy backup process ==================
+======
+====== Start time is`: $startTime
+=========================================================
+</code>
+"@
+    doRemoteNotifications $msg
 }
 
 function zipOlderLogFiles()
@@ -150,12 +161,25 @@ function logFinishBackupProcess()
     $timings.scriptTotalRuntime = New-Timespan -Start $timings.scriptStartTime -End $timings.scriptEndTime
     $startTime = $timings.scriptStartTime.ToString("yyyy-MM-dd HH:mm:ss")
     $endTime = $timings.scriptEndTime.ToString("yyyy-MM-dd HH:mm:ss")
+    $logFilePath = (Resolve-Path -Path $log.filePath).Path
     log "================================================================="
     log "==== Finished Duplicacy backup process =========================="
     log "======"
     log ("====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}" -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
-    log ("====== logFile is: " + (Resolve-Path -Path $log.filePath).Path)
+    log "====== logFile is: $logFilePath"
     log "================================================================="
+
+    $msg = @"
+<pre>=========================================================
+==== Finished Duplicacy backup process ==================
+======
+====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}
+====== logFile is: $logFilePath
+=========================================================
+</pre>
+"@ -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime
+
+    doRemoteNotifications $msg
 }
 
 
@@ -166,7 +190,14 @@ function doDuplicacyCommand($arg)
     log "==="
     log "=== Now executting $command"
     log "==="
+
+    doRemoteNotifications "<code> == Now executting $command</code>"
+
     invoke $command
+
+    $msg = Get-Content -Tail 6 -Path $log.filePath
+    $msg = "Last lines:`n" + "     => " + "$( $msg -join "`n     => " )"
+    doRemoteNotifications "<code>$msg</code>"
 }
 
 function invoke($command)
@@ -294,9 +325,12 @@ function warnIfNoCommandsWereExecuted
             $runPruneOffsite -Or
             $runCopyToOffsite))
     {
+        $msg = "       !!! No commands were executed. You should check your configuration file: user_config.ps1!"
         log
-        log "       !!! No commands were executed. You should check your configuration file: user_config.ps1!"
+        log $msg
         log
+
+        doRemoteNotifications $msg
     }
 }
 
