@@ -65,15 +65,29 @@ function main
     # ============================================
 
     # ============================================
-    # == Execute the commands. Select which ones =
-    doDuplicacyCommand $duplicacy.backup
-    # doDuplicacyCommand $duplicacy.check
-    # doDuplicacyCommand $duplicacy.copy
+    # == Execute the commands ==
+    if ($runBackup)
+    {
+        doDuplicacyCommand $duplicacy.backup
+    }
+    if ($runPrune)
+    {
+        doDuplicacyCommand $duplicacy.prune
+    }
+    if ($runCheck)
+    {
+        doDuplicacyCommand $duplicacy.check
+    }
+    if ($runCopyToOffsite)
+    {
+        doDuplicacyCommand $duplicacy.copy
+    }
+    if ($runPruneOffsite)
+    {
+        doDuplicacyCommand $duplicacy.pruneOffsite
+    }
 
-    # doDuplicacyCommand $duplicacy.prune
-    # doDuplicacyCommand $duplicacy.pruneOffsite
-
-
+    warnIfNoCommandsWereExecuted
 
     # ============================================
     # ============================================
@@ -269,6 +283,20 @@ function createLogFolder
     {
         New-Item -ItemType directory -Path $log.workingPath
         log "Folder ${log.workingPath} does not exist. It has just been created"
+    }
+}
+
+function warnIfNoCommandsWereExecuted
+{
+    if (-Not($runBackup -Or
+            $runPrune -Or
+            $runCheck -Or
+            $runPruneOffsite -Or
+            $runCopyToOffsite))
+    {
+        log
+        log "       !!! No commands were executed. You should check your configuration file: user_config.ps1!"
+        log
     }
 }
 

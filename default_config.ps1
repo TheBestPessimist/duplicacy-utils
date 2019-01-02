@@ -37,7 +37,14 @@ $duplicacyExePath = ".\z.exe"
 $duplicacyDebug = $false        # or $true
 
 
+# ================================================
+# What commands you want to execute
 
+$runBackup = $false
+$runPrune = $false
+$runCheck = $false
+$runPruneOffsite = $false
+$runCopyToOffsite = $false
 
 # ==============================================================================
 # ==============================================================================
