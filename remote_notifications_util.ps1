@@ -38,7 +38,6 @@ function doTelegramNotification($message)
 
     $body = ConvertTo-Json -Compress -InputObject $payload
     $url = "https://duplicacy-utils.tbp.land/userUpdate"
-    $url = "https://6082ec77.ngrok.io/userUpdate"
 
     doPostRequest $url $body
 }
