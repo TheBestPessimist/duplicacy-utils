@@ -35,10 +35,6 @@
 # ==============================================================================
 
 # ================================================
-# What commands you want to execute: set to $true
+# What commands you want to execute: toggle to $true
 $runBackup = $true
 $runPrune = $false
-$runCheck = $false
-$runPruneOffsite = $false
-$runCopyToOffsite = $false
-
