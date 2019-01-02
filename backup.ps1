@@ -189,17 +189,21 @@ function initDuplicacyOptions
         $backupOpts += " -vss-timeout " + $duplicacyVssTimeout
     }
 
-    if ($duplicacyMaxUploadRate)
+    if ($duplicacyLimitRate)
     {
-        $backupOpts += " -limit-rate " + $duplicacyMaxUploadRate
+        $backupOpts += " -limit-rate $duplicacyLimitRate "
     }
 
+    if ($duplicacyBackupNumberOfThreads)
+    {
+        $backupOpts += " -threads " + $duplicacyBackupNumberOfThreads
+    }
 
     # ============================================
     # Duplicacy prune options
-    #
-    $pruneOpts = $duplicacyPruneRetentionPolicy
-    $pruneOffsiteOpts = $duplicacyPruneRetentionPolicy
+
+    $pruneOpts = " $pruneRetentionPolicyLocal "
+    $pruneOffsiteOpts = " $pruneRetentionPolicyLocal "
 
     if ($duplicacyPruneNumberOfThreads)
     {
@@ -220,6 +224,7 @@ function initDuplicacyOptions
 
     # ============================================
     # Duplicacy copy options
+
     $copyOpts = ""
     if ($duplicacyCopyNumberOfThreads)
     {
