@@ -51,9 +51,9 @@ systemctl enable duplicacy-utils.service
 systemctl start duplicacy-utils.timer
 
 # show when the timer runs next
-systemctl list-timers duplicacy-utils.timer
-
 systemctl status duplicacy-utils.timer
+
+systemctl list-timers duplicacy-utils.timer
 
 # this is just for debugging
 # sleep 6
