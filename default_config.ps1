@@ -31,7 +31,7 @@ $repositoryFolder = (Get-Item $PSScriptRoot).Parent.Parent.FullName
 # $repositoryFolder = "C:/duplicacy repositories/my downloads/"
 
 # Full path to Duplicacy.exe
-$duplicacyExePath = ".\z.exe"
+$duplicacyExePath = ".duplicacy/z.exe"
 
 # Should the "-d" flag (debuging) be used? (hint: it generally shouldn't)
 $duplicacyDebug = $false        # or $true
