@@ -56,7 +56,13 @@ $log = @{ }
 $duplicacy = @{ }
 # ================================================
 
+# ================================================
+# ================================================
+# If there was no error for all the duplicacy command invocations
+# $globalSuccessStatus should remain true.
 
+$globalSuccessStatus = $true
+# ================================================
 
 function main
 {
@@ -170,8 +176,11 @@ function logFinishBackupProcess()
     $startTime = $timings.scriptStartTime.ToString("yyyy-MM-dd HH:mm:ss")
     $endTime = $timings.scriptEndTime.ToString("yyyy-MM-dd HH:mm:ss")
     $logFilePath = (Resolve-Path -Path $log.filePath).Path
+
+    $successStatusString = successStatusAsString $globalSuccessStatus
+
     log "================================================================="
-    log "==== Finished $scheduledTaskName @ $repositoryFolder"
+    log "==== Finished($successStatusString) $scheduledTaskName @ $repositoryFolder"
     log "===="
     log "==== Start time is: $startTime"
     log "==== End   time is: $endTime"
@@ -182,7 +191,7 @@ function logFinishBackupProcess()
 
     $msg = @"
 <code>`n
- == Finished $scheduledTaskName @ $repositoryFolder
+ == Finished($successStatusString) $scheduledTaskName @ $repositoryFolder
 
  = Start time is: $startTime
  = End   time is: $endTime
@@ -209,8 +218,17 @@ function doDuplicacyCommand($arg)
 
     doCall $duplicacy.exe (-split $duplicacy.options + -split $arg)
 
+    $localSuccessStatus = $true
+
+    if ($LastExitCode -ne 0)
+    {
+        $globalSuccessStatus = $false
+        $localSuccessStatus = $false
+    }
+    $successStatusString = successStatusAsString $localSuccessStatus
+
     $msg = Get-Content -Tail 6 -Path $log.filePath
-    $msg = "Last lines:`n" + " => " + "$( $msg -join "`n => " )"
+    $msg = "$successStatusString! Last lines:`n" + " => " + "$( $msg -join "`n => " )"
     doRemoteNotifications "<code>$msg</code>"
 }
 
@@ -347,5 +365,17 @@ function warnIfNoCommandsWereExecuted
         doRemoteNotifications $msg
     }
 }
+
+
+function successStatusAsString($someBoolean)
+{
+    $status = "SUCCESS"
+    if (-Not$someBoolean)
+    {
+        $status = "FAILURE"
+    }
+    return $status
+}
+
 
 main
