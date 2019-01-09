@@ -139,10 +139,20 @@ function zipOlderLogFiles()
         log "Zipping (and then deleting) the folder: $fullName to the zipFile: $zipFileName"
         Compress-Archive -Path $fullName -DestinationPath $zipFileName -CompressionLevel Optimal -Update
 
-        # Remove-Item -Path $fullName # not good since it deletes the Folder. I want to send it to recycle bin.
-        $shell = New-Object -ComObject "Shell.Application"
-        $item = $shell.Namespace(0).ParseName("$fullName")
-        $item.InvokeVerb("delete")
+        if ($IsLinux -Or $IsMacOS)
+        {
+            log "OS is NOT Windows => deleting the folder"
+            # w/o -Verbose there is no output
+            # w/o output redirect *>&1 the output dooesn't go to Tee-Object
+            doCall { Remove-Item -Path $fullName -Recurse -Verbose *>&1 }
+        }
+        else
+        {
+            log "OS is Windows => sending file to Recycle Bin"
+            $shell = New-Object -ComObject "Shell.Application"
+            $item = $shell.Namespace(0).ParseName("$fullName")
+            $item.InvokeVerb("delete")
+        }
     }
 }
 
