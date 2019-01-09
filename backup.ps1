@@ -131,7 +131,7 @@ function logStartBackupProcess()
 
 function zipOlderLogFiles()
 {
-    $logFiles = Get-ChildItem $log.basePath -Directory |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 1) }
+    $logFiles = Get-ChildItem $log.basePath -Directory |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 0) }
     foreach ($folder in $logFiles)
     {
         $fullName = $folder.FullName
