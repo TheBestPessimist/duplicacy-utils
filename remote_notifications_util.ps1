@@ -25,12 +25,13 @@
 
 function doRemoteNotifications($message)
 {
-    doCall "doTelegramNotification" @($message)
+    doTelegramNotification $message
 }
 
 
 function doTelegramNotification($message)
 {
+    log "=== doTelegramNotification"
     $payload = @{
         content = ($message).ToString()
         chat_id = $telegramToken
@@ -44,8 +45,10 @@ function doTelegramNotification($message)
 
 function doPostRequest($url, $body)
 {
-    Invoke-WebRequest `
+    doCall {
+        Invoke-WebRequest `
         -Body $body `
         -Method Post `
-        -Uri $url
+        -Uri $url | Format-List -Property StatusCode, StatusDescription, Content
+    }
 }
