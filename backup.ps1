@@ -193,23 +193,23 @@ function doDuplicacyCommand($arg)
 
     doRemoteNotifications "<code> == Now executting $command</code>"
 
-    invoke $command
+    doCall $( $duplicacy.exe ) @((-split $( $duplicacy.options )), (-split $arg))
 
     $msg = Get-Content -Tail 6 -Path $log.filePath
     $msg = "Last lines:`n" + "     => " + "$( $msg -join "`n     => " )"
     doRemoteNotifications "<code>$msg</code>"
 }
 
-function invoke($command)
+function doCall ($command, $arg)
 {
-    Invoke-Expression $command | Tee-Object -FilePath "$( $log.filePath )" -Append
+    & $command @arg | Tee-Object -FilePath "$( $log.filePath )" -Append
 }
 
 
 function log($str)
 {
     $date = $( Get-Date ).ToString("yyyy-MM-dd HH:mm:ss.fff")
-    invoke " Write-Output '${date} $str' "
+    doCall "Write-Output" @("${date} $str")
 }
 
 function initDuplicacyOptions
@@ -284,11 +284,11 @@ function initDuplicacyOptions
 
     # ============================================
     # Initialize the script-level duplicacy table with all the precomputed strings
-    $script:duplicacy.exe = " $duplicacyExePath "
-    $script:duplicacy.options = " $globalOpts "
-    $script:duplicacy.command = " $duplicacyExePath $globalOpts "
+    $script:duplicacy.exe = "$duplicacyExePath"
+    $script:duplicacy.options = "$globalOpts"
+    $script:duplicacy.command = "$duplicacyExePath $globalOpts "
 
-    $script:duplicacy.backup = " backup -stats $backupOpts "
+    $script:duplicacy.backup = "backup -stats $backupOpts"
     $script:duplicacy.check = " check "
 
     $script:duplicacy.prune = " prune $pruneOpts "

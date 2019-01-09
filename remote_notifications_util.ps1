@@ -25,7 +25,7 @@
 
 function doRemoteNotifications($message)
 {
-    invoke " doTelegramNotification '$message' "
+    doCall "doTelegramNotification" @($message)
 }
 
 
