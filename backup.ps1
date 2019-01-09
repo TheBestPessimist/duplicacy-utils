@@ -197,14 +197,14 @@ function doDuplicacyCommand($arg)
 
     doRemoteNotifications "<code> = Now executting $command</code>"
 
-    doCall $( $duplicacy.exe ) @((-split $( $duplicacy.options )), (-split $arg))
+    doCall $duplicacy.exe (-split $duplicacy.options + -split $arg)
 
     $msg = Get-Content -Tail 6 -Path $log.filePath
     $msg = "Last lines:`n" + " => " + "$( $msg -join "`n => " )"
     doRemoteNotifications "<code>$msg</code>"
 }
 
-function doCall ($command, $arg)
+function doCall($command, $arg)
 {
     & $command @arg | Tee-Object -FilePath "$( $log.filePath )" -Append
 }
@@ -213,7 +213,7 @@ function doCall ($command, $arg)
 function log($str)
 {
     $date = $( Get-Date ).ToString("yyyy-MM-dd HH:mm:ss.fff")
-    doCall "Write-Output" @("${date} $str")
+    doCall { Write-Output "${date} $str" }
 }
 
 function initDuplicacyOptions
