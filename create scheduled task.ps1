@@ -10,8 +10,8 @@
 # ================================================
 # Import the global and local config file 
 
-#. "$PSScriptRoot\default_config.ps1"
-#. "$PSScriptRoot\user_config.ps1"
+. "$PSScriptRoot\default_config.ps1"
+. "$PSScriptRoot\user_config.ps1"
 # ================================================
 
 
@@ -21,13 +21,6 @@
 #       [duplicacy repo path]\.duplicacy\duplicacy utils (eg. relative to the repository)
 $scriptPath = "$PSScriptRoot\backup.ps1"
 # $scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
-
-
-# ================================================
-# The name of the Scheduled Task
-#   Recommendation: please use unique names for each different task (backup prune, etc.),
-#       as tasks which already exist WILL BE REPLACED!
-$taskName = "Duplicacy Hourly Backup"
 
 
 # ================================================
@@ -89,10 +82,10 @@ $userCredentials = @{
 $duplicacyFolderIndex = $scriptPath.IndexOf('.duplicacy')
 if ($duplicacyFolderIndex -ne -1)
 {
-    $taskName = $taskName + " for repository " + $scriptPath.Substring(0, $duplicacyFolderIndex - 1).Replace("\", "__").Replace(":", "")
+    $scheduledTaskName = $scheduledTaskName + " for repository " + $scriptPath.Substring(0, $duplicacyFolderIndex - 1).Replace("\", "__").Replace(":", "")
     # it appears that the task name length limit is somewhere around 190 characters :^)
 }
-$taskName = $taskName[0..190] -join "" # range operator, like in kotlin :^)
+$scheduledTaskName = $scheduledTaskName[0..190] -join "" # range operator, like in kotlin :^)
 
 
 function main()
@@ -103,7 +96,7 @@ function main()
 
     ##############################
     # cleanup: Unregister first the ScheduledTask if it already exists
-    Unregister-ScheduledTask -TaskName $taskName -Confirm: $false -ErrorAction SilentlyContinue
+    Unregister-ScheduledTask -TaskName $scheduledTaskName -Confirm: $false -ErrorAction SilentlyContinue
     ##############################
 
     createNewTask
@@ -129,7 +122,7 @@ function createNewTask()
     $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -StartWhenAvailable
 
     $scheduledTaskParameters = @{
-        TaskName = $taskName
+        TaskName = $scheduledTaskName
         Action = $task
         Trigger = $trigger
         RunLevel = "Highest"

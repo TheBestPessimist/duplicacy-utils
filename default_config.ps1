@@ -36,6 +36,13 @@ $duplicacyExePath = ".duplicacy/z.exe"
 # Should the "-d" flag (debuging) be used? (hint: it generally shouldn't)
 $duplicacyDebug = $false        # or $true
 
+# ================================================
+# The name used when creating the Scheduled Task
+#       and also when sending notifications
+# Recommendation: please use unique names for each different task (backup prune, etc.),
+#       as tasks which already exist WILL BE REPLACED!
+$scheduledTaskName = "Duplicacy Backup"
+
 
 # ================================================
 # What commands you want to execute
