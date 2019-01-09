@@ -104,7 +104,7 @@ function doPreBackupTasks()
     initLoggingOptions
     createLogFolder
     logStartBackupProcess
-    zipOlderLogFiles
+    cleanupOlderLogFiles
 }
 
 function logStartBackupProcess()
@@ -129,7 +129,7 @@ function logStartBackupProcess()
     doRemoteNotifications $msg
 }
 
-function zipOlderLogFiles()
+function cleanupOlderLogFiles()
 {
     $logFiles = Get-ChildItem $log.basePath -Directory |  Where-Object { $_.LastWriteTime -lt (Get-Date -Hour 0 -Minute 0 -Second 0) }
     foreach ($folder in $logFiles)
