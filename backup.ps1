@@ -114,18 +114,16 @@ function logStartBackupProcess()
     log
     log
     log "================================================================="
-    log "==== Starting Duplicacy backup process =========================="
-    log "======"
-    log "====== Start time is: $startTime"
+    log "==== Starting $scheduledTaskName @ $repositoryFolder"
+    log "===="
+    log "==== Start time is: $startTime"
     log "================================================================="
 
     $msg = @"
 <code>`n`n`n`n`n`n`n`n
-=========================================================
-==== Starting Duplicacy backup process ==================
-======
-====== Start time is`: $startTime
-=========================================================
+ == Starting $scheduledTaskName @ $repositoryFolder
+
+ = Start time is`: $startTime
 </code>
 "@
     doRemoteNotifications $msg
@@ -163,21 +161,27 @@ function logFinishBackupProcess()
     $endTime = $timings.scriptEndTime.ToString("yyyy-MM-dd HH:mm:ss")
     $logFilePath = (Resolve-Path -Path $log.filePath).Path
     log "================================================================="
-    log "==== Finished Duplicacy backup process =========================="
-    log "======"
-    log ("====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}" -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime)
-    log "====== logFile is: $logFilePath"
+    log "==== Finished $scheduledTaskName @ $repositoryFolder"
+    log "===="
+    log "==== Start time is: $startTime"
+    log "==== End   time is: $endTime"
+    log "===="
+    log ("==== Total runtime: {0} Hours {1} Minutes {2} Seconds" -f [int]($timings.scriptTotalRuntime.TotalHours), $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds)
+    log "==== logFile is: $logFilePath"
     log "================================================================="
 
     $msg = @"
-<pre>=========================================================
-==== Finished Duplicacy backup process ==================
-======
-====== Total runtime: {0} Days {1} Hours {2} Minutes {3} Seconds, start time: {4}, finish time: {5}
-====== logFile is: $logFilePath
-=========================================================
-</pre>
-"@ -f $timings.scriptTotalRuntime.Days, $timings.scriptTotalRuntime.Hours, $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds, $startTime, $endTime
+<code>`n
+ == Finished $scheduledTaskName @ $repositoryFolder
+
+ = Start time is: $startTime
+ = End   time is: $endTime
+
+ = Total runtime: {0} Hours {1} Minutes {2} Seconds
+
+ = logFile is: $logFilePath
+</code>
+"@ -f [int]($timings.scriptTotalRuntime.TotalHours), $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds
 
     doRemoteNotifications $msg
 }
@@ -191,12 +195,12 @@ function doDuplicacyCommand($arg)
     log "=== Now executting $command"
     log "==="
 
-    doRemoteNotifications "<code> == Now executting $command</code>"
+    doRemoteNotifications "<code> = Now executting $command</code>"
 
     doCall $( $duplicacy.exe ) @((-split $( $duplicacy.options )), (-split $arg))
 
     $msg = Get-Content -Tail 6 -Path $log.filePath
-    $msg = "Last lines:`n" + "     => " + "$( $msg -join "`n     => " )"
+    $msg = "Last lines:`n" + " => " + "$( $msg -join "`n => " )"
     doRemoteNotifications "<code>$msg</code>"
 }
 
