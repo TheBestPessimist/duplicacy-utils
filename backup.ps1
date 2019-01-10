@@ -216,7 +216,7 @@ function doDuplicacyCommand($arg)
 
 function doCall($command, $arg)
 {
-    & $command @arg | Tee-Object -FilePath "$( $log.filePath )" -Append
+    & $command @arg *>&1 | Tee-Object -FilePath "$( $log.filePath )" -Append
 }
 
 
