@@ -222,28 +222,19 @@ function doDuplicacyCommand($arg)
 
     if ($LastExitCode -ne 0)
     {
-        $globalSuccessStatus = $false
+        $script:globalSuccessStatus = $false
         $localSuccessStatus = $false
     }
     $successStatusString = successStatusAsString $localSuccessStatus
 
     $msg = Get-Content -Tail 6 -Path $log.filePath
-    $msg = "$successStatusString($LastExitCode)! Last lines:`n" + " => " + "$( $msg -join "`n => " )"
+    $msg = "$successStatusString! Last lines:`n" + " => " + "$( $msg -join "`n => " )"
     doRemoteNotifications "<code>$msg</code>"
 }
 
 function doCall($command, $arg)
 {
     & $command @arg *>&1 | Tee-Object -FilePath "$( $log.filePath )" -Append
-    echo ""
-    echo ""
-    echo ""
-    echo ""
-    echo $LastExitCode
-    echo ""
-    echo ""
-    echo ""
-    echo ""
 }
 
 
