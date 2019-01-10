@@ -164,6 +164,16 @@ function cleanupOlderLogFiles()
 
 function doPostBackupTasks()
 {
+
+    if ($globalSuccessStatus)
+    {
+        doRemotePing
+    }
+    else
+    {
+        log "=== Not doing any remote pings since globalSuccessStatus is $globalSuccessStatus"
+    }
+
     logFinishBackupProcess
 
     Pop-Location
