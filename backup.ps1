@@ -248,9 +248,9 @@ function initDuplicacyOptions
         $backupOpts += " -vss-timeout " + $duplicacyVssTimeout
     }
 
-    if ($duplicacyLimitRate)
+    if ($maxTransferRate)
     {
-        $backupOpts += " -limit-rate $duplicacyLimitRate "
+        $backupOpts += " -limit-rate $maxTransferRate "
     }
 
     if ($duplicacyBackupNumberOfThreads)
@@ -290,9 +290,9 @@ function initDuplicacyOptions
         $copyOpts += " -threads " + $duplicacyCopyNumberOfThreads
     }
 
-    if ($duplicacyMaxCopyRate)
+    if ($maxTransferRate)
     {
-        $copyOpts += " -upload-limit-rate " + $duplicacyMaxCopyRate
+        $copyOpts += " -upload-limit-rate " + $maxTransferRate
     }
 
 

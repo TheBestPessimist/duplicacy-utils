@@ -53,6 +53,10 @@ $runCheck = $false
 $runPruneOffsite = $false
 $runCopyToOffsite = $false
 
+
+# The value of -limit-rate for backup or -upload-limit-rate for copy
+$maxTransferRate = 100000
+
 # ==============================================================================
 # ==============================================================================
 # ======== Backup configuration
@@ -65,8 +69,6 @@ $duplicacyVssTimeout = 60       # in seconds
 # The number of threads to use during backup
 $duplicacyBackupNumberOfThreads = 1
 
-# The value of -limit-rate
-$duplicacyLimitRate = 100000
 
 
 # ==============================================================================
