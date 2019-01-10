@@ -54,9 +54,6 @@ $runPruneOffsite = $false
 $runCopyToOffsite = $false
 
 
-# The value of -limit-rate for backup or -upload-limit-rate for copy
-$maxTransferRate = 100000
-
 # ==============================================================================
 # ==============================================================================
 # ======== Backup configuration
@@ -70,6 +67,8 @@ $duplicacyVssTimeout = 60       # in seconds
 $duplicacyBackupNumberOfThreads = 1
 
 
+# The max transfer rate for backup (value of -limit-rate)
+$maxBackupTransferRate = 100000
 
 # ==============================================================================
 # ==============================================================================
@@ -99,6 +98,9 @@ $duplicacyPruneNumberOfThreads = 4
 
 # The number of threads to use during copy to "offsite"
 $duplicacyCopyNumberOfThreads = 4
+
+# The max transfer rate for copy (value of -upload-limit-rate)
+$maxCopyTransferRate = 100000
 
 # Other options for offiste prune (retention is the same as local)
 # -exhaustive, -exclusive, or other
