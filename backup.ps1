@@ -335,7 +335,7 @@ function initDuplicacyOptions
 
     $script:duplicacy.prune = " prune $pruneOpts "
     $script:duplicacy.pruneOffsite = " prune $pruneOffsiteOpts "
-    $script:duplicacy.copy = " copy -to offsite $copyOpts "
+    $script:duplicacy.copy = " copy -to $offsiteStorageName $copyOpts "
 }
 
 

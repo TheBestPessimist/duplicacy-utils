@@ -96,6 +96,9 @@ $duplicacyPruneNumberOfThreads = 4
 # ==============================================================================
 # ========       Offsite repository configuration
 
+# The name of the offsite storage
+$offsiteStorageName = "offsite"
+
 # The number of threads to use during copy to "offsite"
 $duplicacyCopyNumberOfThreads = 4
 
@@ -104,4 +107,4 @@ $maxCopyTransferRate = 100000
 
 # Other options for offiste prune (retention is the same as local)
 # -exhaustive, -exclusive, or other
-$duplicacyPruneExtraOptionsOffsite = " -all -exclusive -storage offsite "
+$duplicacyPruneExtraOptionsOffsite = " -all -exclusive -storage $offsiteStorageName "
