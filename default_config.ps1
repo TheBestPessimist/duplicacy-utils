@@ -107,4 +107,4 @@ $maxCopyTransferRate = 100000
 
 # Other options for offiste prune (retention is the same as local)
 # -exhaustive, -exclusive, or other
-$duplicacyPruneExtraOptionsOffsite = " -all -exclusive -storage $offsiteStorageName "
+$duplicacyPruneExtraOptionsOffsite = " -all -storage $offsiteStorageName "
