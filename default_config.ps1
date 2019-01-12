@@ -105,6 +105,12 @@ $duplicacyCopyNumberOfThreads = 4
 # The max transfer rate for copy (value of -upload-limit-rate)
 $maxCopyTransferRate = 100000
 
+# By default the copy operation copies all the snapshot IDs
+# If you want to copy only a specific one, fill it's name here
+# This fills the `-id` parameter
+# Reference: https://forum.duplicacy.com/t/copy-command-details/1083
+$copySnapshotId = ""
+
 # Other options for offiste prune (retention is the same as local)
 # -exhaustive, -exclusive, or other
 $duplicacyPruneExtraOptionsOffsite = " -all -storage $offsiteStorageName "

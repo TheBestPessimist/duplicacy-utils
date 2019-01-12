@@ -323,6 +323,11 @@ function initDuplicacyOptions
         $copyOpts += " -upload-limit-rate " + $maxCopyTransferRate
     }
 
+    if ($copySnapshotId)
+    {
+        $copyOpts += " -id " + $copySnapshotId
+    }
+
 
     # ============================================
     # Initialize the script-level duplicacy table with all the precomputed strings
