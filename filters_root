@@ -174,20 +174,22 @@ e:(?i)^Sun/
 
 
 # ============================ uneeded folders in Users profiles: systems, junctions
-e:(?i)^Users/[^/]+/\.?Application Data/
-e:(?i)^Users/[^/]+/\.?IntelGraphicsProfiles/
-e:(?i)^Users/[^/]+/\.?Links/
-e:(?i)^Users/[^/]+/\.?Local Settings/
-e:(?i)^Users/[^/]+/\.?MicrosoftEdgeBackups/
-e:(?i)^Users/[^/]+/\.?NetHood/
-e:(?i)^Users/[^/]+/\.?oracle_jre_usage/
-e:(?i)^Users/[^/]+/\.?PrintHood/
-e:(?i)^Users/[^/]+/\.?Recent/
-e:(?i)^Users/[^/]+/\.?Searches/
-e:(?i)^Users/[^/]+/\.?SendTo/
-e:(?i)^Users/[^/]+/\.?Start Menu/
-e:(?i)^Users/[^/]+/\.?Templates/
-e:(?i)^Users/[^/]+/\.?Tracing/
+e:(?i)^Users/[^/]+/Application Data
+e:(?i)^Users/[^/]+/Cookies
+e:(?i)^Users/[^/]+/IntelGraphicsProfiles/
+e:(?i)^Users/[^/]+/Links/
+e:(?i)^Users/[^/]+/Local Settings
+e:(?i)^Users/[^/]+/MicrosoftEdgeBackups/
+e:(?i)^Users/[^/]+/My Documents
+e:(?i)^Users/[^/]+/NetHood
+e:(?i)^Users/[^/]+/oracle_jre_usage/
+e:(?i)^Users/[^/]+/PrintHood
+e:(?i)^Users/[^/]+/Recent
+e:(?i)^Users/[^/]+/Searches/
+e:(?i)^Users/[^/]+/SendTo
+e:(?i)^Users/[^/]+/Start Menu
+e:(?i)^Users/[^/]+/Templates
+e:(?i)^Users/[^/]+/Tracing/
 
 
 # ============================ uneeded folders in Users profiles: runtimes, dev, others
