@@ -182,7 +182,7 @@ e:(?i)^Users/[^/]+/Local Settings
 e:(?i)^Users/[^/]+/MicrosoftEdgeBackups/
 e:(?i)^Users/[^/]+/My Documents
 e:(?i)^Users/[^/]+/NetHood
-e:(?i)^Users/[^/]+/oracle_jre_usage/
+e:(?i)^Users/[^/]+/\.oracle_jre_usage/
 e:(?i)^Users/[^/]+/PrintHood
 e:(?i)^Users/[^/]+/Recent
 e:(?i)^Users/[^/]+/Searches/
