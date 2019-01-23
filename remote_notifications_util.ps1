@@ -30,16 +30,19 @@
 #
 # Note that doRemotePing does not check the status of $globalSuccessStatus.
 #   It is caller's job to check that.
-function doRemotePing {
+function doRemotePing
+{
     log "=== doRemotePing"
     doHealthchecksIOPing
 }
 
 function doHealthchecksIOPing
 {
-    log "=== doHealthchecksIOPing"
-    doPostRequest $healthchecksIOPingURL ""
-
+    if ($healthchecksIOPingURL)
+    {
+        log "=== doHealthchecksIOPing"
+        doPostRequest $healthchecksIOPingURL ""
+    }
 }
 
 # doRemoteNotifications is called at script start/end and before/after a duplicacy command is run.
@@ -50,19 +53,23 @@ function doRemoteNotifications($message)
     doTelegramNotification $message
 }
 
-
+# Telegram notifications use the bot
+# https://t.me/DuplicacyUtilsTBPBot
 function doTelegramNotification($message)
 {
-    log "=== doTelegramNotification"
-    $payload = @{
-        content = ($message).ToString()
-        chat_id = $telegramToken
+    if ($telegramToken)
+    {
+        log "=== doTelegramNotification"
+        $payload = @{
+            content = ($message).ToString()
+            chat_id = $telegramToken
+        }
+
+        $body = ConvertTo-Json -Compress -InputObject $payload
+        $url = "https://duplicacy-utils.tbp.land/userUpdate"
+
+        doPostRequest $url $body
     }
-
-    $body = ConvertTo-Json -Compress -InputObject $payload
-    $url = "https://duplicacy-utils.tbp.land/userUpdate"
-
-    doPostRequest $url $body
 }
 
 function doPostRequest($url, $body)
