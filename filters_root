@@ -1,47 +1,53 @@
-# ==============================================================================
-# ============================================================================== notes about this file
-# ==============================================================================
 #
-# This file is a generic file which adds some folders and files to the duplicacy backup ignore list
-# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/.
+# ========== WHAT IS THIS
 #
-# ==============================================================================
+# This file is a generic filters file which adds some folders and files to the duplicacy backup ignore list (https://forum.duplicacy.com/t/1089)
+# This file can be modified as needed by you --> the user.
+# If your modifications are generic enough, propose those modifications to be included by creating a new thread on the duplicacy forum.
 #
-# Regexes:
 #
-#   1. The repository must be used in the normal <backup everything underneath> mode (e.g.: " -repository C:\"):
-#           "^" is used for detecting root-level folders.
-#           This makes it harder to detect "files/folders anywhere", needing a root-or-folder regex: "(^|/)"
-#       Example: "(?i)^Recovery/" matches only root-level folder:
-#       "Recovery/", but not
-#       "Users/something/Recovery/"
-#       
-#       Example: "(?i)(^|/)Recovery/" matches folder anywhere:
-#       "Recovery/", and
-#       "Users/something/Recovery/", but not
-#       "Users/something/Ongoing Recovery/", but not
+# ========== HOW TO USE
 #
-#       In other words, the purpose of that regex is to handle excluding, at least in Windows,
-#           folders and files which are in HDD root (c:, d:, etc.), when that root is symlinked from the repository.
+# This file is used
+# - when the repository is at the root of the drive: "C:/" (so you have "C:/.duplicacy/")
+# - when you use symlink repository (https://forum.duplicacy.com/t/1097)
+#     - you create symlinks to the folders in the root of your drive "C:/" in your repository, and the symlinks have the EXACT SAME NAME AS THE ORIGINAL
+#         Example: you create a symlink to "C:/Users" in your repository with the name "Users"
+#         Example: you create a symlink to "C:/MyImportantFolder" in your repository with the name "MyImportantFolder"
 #
-#   2. When the repository is used in the <symlinking backups> mode:
-#       Use the other filters file: "filters"
 #
-#   3. (?i) means "case insensitive"
+# ========== NOTE
 #
-#   4. [^/]*/: has the purpose of matching a folder which "starts with" or "contains" or "is exactly this" (depending on where it is placed).
-#       The difference between this and the above is the "*" instead of "+", which means 0 or more.
-#       Example: "(?i)^ProgramData/Microsoft[^/]*/" matches both
-#       "ProgramData/Microsoft OneDrive/" (the name of the folder is "Microsoft OneDrive" so it acts as a "starts with")
-#       "ProgramData/Microsoft/" (the name of the folder is "Microsoft" so it acts also as a "is exactly")
-#       but will not match "ProgramData/Micro/" (the name of the folder is "Micro" and not "Microsoft")
+# If you don't know what a symlink is then you SHOULD USE this file! :^)
 #
 #
 #
 #
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
+# ========== EXPLANATION OF THE REGEXES
+#
+# 0. (?i) means "case insensitive"
+#
+#
+# 1. "^" is used for detecting root-level folders.
+#   Example: "(?i)^Recovery/"
+#     matches only root-level folder: "Recovery/"
+#     does not match: "Users/something/Recovery/"
+#
+#
+# 2. "(^|/)foldername" is used to match folders which have exact name "foldername"
+#   Example: "(?i)(^|/)temp/"
+#     matches root-level folder: "temp/"
+#     matches any folder from any path named "temp": "long/path/temp/"
+#     does not match folders which have "temp" in their name: "long/path/somefolder.temp/"
+#
+#
+# 3. "[^/]+/": has the purpose of assuring that there is only 1 folder in the matched path (only 1 "/")
+#   Example: "(?i)/AppData/[^/]+/Steam/"
+#     matches: "C:/Users/anyUserName/AppData/Local/Steam/"
+#     does not match:"C:/Users/anyUserName/AppData/Local/someotherfolder/Steam/", as there has to be ONLY 1 FOLDER in between "AppData" and "Steam" folders
+#
+#
+# ==========
 
 
 

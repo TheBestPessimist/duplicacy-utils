@@ -1,61 +1,41 @@
-# ==============================================================================
-# ============================================================================== notes about this file
-# ==============================================================================
 #
-# This file is a generic file which adds some folders and files to the duplicacy backup ignore list
-# This file can be modified as needed, eventually also propose said modifications, if they are generic enough, to the main duplicacy repository on github: https://github.com/gilbertchen/duplicacy/.
+# ========== WHAT IS THIS
 #
-# ==============================================================================
-#
-# Regexes:
+# This file is a generic filters file which adds some folders and files to the duplicacy backup ignore list (https://forum.duplicacy.com/t/1089)
+# This file can be modified as needed by you --> the user.
+# If your modifications are generic enough, propose those modifications to be included by creating a new thread on the duplicacy forum.
 #
 #
-#   1. Reasoning of "/" vs "\/" for folder delimitation:
-#       In my opinion using only "/" instead of "\/" looks cleaner.
-#       Secondly, on https://regex101.com/, if the selected language is golang,
-#           it seems the regex still works only with "/", so it's very easy to test.
+# ========== HOW TO USE
+#
+# This file is created for only one usecase: when you create a repository in which you symlink the root of the drive itself: "C:/"
 #
 #
-#   2. "[^/]+/": has the purpose of assuring that there is only 1 folder in the matched path (only 1 "/")
-#       Example: "(?i)/AppData/[^/]+/Steam/" matches:
-#       "C__abcd_link/leAdministrateur/AppData/Local/Steam/", but it doesnt match:
-#       "C__abcd_link/leAdministrateur/AppData/Local/someotherfolder/Steam/", as there has to be ONLY 1 FOLDER in between "AppData" and "Steam" folders.
+# ========== NOTE
+#
+# If you don't know what a symlink is then you SHOULD NOT USE this file! :^)
 #
 #
-#   3. When the repository is used in the <symlinking backups> mode:
-#           "^[^/]+/" is used just as above,
-#           with the difference that it assures that any path only has 1 folder before (1 "/").
-#       Example: "(?i)^[^/]+/Recovery/" matches:
-#       "some_sym_link/Recovery/", but not
-#       "some_sym_link/Important App/Recovery/" nor
-#       "c:/Users/something/Recovery/" nor
-#       "Users/something/Recovery/" and nor
-#       "Recovery/". (This is what would be evaluated in normal non-symlink mode)
+# ========== EXPLANATION OF THE REGEXES
 #
-#       In other words, the purpose of that regex is to handle excluding, at least in Windows,
-#           folders and files which are in HDD root (c:, d:, etc.), when that root is symlinked from the repository.
-#
-#   4. When the repository is used in the normal <backup everything underneath> mode:
-#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
-#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
-#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
-#       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO       TODO
-#
-#   5. (?i) means "case insensitive"
-#
-#   6. [^/]*/: has the purpose of matching a folder which "starts with" or "contains" or "is exactly this" (depending on where it is placed).
-#       The difference between this and the above is the "*" instead of "+", which means 0 or more.
-#       Example: "(?i)^[^/]+/ProgramData/Microsoft[^/]*/" matches both
-#       "many/other/folders/ProgramData/Microsoft OneDrive/" (the name of the folder is "Microsoft OneDrive" so it acts as a "starts with")
-#       "many/other/folders/ProgramData/Microsoft/" (the name of the folder is "Microsoft" so it acts also as a "is exactly")
-#       but will not match "many/other/folders/ProgramData/Micro/" (the name of the folder is "Micro" and not "Microsoft")
+# 0. (?i) means "case insensitive"
 #
 #
+# 1. "[^/]+/": has the purpose of assuring that there is only 1 folder in the matched path (only 1 "/")
+#   Example: "(?i)/AppData/[^/]+/Steam/"
+#     matches: "C:/Users/anyUserName/AppData/Local/Steam/"
+#     does not match:"C:/Users/anyUserName/AppData/Local/someotherfolder/Steam/", as there has to be ONLY 1 FOLDER in between "AppData" and "Steam" folders
 #
 #
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
+# 2. "[^/]*/": has the purpose of matching a folder which "starts with" or "contains" or "is exactly this" (depending on where it is placed).
+# The difference between this and the above is the "*" instead of "+", which means 0 or more other characters.
+#   Example: "(?i)/ProgramData/Microsoft[^/]*/"
+#     matches: "many/other/folders/ProgramData/Microsoft OneDrive/" (the name of the folder is "Microsoft OneDrive" so it acts as a "starts with")
+#     matches: "many/other/folders/ProgramData/Microsoft/" (the name of the folder is "Microsoft" so it acts also as a "is exactly")
+#     does not match: "many/other/folders/ProgramData/Micro/" (the name of the folder is "Micro" and not "Microsoft")
+#
+#
+# ==========
 
 
 
