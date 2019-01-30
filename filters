@@ -118,13 +118,13 @@ e:(?i)^[^/]+/\$GetCurrent/
 e:(?i)^[^/]+/\$SysReset
 e:(?i)^[^/]+/Boot/
 e:(?i)^[^/]+/Config\.Msi/
-e:(?i)^[^/]+/Documents and Settings/
+e:(?i)^[^/]+/Documents and Settings
 e:(?i)^[^/]+/MSOCache/
 e:(?i)^[^/]+/PerfLogs/
 e:(?i)^[^/]+/Recovery/
 e:(?i)^[^/]+/System Volume Information/
 e:(?i)^[^/]+/Windows/
-e:(?i)/Temporary Internet Files/
+e:(?i)/Temporary Internet Files
 #e(?i):/Windows/Installer/ ####### i think this may exclude too much!
 
 # ============================ windows update related

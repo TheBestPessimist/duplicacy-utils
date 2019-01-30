@@ -104,13 +104,13 @@ e:(?i)^\$GetCurrent/
 e:(?i)^\$SysReset
 e:(?i)^Boot/
 e:(?i)^Config\.Msi/
-e:(?i)^Documents and Settings/
+e:(?i)^Documents and Settings
 e:(?i)^MSOCache/
 e:(?i)^PerfLogs/
 e:(?i)^Recovery/
 e:(?i)^System Volume Information/
 e:(?i)^Windows/
-e:(?i)/Temporary Internet Files/
+e:(?i)/Temporary Internet Files
 #e(?i):/Windows/Installer/ ####### i think this may exclude too much!
 
 # ============================ windows update related
@@ -132,7 +132,6 @@ e:(?i)^swapfile\.sys$
 # ntuser.dat may contain come other things at the end, therefore don't end with "$"
 e:(?i)ntuser\.dat
 
-# is this thumbs db correct?
 e:(?i)(^|/)thumbs\.db$
 e:(?i)(^|/)IconCache\.db
 
@@ -319,7 +318,6 @@ e:(?i)/AppData/[^/]+/Mozilla/
 i:(?i)/AppData/[^/]+/Google/$
 i:(?i)/AppData/[^/]+/Google/Chrome/$
 e:(?i)/AppData/[^/]+/Google/Chrome/.*Safe Browsing
-
 i:(?i)/AppData/[^/]+/Google/Chrome/User Data/
 i:(?i)/AppData/[^/]+/Google/Picasa[^/]*/
 e:(?i)/AppData/[^/]+/Google/
