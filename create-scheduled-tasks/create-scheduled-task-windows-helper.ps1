@@ -10,8 +10,8 @@
 # ================================================
 # Import the global and local config file 
 
-. "$PSScriptRoot\config.default.ps1"
-. "$PSScriptRoot\config.user.ps1"
+. "$PSScriptRoot\..\config.default.ps1"
+. "$PSScriptRoot\..\config.user.ps1"
 # ================================================
 
 
@@ -19,7 +19,7 @@
 # Backup script full path
 #   Recommendation: please place all the util scrips in
 #       [duplicacy repo path]\.duplicacy\duplicacy utils (eg. relative to the repository)
-$scriptPath = "$PSScriptRoot\backup.ps1"
+$scriptPath = (Resolve-Path -Path "$PSScriptRoot\..\backup.ps1").Path
 # $scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
 
 
