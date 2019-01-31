@@ -20,8 +20,8 @@
 # ================================================
 # Import the global and local config files
 
-. "$PSScriptRoot\default_config.ps1"
-. "$PSScriptRoot\user_config.ps1"
+. "$PSScriptRoot\config.default.ps1"
+. "$PSScriptRoot\config.user.ps1"
 . "$PSScriptRoot\remote_notifications_util.ps1"
 # ================================================
 
@@ -372,7 +372,7 @@ function warnIfNoCommandsWereExecuted
             $runPruneOffsite -Or
             $runCopyToOffsite))
     {
-        $msg = "       !!! No commands were executed. You should check your configuration file: user_config.ps1!"
+        $msg = "       !!! No commands were executed. You should check your configuration file: config.user.ps1!"
         log
         log $msg
         log

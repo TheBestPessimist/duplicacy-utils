@@ -1,4 +1,4 @@
-. "$PSScriptRoot\user_config.ps1"
+. "$PSScriptRoot\config.user.ps1"
 
 ## ================================================
 ## function to split the lines at the end of the log file into individual slack notifications

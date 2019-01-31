@@ -10,8 +10,8 @@
 # ================================================
 # Import the global and local config file 
 
-. "$PSScriptRoot\default_config.ps1"
-. "$PSScriptRoot\user_config.ps1"
+. "$PSScriptRoot\config.default.ps1"
+. "$PSScriptRoot\config.user.ps1"
 # ================================================
 
 

@@ -2,7 +2,7 @@
 # ==============================================================================
 #
 # Default configuration file. Please don't modify anything here,
-#   but copy the line you want to edit to the file `user_config.ps1`
+#   but copy the line you want to edit to the file `config.user.ps1`
 #   and do the edit there.
 #   In this way when duplicacy utils will be updated in the future, there should be no conflicts.
 #

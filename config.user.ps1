@@ -1,9 +1,9 @@
 # ==============================================================================
 # ==============================================================================
 #
-# Machine-local configurations file. 
-# 
-# Any setting here overrides the one from "default_config.ps1" file.
+# Machine-local configurations file.
+#
+# Any setting here overrides the one from "config.default.ps1" file.
 #
 # Just copy here then modify the variables you need changed from the default file.
 # In this way when duplicacy utils will be updated in the future, there should be no conflicts
