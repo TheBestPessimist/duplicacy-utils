@@ -35,6 +35,18 @@
 #     does not match: "many/other/folders/ProgramData/Micro/" (the name of the folder is "Micro" and not "Microsoft")
 #
 #
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 # ==========
 
 
@@ -57,6 +69,27 @@ e:(?i)\.cache$
 e:(?i)/temp/
 e:(?i)/tmp/
 e:(?i)/cache/
+e:(?i)/Package Cache/
+
+# Users/a/AppData/Local/Google/Chrome/User Data/Default/Service Worker/CacheStorage/fodisjfladsf87-a9ds8fa87d6f8as-d7f6978690-7df6a78fs6a
+e:(?i)/Service Worker/CacheStorage/
+
+# Users/cpasat/AppData/Local/Mozilla/Firefox/Profiles/6tdz9jz4.default/OfflineCache/5/D/
+/OfflineCache/
+
+# Users/cpasat/AppData/Roaming/Apple Computer/Logs/CrashReporter/MobileDevice/
+e:(?i)/Logs/CrashReporter/
+
+# Chrome/electron based apps
+e:(?i)/ShaderCache/
+e:(?i)/GPUCache/
+
+# npm/node related
+e:(?i)/compile-cache/
+e:(?i)/node_modules/
+e:(?i)/npm-cache/
+
+e:(?i)/InternalCache/
 
 
 
@@ -126,7 +159,6 @@ e:(?i)^[^/]+/swapfile\.sys$
 # ntuser.dat may contain come other things at the end, therefore don't end with "$"
 e:(?i)ntuser\.dat
 
-# is this thumbs db correct?
 e:(?i)^[^/]+/thumbs\.db$
 e:(?i)/IconCache\.db
 
@@ -147,7 +179,6 @@ e:(?i)^[^/]+/Ming[^/]*/
 e:(?i)^[^/]+/MSI/
 e:(?i)^[^/]+/NVIDIA/
 e:(?i)^[^/]+/PerfLogs/
-# Exclude all versions of python installed
 e:(?i)^[^/]+/Python[^/]*/
 e:(?i)^[^/]+/Sun/
 
@@ -168,15 +199,18 @@ e:(?i)^[^/]+/Sun/
 
 
 # ============================ unneeded folders in Users profiles: systems, junctions
+e:(?i)^[^/]+/Users/[^/]+/\.oracle_jre_usage/
 e:(?i)^[^/]+/Users/[^/]+/Application Data
 e:(?i)^[^/]+/Users/[^/]+/Cookies
+e:(?i)^[^/]+/Users/[^/]+/Documents/My Music
+e:(?i)^[^/]+/Users/[^/]+/Documents/My Pictures
+e:(?i)^[^/]+/Users/[^/]+/Documents/My Videos
 e:(?i)^[^/]+/Users/[^/]+/IntelGraphicsProfiles
 e:(?i)^[^/]+/Users/[^/]+/Links/
 e:(?i)^[^/]+/Users/[^/]+/Local Settings
 e:(?i)^[^/]+/Users/[^/]+/MicrosoftEdgeBackups/
 e:(?i)^[^/]+/Users/[^/]+/My Documents
 e:(?i)^[^/]+/Users/[^/]+/NetHood
-e:(?i)^[^/]+/Users/[^/]+/\.oracle_jre_usage/
 e:(?i)^[^/]+/Users/[^/]+/PrintHood
 e:(?i)^[^/]+/Users/[^/]+/Recent
 e:(?i)^[^/]+/Users/[^/]+/Searches/
@@ -221,11 +255,10 @@ e:(?i)^[^/]+/Program Files[^/]*/
 
 
 # ================================================ Exclude all AppData folders with known useless-but-heavy content
-# ============================ C:\Users\<username>\AppData\ holds app's configurations specific for each user
-# ============================ C:\ProgramData\ holds app's configurations global to all users (every time you select "Install to all users")
+# ============================ C:/Users/<username>/AppData/ holds app's configurations specific for each user
+# ============================ C:/ProgramData/ holds app's configurations global to all users (every time you select "Install to all users")
 
-# ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
-e:(?i)/AppData/Local/Packages/
+e:(?i)/AppData/LocalLow/
 
 
 e:(?i)/AppData/[^/]+/Acronis/
@@ -242,9 +275,9 @@ e:(?i)/AppData/[^/]+/Dropbox/
 e:(?i)/AppData/[^/]+/Duplicati/
 e:(?i)/AppData/[^/]+/ElevatedDiagnostics/
 e:(?i)/AppData/[^/]+/JetBrains/
+e:(?i)/AppData/[^/]+/npm/
 e:(?i)/AppData/[^/]+/NVIDIA[^/]*/
 e:(?i)/AppData/[^/]+/Oracle/
-e:(?i)/AppData/[^/]+/Packages/
 e:(?i)/AppData/[^/]+/PackageStaging/
 e:(?i)/AppData/[^/]+/PeerDistRepub/
 e:(?i)/AppData/[^/]+/Publishers/
@@ -253,6 +286,21 @@ e:(?i)/AppData/[^/]+/TileDataLayer/
 e:(?i)/AppData/[^/]+/Veeam/
 e:(?i)/AppData/[^/]+/VirtualStore/
 
+# ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
+e:(?i)/AppData/[^/]+/Packages/
+
+e:(?i)/AppData/Local/AMD/
+e:(?i)/AppData/Local/atom/
+e:(?i)/AppData/Local/ForensiT/
+e:(?i)/AppData/Local/GitHubDesktop/
+e:(?i)/AppData/Local/gitkraken/
+e:(?i)/AppData/Local/go-build/
+e:(?i)/AppData/Local/kotlin/
+e:(?i)/AppData/Local/PackageManagement/
+e:(?i)/AppData/Local/pip
+e:(?i)/AppData/Local/Programs/Python/
+e:(?i)/AppData/Local/SourceTree/
+e:(?i)/AppData/Local/SquirrelTemp/
 
 
 # ============== Skype AppData holds message history. Better save it
@@ -261,8 +309,10 @@ e:(?i)/AppData/[^/]+/VirtualStore/
 
 e:(?i)^[^/]+/ProgramData/Acronis/
 e:(?i)^[^/]+/ProgramData/Adobe/
+e:(?i)^[^/]+/ProgramData/Apple/Installer Cache/
 e:(?i)^[^/]+/ProgramData/AVAST[^/]*/
 e:(?i)^[^/]+/ProgramData/CrashPlan/
+e:(?i)^[^/]+/ProgramData/Dell/drivers
 e:(?i)^[^/]+/ProgramData/Dropbox/
 e:(?i)^[^/]+/ProgramData/Duplicati/
 e:(?i)^[^/]+/ProgramData/Epson/
@@ -276,7 +326,6 @@ e:(?i)^[^/]+/ProgramData/MiKTeX/
 e:(?i)^[^/]+/ProgramData/Mozilla/
 e:(?i)^[^/]+/ProgramData/NVIDIA[^/]*/
 e:(?i)^[^/]+/ProgramData/Oracle/
-e:(?i)^[^/]+/ProgramData/Package Cache/
 e:(?i)^[^/]+/ProgramData/Packages/
 e:(?i)^[^/]+/ProgramData/Skype/
 e:(?i)^[^/]+/ProgramData/SoftwareDistribution/
@@ -303,6 +352,7 @@ e:(?i)/AppData/[^/]+/Microsoft[^/]*/
 
 
 # ============================ include Firefox profiles but nothing else from Mozilla
+# ============================ note that we include the whole profile, because we are unsure how many "users" are added beside the "Default" profile
 i:(?i)/AppData/[^/]+/Mozilla/$
 i:(?i)/AppData/[^/]+/Mozilla/Firefox/
 e:(?i)/AppData/[^/]+/Mozilla/
@@ -313,7 +363,6 @@ e:(?i)/AppData/[^/]+/Mozilla/
 i:(?i)/AppData/[^/]+/Google/$
 i:(?i)/AppData/[^/]+/Google/Chrome/$
 e:(?i)/AppData/[^/]+/Google/Chrome/.*Safe Browsing
-
 i:(?i)/AppData/[^/]+/Google/Chrome/User Data/
 i:(?i)/AppData/[^/]+/Google/Picasa[^/]*/
 e:(?i)/AppData/[^/]+/Google/
@@ -389,26 +438,6 @@ e:(?i)/Trash/
 e:(?i)/Network Trash Folder/
 
 
-# ================================================
-# ================================================ libraries
-# ================================================
-e:(?i).Library/Saved Application State/
-e:(?i)/iTunes/Album Artwork/Cache/
-e:(?i)/Library/Application Support/SyncServices/
-e:(?i)/Library/Caches/
-e:(?i)/Library/Logs/
-e:(?i)/Library/Mail/AvailableFeeds/
-e:(?i)/Library/Mirrors/
-e:(?i)/Library/PubSub/Database/
-e:(?i)/Library/PubSub/Downloads/
-e:(?i)/Library/PubSub/Feeds/
-e:(?i)/Library/Safari/HistoryIndex.sk
-e:(?i)/Library/Safari/Icons.db
-e:(?i)/Library/Safari/WebpageIcons.db
-e:(?i)/System/Library/Extensions/Caches/
-e:(?i)\.Library/Saved Application State/
-e:(?i)^[^/]+/System/Library/Extensions/Caches/
-
 
 
 
@@ -433,6 +462,28 @@ e:(?i)^[^/]+/System/Library/Extensions/Caches/
 # i:(?i)/AppData/[^/]+/Thunderbird/Profiles/
 # e:(?i)/AppData/[^/]+/Thunderbird/
 
+
+
+
+# ================================================
+# ================================================ macos libraries
+# ================================================
+# e:(?i).Library/Saved Application State/
+# e:(?i)/iTunes/Album Artwork/Cache/
+# e:(?i)/Library/Application Support/SyncServices/
+# e:(?i)/Library/Caches/
+# e:(?i)/Library/Logs/
+# e:(?i)/Library/Mail/AvailableFeeds/
+# e:(?i)/Library/Mirrors/
+# e:(?i)/Library/PubSub/Database/
+# e:(?i)/Library/PubSub/Downloads/
+# e:(?i)/Library/PubSub/Feeds/
+# e:(?i)/Library/Safari/HistoryIndex.sk
+# e:(?i)/Library/Safari/Icons.db
+# e:(?i)/Library/Safari/WebpageIcons.db
+# e:(?i)^System/Library/Extensions/Caches/
+# e:(?i)\.Library/Saved Application State/
+# e:(?i)^[^/]+/System/Library/Extensions/Caches/
 
 
 
