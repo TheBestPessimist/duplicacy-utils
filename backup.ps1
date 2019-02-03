@@ -135,9 +135,8 @@ function logStartBackupProcess()
     log "================================================================="
 
     $msg = @"
-<code>`n`n`n`n`n`n`n`n
- == Starting $scheduledTaskName @ $repositoryFolder
-
+ <b>== Starting $scheduledTaskName @ $repositoryFolder</b>
+<code>
  = Start time is`: $startTime
 </code>
 "@
