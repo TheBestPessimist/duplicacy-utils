@@ -70,6 +70,7 @@ $duplicacyBackupNumberOfThreads = 1
 # The max transfer rate for backup (value of -limit-rate)
 $maxBackupTransferRate = 100000
 
+
 # ==============================================================================
 # ==============================================================================
 # ========       Prune configuration
@@ -114,3 +115,13 @@ $copySnapshotId = ""
 # Other options for offiste prune (retention is the same as local)
 # -exhaustive, -exclusive, or other
 $duplicacyPruneExtraOptionsOffsite = " -all -storage $offsiteStorageName "
+
+
+# ==============================================================================
+# ==============================================================================
+# ========       Notifications configuration
+
+# By default whenever a command starts or ends a notification will be sent (eg. to Telegram).
+# If $mergeNotificationsIntoOne is set to $true then all notifications will be merged into a single one.
+# Basically you get a single notification at the end with the complete text instead of multiple notifications.
+$mergeNotificationsIntoOne = $false

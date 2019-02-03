@@ -64,6 +64,15 @@ $duplicacy = @{ }
 $globalSuccessStatus = $true
 # ================================================
 
+
+# ================================================
+# ================================================
+# In case the user wants to merge all notifications into one,
+# fullNotificationMessage will store the text.
+
+$fullNotificationMessage = ""
+# ================================================
+
 function main
 {
     # http://www.wallacetech.co.uk/?p=693
@@ -132,7 +141,14 @@ function logStartBackupProcess()
  = Start time is`: $startTime
 </code>
 "@
-    doRemoteNotifications $msg
+    if (!$mergeNotificationsIntoOne)
+    {
+        doRemoteNotifications $msg
+    }
+    else
+    {
+        $script:fullNotificationMessage += "$msg`n`n"
+    }
 }
 
 function cleanupOlderLogFiles()
@@ -212,7 +228,15 @@ function logFinishBackupProcess()
 </code>
 "@ -f [int]($timings.scriptTotalRuntime.TotalHours), $timings.scriptTotalRuntime.Minutes, $timings.scriptTotalRuntime.Seconds
 
-    doRemoteNotifications $msg
+    if (!$mergeNotificationsIntoOne)
+    {
+        doRemoteNotifications $msg
+    }
+    else
+    {
+        $script:fullNotificationMessage += "$msg`n`n"
+        doRemoteNotifications $fullNotificationMessage
+    }
 }
 
 
@@ -224,7 +248,14 @@ function doDuplicacyCommand($arg)
     log "=== Now executting $command"
     log "==="
 
-    doRemoteNotifications "<code> = Now executting $command</code>"
+    if (!$mergeNotificationsIntoOne)
+    {
+        doRemoteNotifications "<code> = Now executting $command</code>"
+    }
+    else
+    {
+        $script:fullNotificationMessage += "<code> = Now executting $command</code>`n`n"
+    }
 
     doCall $duplicacy.exe (-split $duplicacy.options + -split $arg)
 
@@ -239,7 +270,14 @@ function doDuplicacyCommand($arg)
 
     $msg = Get-Content -Tail 6 -Path $log.filePath
     $msg = "$successStatusString! Last lines:`n" + " => " + "$( $msg -join "`n => " )"
-    doRemoteNotifications "<code>$msg</code>"
+    if (!$mergeNotificationsIntoOne)
+    {
+        doRemoteNotifications "<code>$msg</code>"
+    }
+    else
+    {
+        $script:fullNotificationMessage += "<code>$msg</code>`n`n"
+    }
 }
 
 function doCall($command, $arg)
