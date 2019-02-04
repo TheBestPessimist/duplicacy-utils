@@ -1,26 +1,36 @@
-# create systemd config (service+timer) which starts backup.ps1 on schedule
+# Create systemd config (service+timer) which starts backup.ps1 on schedule
+
+# ================================================
+# Import the global and local config file
+
+. "$PSScriptRoot\..\config.default.ps1"
+. "$PSScriptRoot\..\config.user.ps1"
+# ================================================
 
 # the systemd user cfg folder
 $systemdPath = '/etc/systemd/system/'
 
-# create the service
-$serviceUnitPath = $systemdPath + 'duplicacy-utils.service'
-$serviceUnit = @"
+
+function createService
+{
+    $serviceUnitPath = $systemdPath + 'duplicacy-utils.service'
+    $serviceUnit = @"
 [Unit]
 Description=Duplicacy-utils backup
 
 [Service]
-ExecStart=/usr/bin/pwsh $PSScriptRoot/backup.ps1
+ExecStart=/usr/bin/pwsh $backupScriptPath
 
 "@
-
-Out-File -Encoding utf8 -LiteralPath $serviceUnitPath -InputObject $serviceUnit
-
+    Out-File -Encoding utf8 -LiteralPath $serviceUnitPath -InputObject $serviceUnit
+}
 
 
 # the service is run by a timer
-$timerUnitPath = $systemdPath + 'duplicacy-utils.timer'
-$timerUnit = @"
+function createTimer
+{
+    $timerUnitPath = $systemdPath + 'duplicacy-utils.timer'
+    $timerUnit = @"
 [Unit]
 Description=Run duplicacy-utils on schedule
 
@@ -33,33 +43,50 @@ Requires=duplicacy-utils.service
 
 
 [Timer]
-# right now this is hardcoded to 4 hours
-OnUnitInactiveSec=4h
+
+OnUnitInactiveSec=$( $scheduledTaskRepetitionInterval.TotalHours )h
+RandomizedDelaySec=$( $scheduledTaskRandomDelay.TotalMinutes )m
 Unit=duplicacy-utils.service
 
 "@
+    Out-File -Encoding utf8 -LiteralPath $timerUnitPath -InputObject $timerUnit
+}
 
-Out-File -Encoding utf8 -LiteralPath $timerUnitPath -InputObject $timerUnit
+
+# Enable and start Everything
+function startTimerAndService
+{
+    # refresh systemd, enable the units and start the timer
+    systemctl daemon-reload
+
+    systemctl enable duplicacy-utils.timer
+    systemctl enable duplicacy-utils.service
+
+    #    systemctl start duplicacy-utils.timer
+
+    echo "`n`n status of the timer: "
+    systemctl status duplicacy-utils.timer
+
+    echo "`n`n timer runs next @: "
+    systemctl list-timers duplicacy-utils.timer
+}
+
+function main
+{
+    createService
+    createTimer
+    startTimerAndService
+}
 
 
-# refresh systemd, enable the units and start the timer
-systemctl daemon-reload
 
-systemctl enable duplicacy-utils.timer
-systemctl enable duplicacy-utils.service
+main
 
-systemctl start duplicacy-utils.timer
 
-# show when the timer runs next
-systemctl status duplicacy-utils.timer
-
-systemctl list-timers duplicacy-utils.timer
-
-# this is just for debugging
+## this is just for debugging
 # sleep 6
 # while($true){
 #     clear
-#     systemctl status duplicacy-utils.timer
-#     systemctl status duplicacy-utils.service
+#     systemctl list-timers duplicacy-utils.timer
 #     sleep 0.5
 # }

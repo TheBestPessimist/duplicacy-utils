@@ -1,51 +1,11 @@
 ﻿# ==============================================================================
 # ==============================================================================
 #
-# User-configurable part. Please don't modify anything else!
+# All the configuration should be placed in "config.user.ps1".
+# Just copy the related config  from "config.default.ps1" and modify as needed
 #
 # ==============================================================================
 # ==============================================================================
-
-
-# ================================================
-# Import the global and local config file 
-
-. "$PSScriptRoot\..\config.default.ps1"
-. "$PSScriptRoot\..\config.user.ps1"
-# ================================================
-
-
-# ================================================
-# Backup script full path
-#   Recommendation: please place all the util scrips in
-#       [duplicacy repo path]\.duplicacy\duplicacy utils (eg. relative to the repository)
-$scriptPath = (Resolve-Path -Path "$PSScriptRoot\..\backup.ps1").Path
-# $scriptPath = "C:\duplicacy repo\.duplicacy\duplicacy utils\backup.ps1"
-
-
-# ================================================
-# Repetition interval example (just copy the part after "#", which starts with "$"):
-#       1 minute:     run the backup every minute (not recommended!),
-#       1 hour:       run the backup every hour,
-#       3 hours:       run the backup every 3 hours,
-#       1 day:        run the backup every day (once a day)
-# $repetitionInterval = (New-TimeSpan -Minutes 1)
-# $repetitionInterval = (New-TimeSpan -Hours 1)
-# $repetitionInterval = (New-TimeSpan -Hours 3)
-# $repetitionInterval = (New-TimeSpan -Days 1)
-#
-# copy repetition interval below:
-$repetitionInterval = (New-TimeSpan -Hours 1)
-
-# ==============================================================================
-# ==============================================================================
-#
-# END of user-configurable part. Please don't modify anything else!
-#
-# ==============================================================================
-# ==============================================================================
-
-
 
 # ================================================
 # task options
@@ -68,23 +28,30 @@ $repetitionInterval = (New-TimeSpan -Hours 1)
 # - https://blog.netnerds.net/2015/01/create-scheduled-task-or-scheduled-job-to-indefinitely-run-a-powershell-script-every-5-minutes/ (mostly copied)
 # - http://britv8.com/powershell-create-a-scheduled-task/
 # - https://stackoverflow.com/a/30856340/2161279
-#
 # ================================================
 
 
-$script = '-NoProfile -ExecutionPolicy Bypass -File "' + $scriptPath + '" -Verb RunAs'
+# ================================================
+# Import the global and local config file
+
+. "$PSScriptRoot\..\config.default.ps1"
+. "$PSScriptRoot\..\config.user.ps1"
+# ================================================
+
+
+$script = '-NoProfile -ExecutionPolicy Bypass -File "' + $backupScriptPath + '" -Verb RunAs'
 
 $userCredentials = @{
     username = ""
     password = ""
 }
 
-$duplicacyFolderIndex = $scriptPath.IndexOf('.duplicacy')
+$duplicacyFolderIndex = $backupScriptPath.IndexOf('.duplicacy')
 if ($duplicacyFolderIndex -ne -1)
 {
-    $scheduledTaskName = $scheduledTaskName + " for repository " + $scriptPath.Substring(0, $duplicacyFolderIndex - 1).Replace("\", "__").Replace(":", "")
-    # it appears that the task name length limit is somewhere around 190 characters :^)
+    $scheduledTaskName = $scheduledTaskName + " for repository " + $backupScriptPath.Substring(0, $duplicacyFolderIndex - 1).Replace("\", "__").Replace(":", "")
 }
+# it appears that the task name length limit is somewhere around 190 characters :^)
 $scheduledTaskName = $scheduledTaskName[0..190] -join "" # range operator, like in kotlin :^)
 
 
@@ -116,11 +83,10 @@ function createNewTask()
 {
     # The script below will run as the specified user (you will be prompted for credentials)
     # and is set to be elevated to use the highest privileges.
-    # In addition, the task will run however long specified in $repetitionInterval above.
+    # In addition, the task will run however long specified in $scheduledTaskRepetitionInterval above.
     $task = New-ScheduledTaskAction –Execute "powershell.exe" -Argument  "$script; quit"
-    $randomDelay = (New-TimeSpan -Seconds 30)  # 30 seconds of random start delay
     $repetitionDuration = (New-TimeSpan -Days 10000)  # 27 years should be enough
-    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $repetitionInterval -RepetitionDuration $repetitionDuration -RandomDelay $randomDelay
+    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $scheduledTaskRepetitionInterval -RepetitionDuration $repetitionDuration -RandomDelay $scheduledTaskRandomDelay
     $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -StartWhenAvailable
 
     $scheduledTaskParameters = @{

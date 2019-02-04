@@ -33,6 +33,9 @@ $repositoryFolder = (Get-Item $PSScriptRoot).Parent.Parent.FullName
 # Full path to Duplicacy.exe
 $duplicacyExePath = ".duplicacy/z.exe"
 
+# Backup script full path
+$backupScriptPath = (Resolve-Path -Path "$PSScriptRoot\backup.ps1").Path
+
 # Should the "-d" flag (debuging) be used? (hint: it generally shouldn't)
 $duplicacyDebug = $false        # or $true
 
@@ -42,6 +45,24 @@ $duplicacyDebug = $false        # or $true
 # Recommendation: please use unique names for each different task (backup prune, etc.),
 #       as tasks which already exist WILL BE REPLACED!
 $scheduledTaskName = "Duplicacy Backup"
+
+
+
+# ================================================
+# How often to run the backup:
+#       1 hour:       run the backup every hour,
+#       3 hours:      run the backup every 3 hours,
+#       1 day:        run the backup every day (once a day)
+# $repetitionInterval = (New-TimeSpan -Hours 1)
+# $repetitionInterval = (New-TimeSpan -Hours 3)
+# $repetitionInterval = (New-TimeSpan -Days 1)
+#
+$scheduledTaskRepetitionInterval = (New-TimeSpan -Hours 4)
+
+# ================================================
+# Add a random time delay before starting the backup between 0 and $randomDelay minutes.
+# Helpful in case multiple backups start at the exact same time, so that the machine won't be slowed to a crawl
+$scheduledTaskRandomDelay = (New-TimeSpan -Minutes 3)  # 3 minutes of random start delay is sufficient
 
 
 # ================================================
