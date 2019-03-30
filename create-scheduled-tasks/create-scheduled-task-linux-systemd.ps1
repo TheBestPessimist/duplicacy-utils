@@ -17,8 +17,11 @@ function createService
     $serviceUnit = @"
 [Unit]
 Description=Duplicacy-utils backup
+Requires=network-online.target
+After=network.target network-online.target
 
 [Service]
+Type=simple
 ExecStart=/usr/bin/pwsh $backupScriptPath
 
 "@
@@ -48,6 +51,9 @@ OnUnitInactiveSec=$( $scheduledTaskRepetitionInterval.TotalHours )h
 RandomizedDelaySec=$( $scheduledTaskRandomDelay.TotalMinutes )m
 Unit=duplicacy-utils.service
 
+[Install]
+WantedBy=timers.target
+
 "@
     Out-File -Encoding utf8 -LiteralPath $timerUnitPath -InputObject $timerUnit
 }
@@ -60,7 +66,6 @@ function startTimerAndService
     systemctl daemon-reload
 
     systemctl enable duplicacy-utils.timer
-    systemctl enable duplicacy-utils.service
 
     #    systemctl start duplicacy-utils.timer
 
