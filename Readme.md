@@ -1,3 +1,5 @@
+_Please note that even though this project is actively maintained, the readme here is outdated. If you want to contribute to its updating, it would make me extremely happy._
+
 # Duplicacy utils
 
 The aim of these scripts is to help the windows user automate Duplicacy usage as much as possible.
