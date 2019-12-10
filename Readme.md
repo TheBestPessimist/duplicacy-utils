@@ -66,6 +66,10 @@ The way the file is created, there should be no need to edit it currently, as it
 
 ### Changelog
 
+##### 2019.12.10
+
+- :exclamation: **BREAKING CHANGE** Update telegram notification code to send content-type json, to be in sync with the latest backend. Please update, otherwise you will no longer receive notifications to telegram.
+
 ##### 2018.04.09
 - Improved the filters file with more (better?) regex from [NiJoao](https://github.com/NiJoao).
 
