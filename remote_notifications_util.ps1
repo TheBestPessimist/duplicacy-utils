@@ -17,6 +17,7 @@
 #
 #    Invoke-WebRequest `
 #      -Body (ConvertTo-Json -Compress -InputObject $payload) `
+#      -ContentType 'application/json' `
 #      -Method Post `
 #      -Uri "$slackWebhookURL" | Out-Null
 #}
@@ -77,6 +78,7 @@ function doPostRequest($url, $body)
     doCall {
         Invoke-WebRequest `
         -Body $body `
+        -ContentType 'application/json' `
         -Method Post `
         -Uri $url | Format-List -Property StatusCode, StatusDescription, Content
     }
