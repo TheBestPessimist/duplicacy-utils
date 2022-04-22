@@ -67,7 +67,7 @@ function startTimerAndService
 
     systemctl enable duplicacy-utils.timer
 
-    #    systemctl start duplicacy-utils.timer
+    systemctl start duplicacy-utils.timer
 
     echo "`n`n status of the timer: "
     systemctl status duplicacy-utils.timer
