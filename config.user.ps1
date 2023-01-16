@@ -18,7 +18,7 @@
 # $repositoryFolder = "C:/duplicacy repositories/my downloads/"
 
 # Full path to Duplicacy.exe
-# $duplicacyExePath = "C:\Duplicacy\.duplicacy\duplicacy_win_x64_2.1.1.exe"
+$duplicacyExePath = "/home/stanly/.local/bin/duplicacy"
 
 # Should the "-d" flag (debuging) be used? (hint: it generally shouldn't)
 # $duplicacyDebug = $true
