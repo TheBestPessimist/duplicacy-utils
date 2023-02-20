@@ -9,7 +9,7 @@
 
 # the systemd user cfg folder
 $systemdPath = '/etc/systemd/system/'
-
+$scheduledTaskName = $scheduledTaskName.replace(' ', '-')
 
 function createService
 {
