@@ -9,14 +9,14 @@
 
 # the systemd user cfg folder
 $systemdPath = '/etc/systemd/system/'
-
+$scheduledTaskName = $scheduledTaskName.replace(' ', '-')
 
 function createService
 {
-    $serviceUnitPath = $systemdPath + 'duplicacy-utils.service'
+    $serviceUnitPath = $systemdPath + 'duplicacy-utils-' + $scheduledTaskName + '.service'
     $serviceUnit = @"
 [Unit]
-Description=Duplicacy-utils backup
+Description=$scheduledTaskName
 Requires=network-online.target
 After=network.target network-online.target
 
@@ -32,7 +32,7 @@ ExecStart=/usr/bin/pwsh $backupScriptPath
 # the service is run by a timer
 function createTimer
 {
-    $timerUnitPath = $systemdPath + 'duplicacy-utils.timer'
+    $timerUnitPath = $systemdPath +'duplicacy-utils-' + $scheduledTaskName + '.timer'
     $timerUnit = @"
 [Unit]
 Description=Run duplicacy-utils on schedule
@@ -42,14 +42,14 @@ Description=Run duplicacy-utils on schedule
 # ref: https://serverfault.com/questions/775246/systemd-timer-not-starting-its-service-unit
 # ref: https://github.com/systemd/systemd/issues/6680#issuecomment-435597258
 
-Requires=duplicacy-utils.service
+Requires=duplicacy-utils-$scheduledTaskName.service
 
 
 [Timer]
 
 OnUnitInactiveSec=$( $scheduledTaskRepetitionInterval.TotalHours )h
 RandomizedDelaySec=$( $scheduledTaskRandomDelay.TotalMinutes )m
-Unit=duplicacy-utils.service
+Unit=duplicacy-utils-$scheduledTaskName.service
 
 [Install]
 WantedBy=timers.target
@@ -65,15 +65,15 @@ function startTimerAndService
     # refresh systemd, enable the units and start the timer
     systemctl daemon-reload
 
-    systemctl enable duplicacy-utils.timer
+    systemctl enable duplicacy-utils-$scheduledTaskName.timer
 
-    systemctl start duplicacy-utils.timer
+    systemctl start duplicacy-utils-$scheduledTaskName.timer
 
     echo "`n`n status of the timer: "
-    systemctl status duplicacy-utils.timer
+    systemctl status duplicacy-utils-$scheduledTaskName.timer
 
     echo "`n`n timer runs next @: "
-    systemctl list-timers duplicacy-utils.timer
+    systemctl list-timers duplicacy-utils-$scheduledTaskName.timer
 }
 
 function main
