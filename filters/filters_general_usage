@@ -46,6 +46,9 @@
 #     matches: "C:/Users/anyUserName/AppData/Local/Steam/"
 #     does not match:"C:/Users/anyUserName/AppData/Local/someotherfolder/Steam/", as there has to be ONLY 1 FOLDER in between "AppData" and "Steam" folders
 #
+# 4. "(^Users|[^/]+Users[^/]+link)" matches the users folder in 2 different scenarios
+#       - C__Users_link/crist/.gradle/      <- this implies a Symlink to the Users folder which is named `<anything>Users<anything>link`
+#       - C:/Users/crist/.gradle/           <- this uses the normal Users path
 #
 # ==========
 
@@ -94,6 +97,8 @@ e:(?i)/InternalCache/
 
 # Ignore telegram's media cache
 e:(?i)/tdata/user_data/media_cache/
+
+
 
 # ==============================================================================
 # ==============================================================================
@@ -165,6 +170,15 @@ e:(?i)(^|/)IconCache\.db
 
 
 
+# temp location
+
+# Vivaldi's /User Data/Default/Code Cache/
+e:(?i)/Vivaldi/User Data/[^/]+/Code Cache/
+
+# Firefox profile cache
+e:(?i)/Mozilla/Firefox/Profiles/[^/]+/cache2/
+
+
 # ================================================
 # ================================================ useless folders in root
 # ================================================
@@ -194,52 +208,59 @@ e:(?i)^Sun/
 
 
 # ============================ Should we exclude all system's users profiles?
-#e:(?i)^Users/All Users/
-#e:(?i)^Users/Default[^/]*/
-#e:(?i)^Users/Public/
+e:(?i)(^Users|[^/]+Users[^/]+link)/All Users/
+e:(?i)(^Users|[^/]+Users[^/]+link)/Default[^/]*/
+e:(?i)(^Users|[^/]+Users[^/]+link)/Public/
 
 
 # ============================ unneeded folders in Users profiles: systems, junctions
-e:(?i)^Users/[^/]+/\.oracle_jre_usage/
-e:(?i)^Users/[^/]+/Application Data
-e:(?i)^Users/[^/]+/Cookies
-e:(?i)^Users/[^/]+/Documents/My Music
-e:(?i)^Users/[^/]+/Documents/My Pictures
-e:(?i)^Users/[^/]+/Documents/My Videos
-e:(?i)^Users/[^/]+/IntelGraphicsProfiles/
-e:(?i)^Users/[^/]+/Links/
-e:(?i)^Users/[^/]+/Local Settings
-e:(?i)^Users/[^/]+/MicrosoftEdgeBackups/
-e:(?i)^Users/[^/]+/My Documents
-e:(?i)^Users/[^/]+/NetHood
-e:(?i)^Users/[^/]+/PrintHood
-e:(?i)^Users/[^/]+/Recent
-e:(?i)^Users/[^/]+/Searches/
-e:(?i)^Users/[^/]+/SendTo
-e:(?i)^Users/[^/]+/Start Menu
-e:(?i)^Users/[^/]+/Templates
-e:(?i)^Users/[^/]+/Tracing/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.oracle_jre_usage/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Application Data
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Cookies
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Documents/My Music
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Documents/My Pictures
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Documents/My Videos
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/IntelGraphicsProfiles/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Links/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Local Settings
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/MicrosoftEdgeBackups/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/My Documents
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/NetHood
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/PrintHood
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Recent
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Searches/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/SendTo
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Start Menu
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Templates
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Tracing/
 
 
 # ============================ unneeded folders in Users profiles: runtimes, dev, others
-e:(?i)^Users/[^/]+/\.?anaconda/
-e:(?i)^Users/[^/]+/\.?android[^/]*/
-e:(?i)^Users/[^/]+/\.?astropy/
-e:(?i)^Users/[^/]+/\.?conda/
-e:(?i)^Users/[^/]+/\.?dia/
-e:(?i)^Users/[^/]+/\.?eclipse/
-e:(?i)^Users/[^/]+/\.?gradle/
-e:(?i)^Users/[^/]+/\.?kivy/
-e:(?i)^Users/[^/]+/\.?matplotlib/
-e:(?i)^Users/[^/]+/\.?Mendeley Desktop/
-e:(?i)^Users/[^/]+/\.?p2/
-e:(?i)^Users/[^/]+/\.?pgadmin./
-e:(?i)^Users/[^/]+/\.?QtWeb/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?.IntelliJIdea[^/]+/system
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?.QtWebEngineProcess
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?.kube/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?.x2go/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?Intel/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?Mendeley Desktop/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?QtWeb/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?anaconda/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?android[^/]*/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?ansel/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?astropy/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?conda/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?dia/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?eclipse/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?gradle/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?kivy/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?m2/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?matplotlib/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?p2/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?pgadmin./
 
 
 # ============================ already backed-up and versioned controlled folders (eg. dropbox/google user folders)
-e:(?i)^Users/[^/]+/Dropbox/
-e:(?i)^Users/[^/]+/OneDrive/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Dropbox/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/OneDrive/
 
 
 
