@@ -42,6 +42,13 @@ It should be edited as needed, either by commenting lines (put `#` at the beginn
 
 The way the file is created, there should be no need to edit it currently, as it _should_ remove no user data.
 
+
+
+**Test filters**
+```
+.\.duplicacy\z.exe -d backup   -dry-run  *>&1 | Tee-Object -FilePath ".duplicacy/zzzzzzzzzzzz.txt" -Append
+```
+
 ---
 
 
