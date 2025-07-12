@@ -74,6 +74,12 @@ e:(?i)(^|/)temp/
 e:(?i)(^|/)tmp/
 e:(?i)(^|/)cache/
 e:(?i)/Package Cache/
+e:(?i)/caches/
+e:(?i)/cache2/
+e:(?i)/Code Cache/
+e:(?i)/AppData/.*/logs/
+e:(?i)/[^/]+compiler_cache/
+
 
 # Users/a/AppData/Local/Google/Chrome/User Data/Default/Service Worker/CacheStorage/fodisjfladsf87-a9ds8fa87d6f8as-d7f6978690-7df6a78fs6a
 e:(?i)/Service Worker/CacheStorage/
@@ -87,6 +93,8 @@ e:(?i)/Logs/CrashReporter/
 # Chrome/electron based apps
 e:(?i)/ShaderCache/
 e:(?i)/GPUCache/
+# webcache without the ending / as there may be other characters after
+e:(?i)/webcache
 
 # npm/node related
 e:(?i)/compile-cache/
@@ -164,7 +172,7 @@ e:(?i)^pagefile\.sys$
 e:(?i)^swapfile\.sys$
 
 # ============================ system files anywhere
-# ntuser.dat may contain come other things at the end, therefore don't end with "$"
+# ntuser.dat may contain some other things at the end, therefore don't end with "$"
 e:(?i)ntuser\.dat
 
 e:(?i)(^|/)thumbs\.db$
@@ -195,17 +203,18 @@ e:(?i)^Sun/
 # ==============================================================================
 # ============================================================================== Local excludes (user specific)
 # ==============================================================================
-# ============================================================================== Analyze carefully and de-exclude anything that might be useful to someone
+# ============================================================================== Analyze carefully and de-exclude anything that might be useful to you
 # ==============================================================================
 # ==============================================================================
 
 
-# ============================ Should we exclude all system's users profiles?
+# ============================ Exclude all system user profiles
 e:(?i)(^Users|[^/]+Users[^/]+link)/All Users/
 e:(?i)(^Users|[^/]+Users[^/]+link)/Default[^/]*/
 e:(?i)(^Users|[^/]+Users[^/]+link)/Public/
 
 
+# TODO: merge this and the one below into a single list, sorted!
 # ============================ unneeded folders in Users profiles: systems, junctions
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.oracle_jre_usage/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Application Data
@@ -241,15 +250,22 @@ e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?anaconda/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?android[^/]*/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?ansel/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?astropy/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?cache/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?conda/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?dia/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?eclipse/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?gradle/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?javacpp/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?jdks/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?jupyter_kotlin/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?kivy/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?m2/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?matplotlib/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?ollama/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?p2/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?pgadmin./
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/ApkProjects/
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/IdeaSnapshots/
 
 
 # ============================ already backed-up and versioned controlled folders (eg. dropbox/google user folders)
@@ -279,6 +295,7 @@ e:(?i)/AppData/LocalLow/
 
 e:(?i)/AppData/[^/]+/Acronis/
 e:(?i)/AppData/[^/]+/Adobe/
+e:(?i)/AppData/[^/]+/Android/
 e:(?i)/AppData/[^/]+/Atlassian/SourceTree/[^/]*local/
 e:(?i)/AppData/[^/]+/Comms/
 e:(?i)/AppData/[^/]+/ConnectedDevicesPlatform/
@@ -291,10 +308,12 @@ e:(?i)/AppData/[^/]+/Dropbox/
 e:(?i)/AppData/[^/]+/Docker/
 e:(?i)/AppData/[^/]+/Duplicati/
 e:(?i)/AppData/[^/]+/ElevatedDiagnostics/
+e:(?i)/AppData/[^/]+/Intel/
 e:(?i)/AppData/[^/]+/JetBrains/
 e:(?i)/AppData/[^/]+/npm/
 e:(?i)/AppData/[^/]+/NVIDIA[^/]*/
 e:(?i)/AppData/[^/]+/Oracle/
+e:(?i)/AppData/[^/]+/Ollama/
 e:(?i)/AppData/[^/]+/PackageStaging/
 e:(?i)/AppData/[^/]+/PeerDistRepub/
 e:(?i)/AppData/[^/]+/Publishers/
@@ -303,23 +322,20 @@ e:(?i)/AppData/[^/]+/Samsung Magician/
 e:(?i)/AppData/[^/]+/TileDataLayer/
 e:(?i)/AppData/[^/]+/Veeam/
 e:(?i)/AppData/[^/]+/VirtualStore/
-
-# ============================ "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
+# "packages" is because of "skype modern app" which throws an error even with -vss flag (and duplicacy stops). I have opened a bug to for duplicacy.
 e:(?i)/AppData/[^/]+/Packages/
-
-e:(?i)/AppData/Local/AMD/
-e:(?i)/AppData/Local/atom/
-e:(?i)/AppData/Local/ForensiT/
-e:(?i)/AppData/Local/GitHubDesktop/
-e:(?i)/AppData/Local/gitkraken/
-e:(?i)/AppData/Local/go-build/
-e:(?i)/AppData/Local/kotlin/
-e:(?i)/AppData/Local/PackageManagement/
-e:(?i)/AppData/Local/pip
-e:(?i)/AppData/Local/Programs/Python/
-e:(?i)/AppData/Local/SourceTree/
-e:(?i)/AppData/Local/SquirrelTemp/
-
+e:(?i)/AppData/[^/]+/AMD/
+e:(?i)/AppData/[^/]+/atom/
+e:(?i)/AppData/[^/]+/ForensiT/
+e:(?i)/AppData/[^/]+/GitHubDesktop/
+e:(?i)/AppData/[^/]+/gitkraken/
+e:(?i)/AppData/[^/]+/go-build/
+e:(?i)/AppData/[^/]+/kotlin/
+e:(?i)/AppData/[^/]+/PackageManagement/
+e:(?i)/AppData/[^/]+/pip
+e:(?i)/AppData/[^/]+/Programs/Python/
+e:(?i)/AppData/[^/]+/SourceTree/
+e:(?i)/AppData/[^/]+/SquirrelTemp/
 
 # ============== Skype AppData holds message history. Better save it
 # e:(?i)/AppData/[^/]+/Skype/
@@ -386,11 +402,7 @@ i:(?i)/AppData/[^/]+/Google/Picasa[^/]*/
 e:(?i)/AppData/[^/]+/Google/
 
 
-# Vivaldi's /User Data/Default/Code Cache/
-e:(?i)/Vivaldi/User Data/[^/]+/Code Cache/
 
-# Firefox profile cache
-e:(?i)/Mozilla/Firefox/Profiles/[^/]+/cache2/
 
 # ==============================================
 # ============================================== Global excludes
@@ -424,10 +436,16 @@ e:(?i)\.ffs_tmp$
 e:(?i)\.lck$
 e:(?i)\.prv$
 e:(?i)\.rbf$
+e:(?i)\.log
 
 # note about chk: https://groups.google.com/forum/#!topic/mozilla.support.firefox/j4J_gWzoQuw
 # (i don't know if deleting those files from Firefox actually break it. i believe it doesn't affect userdata though)
 e:(?i)\.chk$
+
+
+# TODO: Do i want to remove ACDSee catalog and Zoner Catalogs? they are pretty large (>5G in total)?
+
+
 
 
 # ==================================================================================================
