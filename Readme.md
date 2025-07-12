@@ -46,7 +46,7 @@ The way the file is created, there should be no need to edit it currently, as it
 
 **Test filters**
 ```
-.\.duplicacy\z.exe -d backup   -dry-run  *>&1 | Tee-Object -FilePath ".duplicacy/zzzzzzzzzzzz.txt" -Append
+.\.duplicacy\z.exe -d backup   -enum-only   *>&1 | Tee-Object -FilePath ".duplicacy/zzzzzzzzzzzz.txt" -Append
 ```
 
 ---
