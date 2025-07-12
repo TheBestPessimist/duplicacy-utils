@@ -25,28 +25,29 @@
 #
 # ========== EXPLANATION OF THE REGEXES
 #
-# 0. (?i) means "case insensitive"
+# - (?i) means "case insensitive"
 #
 #
-# 1. "^" is used for detecting root-level folders.
+# - "^" is used for detecting root-level folders.
 #   Example: "(?i)^Recovery/"
 #     matches only root-level folder: "Recovery/"
 #     does not match: "Users/something/Recovery/"
 #
 #
-# 2. "(^|/)foldername" is used to match folders which have exact name "foldername"
+# - "(^|/)foldername" is used to match folders which have exact name "foldername"
 #   Example: "(?i)(^|/)temp/"
 #     matches root-level folder: "temp/"
 #     matches any folder from any path named "temp": "long/path/temp/"
 #     does not match folders which have "temp" in their name: "long/path/somefolder.temp/"
 #
+# - "[^/]+" matches one or more consecutive characters that are not a forward slash (/)
 #
-# 3. "[^/]+/": has the purpose of assuring that there is only 1 folder in the matched path (only 1 "/")
+# - "[^/]+/": has the purpose of assuring that there is only 1 folder in the matched path (only 1 "/")
 #   Example: "(?i)/AppData/[^/]+/Steam/"
 #     matches: "C:/Users/anyUserName/AppData/Local/Steam/"
 #     does not match:"C:/Users/anyUserName/AppData/Local/someotherfolder/Steam/", as there has to be ONLY 1 FOLDER in between "AppData" and "Steam" folders
 #
-# 4. "(^Users|[^/]+Users[^/]+link)" matches the users folder in 2 different scenarios
+# - "(^Users|[^/]+Users[^/]+link)" matches the users folder in 2 different scenarios
 #       - C__Users_link/crist/.gradle/      <- this implies a Symlink to the Users folder which is named `<anything>Users<anything>link`
 #       - C:/Users/crist/.gradle/           <- this uses the normal Users path
 #
