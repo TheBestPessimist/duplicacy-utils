@@ -98,7 +98,8 @@ e:(?i)/InternalCache/
 # Ignore telegram's media cache
 e:(?i)/tdata/user_data/media_cache/
 
-
+# D3D Api Cache
+e:(?)/D3DSCache/
 
 # ==============================================================================
 # ==============================================================================
@@ -170,15 +171,6 @@ e:(?i)(^|/)IconCache\.db
 
 
 
-# temp location
-
-# Vivaldi's /User Data/Default/Code Cache/
-e:(?i)/Vivaldi/User Data/[^/]+/Code Cache/
-
-# Firefox profile cache
-e:(?i)/Mozilla/Firefox/Profiles/[^/]+/cache2/
-
-
 # ================================================
 # ================================================ useless folders in root
 # ================================================
@@ -236,6 +228,7 @@ e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/Tracing/
 
 
 # ============================ unneeded folders in Users profiles: runtimes, dev, others
+e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.docker/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?.IntelliJIdea[^/]+/system
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?.QtWebEngineProcess
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?.kube/
@@ -294,6 +287,7 @@ e:(?i)/AppData/[^/]+/DBG/
 e:(?i)/AppData/[^/]+/Diagnostics/
 e:(?i)/AppData/[^/]+/Downloaded Installations/
 e:(?i)/AppData/[^/]+/Dropbox/
+e:(?i)/AppData/[^/]+/Docker/
 e:(?i)/AppData/[^/]+/Duplicati/
 e:(?i)/AppData/[^/]+/ElevatedDiagnostics/
 e:(?i)/AppData/[^/]+/JetBrains/
@@ -304,6 +298,7 @@ e:(?i)/AppData/[^/]+/PackageStaging/
 e:(?i)/AppData/[^/]+/PeerDistRepub/
 e:(?i)/AppData/[^/]+/Publishers/
 e:(?i)/AppData/[^/]+/Sun/
+e:(?i)/AppData/[^/]+/Samsung Magician/
 e:(?i)/AppData/[^/]+/TileDataLayer/
 e:(?i)/AppData/[^/]+/Veeam/
 e:(?i)/AppData/[^/]+/VirtualStore/
@@ -381,7 +376,7 @@ e:(?i)/AppData/[^/]+/Mozilla/
 
 
 # ============================ include Chrome profile and Picasa data, but nothing else from Google
-# ============================ note that we include the whole profile, because we are unsure how many "users" are added beside the "Default" profile
+# ============================ note that we include the whole 'User Data', because we are unsure how many "users" are added beside the "Default" profile
 i:(?i)/AppData/[^/]+/Google/$
 i:(?i)/AppData/[^/]+/Google/Chrome/$
 e:(?i)/AppData/[^/]+/Google/Chrome/.*Safe Browsing
@@ -390,6 +385,11 @@ i:(?i)/AppData/[^/]+/Google/Picasa[^/]*/
 e:(?i)/AppData/[^/]+/Google/
 
 
+# Vivaldi's /User Data/Default/Code Cache/
+e:(?i)/Vivaldi/User Data/[^/]+/Code Cache/
+
+# Firefox profile cache
+e:(?i)/Mozilla/Firefox/Profiles/[^/]+/cache2/
 
 # ==============================================
 # ============================================== Global excludes
