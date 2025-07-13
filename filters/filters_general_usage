@@ -405,17 +405,27 @@ e:(?i)/AppData/[^/]+/Google/
 
 # Gradle build excludes
 e:(?i)/build/classes/
+e:(?i)/build/cucumber/
+e:(?i)/build/generated-sources/
 e:(?i)/build/generated/
+e:(?i)/build/install/
 e:(?i)/build/intermediates/
 e:(?i)/build/jacoco/
+e:(?i)/build/jib-cache/
+e:(?i)/build/jmh-generated.*
+e:(?i)/build/kotlin-dsl/
 e:(?i)/build/kotlin/
+e:(?i)/build/libs/
+e:(?i)/build/pluginDescriptors/
+e:(?i)/build/pluginUnderTestMetadata/
+e:(?i)/build/processedResources/
 e:(?i)/build/reports/
 e:(?i)/build/resources/
+e:(?i)/build/scripts/
 e:(?i)/build/snapshot/
+e:(?i)/build/source-roots/
 e:(?i)/build/test-results/
 e:(?i)/build/tmp/
-
-
 
 
 # ==============================================
