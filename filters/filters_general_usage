@@ -78,7 +78,7 @@ e:(?i)/caches/
 e:(?i)/cache2/
 e:(?i)/Code Cache/
 e:(?i)/GrShaderCache/
-e:(?i)/AppData/.*/logs/
+e:(?i)/logs/
 e:(?i)/[^/]+compiler_cache/
 e:(?i)/__pycache__/
 
@@ -450,7 +450,10 @@ e:(?i)\.ffs_tmp$
 e:(?i)\.lck$
 e:(?i)\.prv$
 e:(?i)\.rbf$
-e:(?i)\.log
+# you might be tempted to remove the  $ at the end for log, but that is a really bad idea
+# as there are many things which have .log inside the name:
+# `a.logMap2.dat`, `IntelliJ IDEA Ultimate/jbr/legal/java.logging`, `lib/modules/intellij.platform.vcs.log.impl.jar`, `FlowLauncher/app-1.20.0/Microsoft.Extensions.Logging.Abstractions.dll`
+e:(?i)\.log$
 
 # note about chk: https://groups.google.com/forum/#!topic/mozilla.support.firefox/j4J_gWzoQuw
 # (i don't know if deleting those files from Firefox actually break it. i believe it doesn't affect userdata though)
