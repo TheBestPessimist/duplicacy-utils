@@ -403,6 +403,20 @@ e:(?i)/AppData/[^/]+/Google/
 
 
 
+# Gradle build excludes
+e:(?i)/build/classes/
+e:(?i)/build/generated/
+e:(?i)/build/intermediates/
+e:(?i)/build/jacoco/
+e:(?i)/build/kotlin/
+e:(?i)/build/reports/
+e:(?i)/build/resources/
+e:(?i)/build/snapshot/
+e:(?i)/build/test-results/
+e:(?i)/build/tmp/
+
+
+
 
 # ==============================================
 # ============================================== Global excludes
