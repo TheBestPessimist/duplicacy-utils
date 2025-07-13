@@ -77,38 +77,36 @@ e:(?i)/Package Cache/
 e:(?i)/caches/
 e:(?i)/cache2/
 e:(?i)/Code Cache/
+e:(?i)/GrShaderCache/
 e:(?i)/AppData/.*/logs/
 e:(?i)/[^/]+compiler_cache/
+e:(?i)/__pycache__/
 
 
-# Users/a/AppData/Local/Google/Chrome/User Data/Default/Service Worker/CacheStorage/fodisjfladsf87-a9ds8fa87d6f8as-d7f6978690-7df6a78fs6a
-e:(?i)/Service Worker/CacheStorage/
+
 
 # Users/cpasat/AppData/Local/Mozilla/Firefox/Profiles/6tdz9jz4.default/OfflineCache/5/D/
-/OfflineCache/
-
-# Users/cpasat/AppData/Roaming/Apple Computer/Logs/CrashReporter/MobileDevice/
-e:(?i)/Logs/CrashReporter/
-
-# Chrome/electron based apps
+e:(?i)/OfflineCache/
 e:(?i)/ShaderCache/
 e:(?i)/GPUCache/
-# webcache without the ending / as there may be other characters after
-e:(?i)/webcache
-
-# npm/node related
+e:(?i)/webcache.*
+e:(?i)/ScriptCache/
+e:(?i)/CacheStorage/
+e:(?i)/shader-cache/
 e:(?i)/compile-cache/
 e:(?i)/node_modules/
 e:(?i)/npm-cache/
-
 e:(?i)/InternalCache/
 
 
 # Ignore telegram's media cache
 e:(?i)/tdata/user_data/media_cache/
 
-# D3D Api Cache
-e:(?)/D3DSCache/
+e:(?i)/D3DSCache/
+
+# The ollama folder is quite large with a lot of NVIDIA binaries. It also is part of many software packages, not just the default ollama install
+e:(?i)/ollama/
+
 
 # ==============================================================================
 # ==============================================================================
@@ -331,11 +329,13 @@ e:(?i)/AppData/[^/]+/GitHubDesktop/
 e:(?i)/AppData/[^/]+/gitkraken/
 e:(?i)/AppData/[^/]+/go-build/
 e:(?i)/AppData/[^/]+/kotlin/
+e:(?i)/AppData/[^/]+/Maxon/Cinebench.*
 e:(?i)/AppData/[^/]+/PackageManagement/
 e:(?i)/AppData/[^/]+/pip
 e:(?i)/AppData/[^/]+/Programs/Python/
 e:(?i)/AppData/[^/]+/SourceTree/
 e:(?i)/AppData/[^/]+/SquirrelTemp/
+e:(?i)/AppData/[^/]+/uv/
 
 # ============== Skype AppData holds message history. Better save it
 # e:(?i)/AppData/[^/]+/Skype/
