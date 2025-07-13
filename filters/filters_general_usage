@@ -252,7 +252,6 @@ e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?cache/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?conda/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?dia/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?eclipse/
-e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?gradle/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?javacpp/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?jdks/
 e:(?i)(^Users|[^/]+Users[^/]+link)/[^/]+/\.?jupyter_kotlin/
@@ -404,6 +403,7 @@ e:(?i)/AppData/[^/]+/Google/
 
 
 # Gradle build excludes
+e:(?i)/\.gradle/
 e:(?i)/build/classes/
 e:(?i)/build/cucumber/
 e:(?i)/build/generated-sources/
