@@ -235,6 +235,10 @@ function logFinishBackupProcess()
     {
         $script:fullNotificationMessage += "$msg`n`n"
         doRemoteNotifications $fullNotificationMessage
+        if ($doNotWriteToStdout -and !$globalSuccessStatus)
+        {
+            Write-Error "$fullNotificationMessage"
+        }
     }
 }
 
@@ -281,7 +285,14 @@ function doDuplicacyCommand($arg)
 
 function doCall($command, $arg)
 {
-    & $command @arg *>&1 | Tee-Object -FilePath "$( $log.filePath )" -Append
+    if ($doNotWriteToStdout)
+    {
+        & $command @arg *>&1 | Out-File "$( $log.filePath )" -Append
+    }
+    else
+    {
+        & $command @arg *>&1 | Tee-Object -FilePath "$( $log.filePath )" -Append
+    }
 }
 
 
