@@ -385,7 +385,17 @@ function initLoggingOptions
 {
     # Init the logging paths and files
     $log = $script:log
-    $log.basePath = ".duplicacy/tbp-logs" # relative to $repositoryFolder
+    if (Test-Path -Path ".duplicacy" -PathType Leaf)
+    {
+         # .duplicacy is a file containing a reference to the repository's metadata folder   
+         $metadataPath = Get-Content -Path ".duplicacy" -Raw # absolute path
+    }
+    else
+    {
+         # .duplicacy is the repository's metadata folder
+         $metadataPath = ".duplicacy" # relative to $repositoryFolder
+    }
+    $log.basePath = $metadataPath + "/tbp-logs"
     $log.fileName = "backup-log " + $( Get-Date ).toString("yyyy-MM-dd HH-mm-ss") + "_" + $( Get-Date ).Ticks + ".log"
     $log.workingPath = $log.basePath + "/" + $( Get-Date ).toString("yyyy-MM-dd dddd") + "/"
     $log.filePath = $log.workingPath + $log.fileName
