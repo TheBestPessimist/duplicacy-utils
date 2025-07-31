@@ -407,7 +407,7 @@ function createLogFolder
     if (!(Test-Path -Path $log.workingPath))
     {
         New-Item -ItemType directory -Path $log.workingPath
-        log "Folder $( $log.workingPath ) does not exist. It has just been created"
+        log "Folder '$( $log.workingPath )' does not exist. It has just been created"
     }
 }
 
