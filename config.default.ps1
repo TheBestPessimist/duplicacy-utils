@@ -146,3 +146,8 @@ $duplicacyPruneExtraOptionsOffsite = " -all -storage $offsiteStorageName "
 # If $mergeNotificationsIntoOne is set to $true then all notifications will be merged into a single one.
 # Basically you get a single notification at the end with the complete text instead of multiple notifications.
 $mergeNotificationsIntoOne = $false
+
+# By default, log messages will be written to standard output and also to a log file.
+# If you want the backup script to operate in "quiet mode", for example when it is being called by cron,
+# set $doNotWriteToStdout to $true.
+$doNotWriteToStdout = $false
