@@ -62,9 +62,10 @@
 # ==============================================================================
 
 # ============================ exclude .VCS subfolder
-e:(?i)(^|/)\.git/
-e:(?i)(^|/)\.hg/
-e:(?i)(^|/)\.svn/
+# 2025-12-14: Initially i thought this was a good idea, but after dataloss, i decided i would much rather have EVERYTHING backed up, including such 'duplicated data'
+# e:(?i)(^|/)\.git/
+# e:(?i)(^|/)\.hg/
+# e:(?i)(^|/)\.svn/
 
 
 # ============================ exclude temp/cache files/folders everywhere
