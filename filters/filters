@@ -1,0 +1,189 @@
+# filters:
+
+
+# ===== pokambrian specific ignores
+e:(?i)^[^/]+/Google Drive File Stream/
+e:(?i)^[^/]+/Piu!/
+# symlink
+e:(?i)^[^/]+/Google Drive File Stream
+# symlink
+e:(?i)^[^/]+/Google Drive
+
+
+
+# i think this should all be ignored, it contains a lot of symlinks which create problems for me
+pokambrian/Library/Application Support/SyncServices/
+pokambrian/Library/Application Support/iCloud/
+
+# ============================ online storage
+e:(?i)^[^/]+/Google Drive/
+e:(?i)^[^/]+/dropbox/
+e:(?i)^[^/]+/.dropbox/
+e:(?i)^[^/]+/Public/Drop Box/
+e:(?i)^[^/]+/OneDrive/
+e:(?i)/Library/Application Support/Google/DriveFS/
+e:(?i)/Library/Application Support/Google/Drive/
+
+
+
+
+# ===== exludes from ~/Library
+
+e:(?i)/Library/Assistant/Siri.*
+e:(?i)/Library/Keyboard/
+e:(?i)/Library/Calendars/Calendar Cache.*
+e:(?i)/Library/Saved Application State/
+e:(?i)/Library/Mobile Documents/
+
+
+
+
+e:(?i)/Library/Application Support/Skype/[^/]+/media_messaging/*.cache
+e:(?i)/Library/Application Support/Adobe/Acrobat/DC/ThumbCache/
+
+
+
+
+
+
+# =====
+# source default Time Machine ignore list:
+#       /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist
+# most of these refer to ~/Library, so if anything else is excluded which shouldn't, please tell me
+
+e:(?i)/Library/Application Support/Ubiquity.*
+e:(?i)/Library/Caches.*
+e:(?i)/Library/Logs.*
+e:(?i)/Library/Mail/Envelope Index
+e:(?i)/Library/Mail/Envelope Index-journal
+e:(?i)/Library/Mail/AvailableFeeds
+e:(?i)/Library/Mail/Metadata/BackingStoreUpdateJournal
+e:(?i)/Library/Mail/V2/MailData/Envelope Index
+e:(?i)/Library/Mail/V2/MailData/Envelope Index-journal
+e:(?i)/Library/Mail/V2/MailData/AvailableFeeds
+e:(?i)/Library/Mail/V2/MailData/BackingStoreUpdateJournal
+e:(?i)/Library/Mail/V2/MailData/Envelope Index-shm
+e:(?i)/Library/Mail/V2/MailData/Envelope Index-wal
+e:(?i)/Library/Mirrors
+e:(?i)/Library/PubSub/Database
+e:(?i)/Library/PubSub/Downloads
+e:(?i)/Library/PubSub/Feeds
+e:(?i)/Library/Safari/Icons.db
+e:(?i)/Library/Safari/WebpageIcons.db
+e:(?i)/Library/Safari/HistoryIndex.sk
+e:(?i)/Music/iTunes/Album Artwork/Cache/
+e:(?i)/Music/iTunes/Album Artwork/Generated/
+e:(?i)/Music/iTunes/Album Artwork/Store/
+e:(?i)/Library/studentd/CloudStorage
+e:(?i)/Library/studentd/Events
+e:(?i)/Library/iTunes/iPhone Software Updates/
+e:(?i)/Library/Containers/com.microsoft.OneDrive-mac/
+e:(?i)/Library/Containers/com.apple.iWork.Keynote/Data/Library/Application Support/DocumentData
+e:(?i)/Library/Containers/com.apple.iWork.Numbers/Data/Library/Application Support/DocumentData
+e:(?i)/Library/Containers/com.apple.iWork.Pages/Data/Library/Application Support/DocumentData
+e:(?i)/Library/Application Support/Microsoft/Skype for Desktop/
+e:(?i)/Pictures/[^/]+.photoslibrary/database/
+e:(?i)/Pictures/[^/]+.photoslibrary/private/com.apple.photoanalysisd/
+
+
+# ============================ full apps
+e:(?i)/com.wondershare.filmora/
+e:(?i)/com.coppertino.VOX.*
+e:(?i)/com.microsoft.HockeyApp/
+e:(?i)/com.amazonaws.MobileAnalytics/
+e:(?i)/com.apple.photoanalysisd/
+
+
+
+
+
+
+# ============================ exclude .VCS subfolder
+e:(?i)(^|/).git/
+e:(?i)(^|/).hg/
+e:(?i)(^|/).svn/
+
+
+# ============================ exclude temp/cache/log files/folders everywhere
+e:(?i).(tmp|temp)$
+e:(?i).log$
+e:(?i).cache$
+e:(?i)/temp/
+e:(?i)/tmp/
+e:(?i)/cache/
+e:(?i)/caches/
+e:(?i)/log/
+e:(?i)/logs/
+e:(?i).cache/
+e:(?i).TemporaryItems/
+e:(?i).dropbox.cache/
+
+
+# Chrome/electron based apps
+e:(?i)/ShaderCache/
+e:(?i)/GPUCache/
+e:(?i)/CacheStorage/
+e:(?i)/BrowserCache/
+e:(?i)/ScriptCache/
+
+
+# npm/node related
+e:(?i)/compile-cache/
+e:(?i)/node_modules/
+e:(?i)/npm-cache/
+
+
+
+
+# ============================ exclude ".DS_Store" and "._.DS_Store"
+e:\.*DS_Store
+
+
+
+# ================================================
+# ================================================ trash/bin stuff
+# ================================================
+e:(?i)/.Trash/
+e:(?i)(^|/)Trash/
+e:(?i)(^|/)Network Trash Folder/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ============================ macos
+#.*/Music/Subscription/.*
+#e:/Library/Calendars/Calendar Cache/
+#e:/Library/Mail/Envelope Index
+#
+#e:/iPhoto Library/iPod Photo Cache
+#e:/iPhoto Library/iPod Photo Cache/
+#e:.Library/Mail/*/Info.plist
+#e:.Library/Calendars/*/Info.plist
+#
+# (?i).*/Google/Chrome/.*cache.*
+# (?i).*/Mozilla/Firefox/.*cache.*
+# .*/Google/Chrome/Safe Browsing.*
+#
+# .*\.Spotlight-.*/.*
+#
+# /Desktop DB
+# /Desktop DF
+# /Network/Servers.*
+# /Users/Shared/SC Info.*
+# /net/.*
+# (?i).*/backups.backupdb/.*
+# .*MobileBackups/.*
