@@ -84,7 +84,7 @@ function createNewTask()
     # The script below will run as the specified user (you will be prompted for credentials)
     # and is set to be elevated to use the highest privileges.
     # In addition, the task will run however long specified in $scheduledTaskRepetitionInterval above.
-    $task = New-ScheduledTaskAction –Execute "powershell.exe" -Argument  "$script; quit"
+    $task = New-ScheduledTaskAction –Execute "pwsh.exe" -Argument  "$script; quit"
     $repetitionDuration = (New-TimeSpan -Days 10000)  # 27 years should be enough
     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).Date -RepetitionInterval $scheduledTaskRepetitionInterval -RepetitionDuration $repetitionDuration -RandomDelay $scheduledTaskRandomDelay
     $settings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew -StartWhenAvailable
@@ -105,7 +105,7 @@ function elevateAsAdmin()
 {
     if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator"))
     {
-        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
+        Start-Process pwsh.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit
     }
 }
 
