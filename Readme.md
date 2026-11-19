@@ -8,8 +8,7 @@ The principle i followed with these is _set it and forget it_.
 
 ---
 
-Currently there are 2 main scripts: `backup.ps1` and `create scheduled task.ps1`, and a generic `filters`
-file for Windows and MacOS.
+Currently there are 2 main scripts: `backup.ps1` and `create scheduled task.ps1`, and a generic `filters` file for Windows and MacOS.
 
 ##### 1. `backup.ps1`
 
@@ -73,14 +72,4 @@ The way the file is created, there should be no need to edit it currently, as it
 
 ### Changelog
 
-##### 2019.12.10
-
-- :exclamation: **BREAKING CHANGE** Update telegram notification code to send content-type json, to be in sync with the latest backend. Please update, otherwise you will no longer receive notifications to telegram.
-
-##### 2018.04.09
-- Improved the filters file with more (better?) regex from [NiJoao](https://github.com/NiJoao).
-
-
-##### 2018.01.31
-
-- There is no need to do anything to powershell. Just running the .bat file to create the Scheduled Task is enough.
+See [CHANGELOG.md](CHANGELOG.md).
