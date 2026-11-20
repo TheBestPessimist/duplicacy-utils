@@ -1,3 +1,4 @@
+
 . "$PSScriptRoot\config.user.ps1"
 
 ## ================================================
@@ -77,6 +78,7 @@ function doPostRequest($url, $body)
 {
     doCall {
         Invoke-WebRequest `
+        -UseBasicParsing `
         -Body $body `
         -ContentType 'application/json' `
         -Method Post `
