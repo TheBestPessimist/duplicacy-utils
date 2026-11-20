@@ -1,0 +1,11 @@
+*.ps1 text eol=lf
+*.md text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Duplicacy filter files have no extension.
+filters/** text eol=lf
+
+# cmd.exe has known parsing bugs with LF-only batch files (labels, GOTO, CALL).
+*.bat text eol=crlf
+*.cmd text eol=crlf
